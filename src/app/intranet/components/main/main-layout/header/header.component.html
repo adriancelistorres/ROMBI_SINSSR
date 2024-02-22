@@ -1,0 +1,120 @@
+<nav class="navbar navbar-dark bg-primary">
+    <div class="">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+            aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation" style="margin-right: 30px;margin-left: 30px;">
+            <i class="navbar-toggler-icon" style="color: rgb(255, 255, 255);"></i>
+        </button>
+        <a class="navbar-brand"><img src="assets/img/Rom/ROM_sobre azul.png" class="img-fluid"
+                style="max-height: 40px;margin-left: 30px;"></a>
+        <div class="offcanvas offcanvas-start p-3" style="background-color: #00002e;" tabindex="-1"
+            id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+            <div class="offcanvas-header">
+                <img src="assets/img/avatar.jpg" class="img-fluid rounded-5" style="max-height: 50px;">
+                <h5 class="offcanvas-title text-white text-center" id="offcanvasDarkNavbarLabel">
+                    Bienvenido<br>Ricardo Solis
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2" aria-current="page"
+                            href="" data-bs-dismiss="offcanvas">
+                            <i class="bi bi-person" style="font-size: 1rem;padding-right: 4px;"></i>
+                            Mi Perfil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2" aria-current="page"
+                            href="" data-bs-dismiss="offcanvas">
+                            <!-- <i class="bi bi-lock" style="font-size: 1rem;padding-right: 4px;"></i> -->
+                            <i class="bi bi-shield-lock" style="font-size: 1rem;padding-right: 4px;"></i>
+                            Cambiar Contraseña
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <hr>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2" aria-current="page"
+                            routerLink="/main" data-bs-dismiss="offcanvas">
+                            <i class="bi bi-house" style="font-size: 1rem;padding-right: 4px;"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2"
+                            routerLink="entelretail/scheduleplanning" data-bs-dismiss="offcanvas">
+                            <i class="bi bi-list-check" style="font-size: 1rem;padding-right: 4px;"></i>
+                            Planificacion horarios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2" href=""
+                            data-bs-dismiss="offcanvas">
+                            <i class="bi bi-check-all" style="font-size: 1rem;padding-right: 4px;"></i>
+                            Marcacion manual
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2" href=""
+                            data-bs-dismiss="offcanvas">
+                            <i class="bi bi-search" style="font-size: 1rem;padding-right: 4px;"></i>
+                            Busqueda IMEIS
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2 dropdown-toggle" href=""
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-gear-wide-connected" style="font-size: 1rem;padding-right: 4px;"></i>
+                            Mantenimientos
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li>
+                                <a class="dropdown-item" href="" data-bs-dismiss="offcanvas">
+                                    <i class="bi bi-tablet" style="font-size: 1rem;padding-right: 4px;"></i>
+                                    Equipos | Modelos
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="" data-bs-dismiss="offcanvas">
+                                    <i class="bi bi-check2-square" style="font-size: 1rem;padding-right: 4px;"></i>
+                                    Planes
+                                </a>
+                            </li>
+                            <!-- <li>
+                              <hr class="dropdown-divider">
+                          </li>
+                          <li><a class="dropdown-item" href="" data-bs-dismiss="offcanvas">Something else here</a></li> -->
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2" style="width:100%"
+                            href="">
+                            <i class="bi bi-check2-circle" style="font-size: 1rem;padding-right: 4px;"></i>
+                            Marcación Asistencia
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2" style="width:100%"
+                            href="">
+                            <i class="bi bi-download" style="font-size: 1rem;padding-right: 4px;"></i>
+                            Descargar Boletas
+                        </a>
+                    </li>
+                </ul>
+                <!-- <form class="d-flex mt-3" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-success" type="submit">Search</button>
+              </form> -->
+            </div>
+            <div class="sticky-bottom btn btn-danger p-2 mt-3">
+                <a class="nav-link text-center text-white" href="#">
+                    <i class="bi bi-box-arrow-right" style="font-size: 1rem;padding-right: 4px;"></i>
+                    CERRAR SESION
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
