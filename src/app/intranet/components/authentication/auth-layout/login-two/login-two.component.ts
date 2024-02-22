@@ -41,6 +41,8 @@ export class LoginTwoComponent implements OnInit {
   ngOnInit(): void {
     //this.formLogin();
     this.getCountry();
+    localStorage.clear();
+
   }
 
   createFormLogin(): UntypedFormGroup{
