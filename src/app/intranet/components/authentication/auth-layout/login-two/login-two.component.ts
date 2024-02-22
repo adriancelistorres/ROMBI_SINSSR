@@ -5,6 +5,9 @@ import { Country } from '../../../../models/Auth/country';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { DataService } from '../../../../services/Data/data.service';
+import { PermissionRequest } from '../../../../models/Auth/permissionsRequest';
+import { LoginMainRequest } from '../../../../models/Auth/loginMainRequest';
+import { SecurityService } from '../../../../services/security.service';
 //import { HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -29,7 +32,7 @@ export class LoginTwoComponent implements OnInit {
     //private cookieService: CookieService,
     private authService: AuthService,
     private dataService: DataService,
-    //private securityService: SecurityService,
+    private securityService: SecurityService,
     private fb: UntypedFormBuilder
   ){
     this.loginForm = this.createFormLogin();
@@ -63,8 +66,32 @@ export class LoginTwoComponent implements OnInit {
 
     //console.log(localStorage.getItem('codempresa'));
     //console.log(localStorage.getItem('user'));
+
+    const permissionRequest:LoginMainRequest = {
+      codempresa: '08',
+      codpais: this.loginForm.getRawValue().country,
+      user: this.loginForm.getRawValue().username,
+      password: this.loginForm.getRawValue().password
+
+    };
     
-    this.router.navigate(['/auth/loginThree']);
+    this.securityService.authenticate(permissionRequest).subscribe(
+      (response) => {
+          // Manejar la respuesta del servicio de permisos aquí
+          console.log(response); // Aquí puedes ver la respuesta del servicio
+          if (response.resultado === "ACCESO CONCEDIDO") {
+              localStorage.setItem('token', response.token);
+              // Si el acceso es concedido, redirige a la página de autenticación tres
+              this.router.navigate(['/auth/loginThree']);
+          } else {
+              // Si el acceso es denegado, maneja el caso apropiado aquí
+              console.log('Acceso denegado');
+          }
+      },
+      (error) => {
+          // Manejar errores de la solicitud HTTP aquí
+          console.error('Error al obtener los permisos:', error);
+      })
     // this.securityService.authentication().subscribe(res => {
     //   console.log(res.token);
     //   console.log(res.expirationDate);
