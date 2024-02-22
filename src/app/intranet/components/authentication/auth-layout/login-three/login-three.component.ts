@@ -70,10 +70,12 @@ export class LoginThreeComponent {
 
   getBusiness() {
 
-    const codempresa = localStorage.getItem('codempresa')
-    const user = localStorage.getItem('user')
-    if (codempresa !== null && user !== null) {
+    const codempresa = localStorage.getItem('codempresa');
+    const codpais = localStorage.getItem('codpais');
+    const user = localStorage.getItem('user');
+    if (codempresa !== null && codpais !== null && user !== null) {
       this.businessUserRequest.codempresa = codempresa;
+      this.businessUserRequest.codpais = codpais;
       this.businessUserRequest.user = user;
     }
 
