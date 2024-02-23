@@ -47,12 +47,14 @@
                                     <ul class="dropdown-menu dropdown-menu-dark ms-2 p-0"
                                         *ngIf="submodulo.items && submodulo.items.length > 0">
                                         <li *ngFor="let item of submodulo.items">
-                                            <a class="dropdown-item text-wrap text-break pb-2" href="#" data-bs-dismiss="offcanvas"
-                                                [routerLink]="item.ruta">
-                                                <i class="{{ item.icono }}"
-                                                    style="font-size: 1rem; padding-right: 4px;"></i>
-                                                {{ item.nombre }}
-                                            </a>
+                                            <div>
+                                                <a class="dropdown-item text-wrap text-break pb-2" href="#" data-bs-dismiss="offcanvas"
+                                                    [routerLink]="item.ruta">
+                                                    <i class="{{ item.icono }}"
+                                                        style="font-size: 1rem; padding-right: 4px;"></i>
+                                                    {{ item.nombre }}
+                                                </a>
+                                            </div>
                                         </li>
                                     </ul>
                                 </div>
