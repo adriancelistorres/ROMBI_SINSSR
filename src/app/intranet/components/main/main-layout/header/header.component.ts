@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { PermissionRequest } from '../../../../models/Auth/permissionsRequest';
 import { AuthService } from '../../../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -70,17 +71,21 @@ export class HeaderComponent {
 
       const mod: any = {
         nombre: modulo.nombremodulo,
+        icono: modulo.iconomodulo,
+        ruta: modulo.ruta,
         submodulos: modulo.submodules
           .filter((submodulo: any) => submodulo.idsubmodulo !== 0) // Filtrar submódulos con idsubmodulo diferente de 0
           .map((submodulo: any) => {
             const submod: any = {
               nombre: submodulo.nombresubmodulo,
+              icono: submodulo.iconosubmodulo,
               ruta: submodulo.rutasubmodulo,
               items: submodulo.items
                 .filter((item: any) => item.iditemmodulo !== 0) // Filtrar items de módulo con iditemmodulo diferente de 0
                 .map((item: any) => {
                   return {
                     nombre: item.nombreitemmodulo,
+                    icono: item.iconoitemmodulo,
                     ruta: item.rutaitemmodulo
                   };
                 })

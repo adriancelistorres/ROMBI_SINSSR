@@ -16,10 +16,10 @@ export const routes: Routes = [
                 path: 'start',
                 component: MainStartComponent
             },
-            // {
-            //     path: 'entelretail',
-            //     loadChildren: () => import('./entelretail/entel-retail.module').then(m => m.EntelRetailModule)
-            // }
+            {
+                path: 'EntelRetail',
+                loadChildren: () => import('./../entel-retail/entel-retail.routes').then(m => m.routes)
+            },
         ]
     },
 ]

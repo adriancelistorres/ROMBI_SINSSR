@@ -20,32 +20,36 @@
                     aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1" >
+                <ul class="navbar-nav justify-content-end flex-grow-1">
                     <li *ngFor="let modulo of modulos" class="nav-item dropdown">
-                        <a class="nav-link text-white text-start text-capitalize btn btn-primary rounded-0 p-2 dropdown-toggle" href=""
+                        <a class="nav-link text-white text-start text-capitalize text-wrap text-break btn btn-primary rounded-0 p-2 m-0 dropdown-toggle"
+                            [routerLink]="modulo.ruta"
                             [class.dropdown-toggle]="modulo.submodulos && modulo.submodulos.length > 0"
                             [attr.data-bs-dismiss]="!modulo.submodulos || modulo.submodulos.length <= 0 ? 'offcanvas' : null"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-gear-wide-connected" style="font-size: 1rem;padding-right: 4px;"></i>
-                            {{ modulo.nombre }} 
+                            <i class="{{ modulo.icono }}" style="font-size: 1rem;padding-right: 4px;"></i>
+                            {{ modulo.nombre }}
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark"  *ngIf=" modulo.submodulos && modulo.submodulos.length > 0">
-                            <li *ngFor="let submodulo of modulo.submodulos" >
-                                <div class="dropdown-item" >
-                                    <a  class="nav-link text-white text-start text-capitalize btn btn-primary rounded-0 p-2 dropdown-toggle fond"
-                                    [class.dropdown-toggle]="submodulo.items && submodulo.items.length > 0"
-                                    [attr.data-bs-dismiss]="!submodulo.items || submodulo.items.length <= 0 ? 'offcanvas' : null"
-                                    href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                        (click)="$event.stopPropagation()"
-                                        data-bs-dismiss="offcanvas">
-                                        <i class="bi bi-gear-wide-connected"
+                        <ul class="dropdown-menu dropdown-menu-dark"
+                            *ngIf=" modulo.submodulos && modulo.submodulos.length > 0">
+                            <li *ngFor="let submodulo of modulo.submodulos">
+                                <div class="dropdown-item">
+                                    <a class="nav-link text-white text-start text-capitalize text-wrap text-break btn btn-primary rounded-0 p-2 dropdown-toggle fond"
+                                        [routerLink]="submodulo.ruta"
+                                        [class.dropdown-toggle]="submodulo.items && submodulo.items.length > 0"
+                                        [attr.data-bs-dismiss]="!submodulo.items || submodulo.items.length <= 0 ? 'offcanvas' : null"
+                                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                        (click)="$event.stopPropagation()" data-bs-dismiss="offcanvas">
+                                        <i class="{{ submodulo.icono }}"
                                             style="font-size: 1rem;padding-right: 4px;"></i>
                                         {{ submodulo.nombre }}
                                     </a>
-                                    <ul class="dropdown-menu dropdown-menu-dark" *ngIf="submodulo.items && submodulo.items.length > 0">
+                                    <ul class="dropdown-menu dropdown-menu-dark"
+                                        *ngIf="submodulo.items && submodulo.items.length > 0">
                                         <li *ngFor="let item of submodulo.items">
-                                            <a class="dropdown-item" href="#" data-bs-dismiss="offcanvas">
-                                                <i class="bi bi-check2-square"
+                                            <a class="dropdown-item text-wrap text-break" href="#" data-bs-dismiss="offcanvas"
+                                                [routerLink]="item.ruta">
+                                                <i class="{{ item.icono }}"
                                                     style="font-size: 1rem; padding-right: 4px;"></i>
                                                 {{ item.nombre }}
                                             </a>
@@ -54,7 +58,9 @@
                                 </div>
                             </li>
                         </ul>
+                        <hr class="m-0 p-0">
                     </li>
+                    
 
                     <!-- <li class="nav-item">
                         <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2" aria-current="page"
