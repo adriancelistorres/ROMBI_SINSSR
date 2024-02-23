@@ -1,7 +1,10 @@
 <nav class="navbar navbar-dark bg-primary">
+
     <div class="">
+
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
-            aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation" style="margin-right: 30px;margin-left: 30px;">
+            aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation"
+            style="margin-right: 30px;margin-left: 30px;">
             <i class="navbar-toggler-icon" style="color: rgb(255, 255, 255);"></i>
         </button>
         <a class="navbar-brand"><img src="assets/img/Rom/ROM_sobre azul.png" class="img-fluid"
@@ -17,7 +20,46 @@
                     aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1">
+                <ul class="navbar-nav justify-content-end flex-grow-1" >
+                    <li *ngFor="let modulo of modulos" class="nav-item dropdown">
+                        <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2 dropdown-toggle" href=""
+                            [class.dropdown-toggle]="modulo.submodulos && modulo.submodulos.length > 0"
+                            [attr.data-bs-dismiss]="!modulo.submodulos || modulo.submodulos.length <= 0 ? 'offcanvas' : null"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-gear-wide-connected" style="font-size: 1rem;padding-right: 4px;"></i>
+                            {{ modulo.nombre }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark"  *ngIf=" modulo.submodulos && modulo.submodulos.length > 0">
+                            <li *ngFor="let submodulo of modulo.submodulos" >
+                                <div class="dropdown-item" >
+                                    <a  class="nav-link text-white text-start btn btn-primary rounded-0 p-2 dropdown-toggle"
+                                    [class.dropdown-toggle]="submodulo.items && submodulo.items.length > 0"
+                                    [attr.data-bs-dismiss]="!submodulo.items || submodulo.items.length <= 0 ? 'offcanvas' : null"
+                                    href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                        (click)="$event.stopPropagation()"
+                                        data-bs-dismiss="offcanvas">
+                                        <i class="bi bi-gear-wide-connected"
+                                            style="font-size: 1rem;padding-right: 4px;"></i>
+                                        {{ submodulo.nombre }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark" *ngIf="submodulo.items && submodulo.items.length > 0">
+                                        <li *ngFor="let item of submodulo.items">
+                                            <a class="dropdown-item" href="#" data-bs-dismiss="offcanvas">
+                                                <i class="bi bi-check2-square"
+                                                    style="font-size: 1rem; padding-right: 4px;"></i>
+                                                {{ item.nombre }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+
+
+
+
                     <!-- <li class="nav-item">
                         <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2" aria-current="page"
                             href="" data-bs-dismiss="offcanvas">
@@ -63,7 +105,7 @@
                             Busqueda IMEIS
                         </a>
                     </li> -->
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                         <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2 dropdown-toggle" href=""
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-gear-wide-connected" style="font-size: 1rem;padding-right: 4px;"></i>
@@ -82,12 +124,12 @@
                                     Planes
                                 </a>
                             </li>
-                            <!-- <li>
+                            <li>
                               <hr class="dropdown-divider">
                           </li>
-                          <li><a class="dropdown-item" href="" data-bs-dismiss="offcanvas">Something else here</a></li> -->
+                          <li><a class="dropdown-item" href="" data-bs-dismiss="offcanvas">Something else here</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                     <!-- <li class="nav-item">
                         <a class="nav-link text-white text-start btn btn-primary rounded-0 p-2" style="width:100%"
                             href="">

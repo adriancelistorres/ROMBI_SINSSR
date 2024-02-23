@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
 import { PermissionRequest } from '../../../../models/Auth/permissionsRequest';
 import { AuthService } from '../../../../services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
 
   listMenu: any[]=[]
+  modulos: any[] = [];
 
   permissionRequest: PermissionRequest = new PermissionRequest();
 
@@ -42,25 +44,58 @@ export class HeaderComponent {
       this.authService.getPermissions(this.permissionRequest).subscribe(res => {
         console.log(res);
         localStorage.setItem('menu', JSON.stringify(res));
-        const menu = localStorage.getItem('menu');
-        if (menu !== null) {
-          console.log(JSON.parse(menu));
-          this.listMenu=JSON.parse(menu)
+        // const menu = localStorage.getItem('menu');
+        // if (menu !== null) {
+        //   console.log(JSON.parse(menu));
+        //   this.listMenu=JSON.parse(menu)
+        // }
+        const menuDataFromLocalStorage = localStorage.getItem('menu');
+        console.log('wwwww',menuDataFromLocalStorage);
+        if (menuDataFromLocalStorage !== null) {
+          const dataFromLocalStorage:any = JSON.parse(menuDataFromLocalStorage);
+          console.log('wwwww22',dataFromLocalStorage);
+
+          this.filtrarYOrganizarModulos(dataFromLocalStorage)     
+          this.modulos = this.filtrarYOrganizarModulos(dataFromLocalStorage);
+          console.log('this.listMenu',this.modulos);
+  
+        } else {
+          console.error('El valor de "menu" en el LocalStorage es nulo.');
         }
+        
       })
     }
   }
 
-  // filtrar(data:any[]){
-  //   let modulosfiltro=[];
-  //   data.forEach(modulo=>{
-  //     const mods={
-  //       nombre:modulo.nombremodulo,
-  //       submodulos:modulo.submodules
+  filtrarYOrganizarModulos(data: any[]): any[] {
+    let modulosFiltrados: any[] = [];
+    data.forEach(modulo => {
 
-  //     }
-  //   })
-  // }
+        const mod: any = {
+            nombre: modulo.nombremodulo,
+            submodulos: modulo.submodules
+                .filter((submodulo:any) => submodulo.idsubmodulo !== 0) // Filtrar submódulos con idsubmodulo diferente de 0
+                .map((submodulo:any) => {
+                    const submod: any = {
+                        nombre: submodulo.nombresubmodulo,
+                        ruta: submodulo.rutasubmodulo,
+                        items: submodulo.items
+                            .filter((item:any) => item.iditemmodulo !== 0) // Filtrar items de módulo con iditemmodulo diferente de 0
+                            .map((item:any) => {
+                                return {
+                                    nombre: item.nombreitemmodulo,
+                                    ruta: item.rutaitemmodulo
+                                };
+                            })
+                    };
+                    return submod;
+                })
+        };
+        modulosFiltrados.push(mod);
+    });
+    return modulosFiltrados;
+}
+
 
 
 }
