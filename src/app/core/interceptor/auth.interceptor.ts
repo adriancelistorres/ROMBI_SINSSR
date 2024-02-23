@@ -5,7 +5,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { SecurityService } from '../../intranet/services/security.service';
+import { SecurityService } from '../../intranet/services/auth/security.service';
 import { catchError, throwError } from 'rxjs';
 import { routes } from '../../app.routes';
 import { Router } from '@angular/router';

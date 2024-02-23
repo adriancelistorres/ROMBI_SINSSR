@@ -3,12 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Country } from '../../../../models/Auth/country';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../../services/auth.service';
-import { DataService } from '../../../../services/Data/data.service';
-import { PermissionRequest } from '../../../../models/Auth/permissionsRequest';
+import { AuthService } from '../../../../services/auth/auth.service';
 import { LoginMainRequest } from '../../../../models/Auth/loginMainRequest';
-import { SecurityService } from '../../../../services/security.service';
-//import { HttpClientModule } from '@angular/common/http';
+import { SecurityService } from '../../../../services/auth/security.service';
 
 @Component({
   selector: 'app-login-two',
@@ -16,8 +13,7 @@ import { SecurityService } from '../../../../services/security.service';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    //HttpClientModule
+    ReactiveFormsModule
   ],
   templateUrl: './login-two.component.html',
   styleUrl: './login-two.component.css'
@@ -26,12 +22,11 @@ export class LoginTwoComponent implements OnInit {
   loginForm: UntypedFormGroup;
   showPassword: boolean = false;
   listCountry: Country[] = [];
+  loginMainRequest: LoginMainRequest = new LoginMainRequest();
 
   constructor(
     private router: Router,
-    //private cookieService: CookieService,
     private authService: AuthService,
-    private dataService: DataService,
     private securityService: SecurityService,
     private fb: UntypedFormBuilder
   ){
@@ -39,10 +34,8 @@ export class LoginTwoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.formLogin();
     this.getCountry();
     localStorage.clear();
-
   }
 
   createFormLogin(): UntypedFormGroup{
@@ -69,15 +62,19 @@ export class LoginTwoComponent implements OnInit {
     //console.log(localStorage.getItem('codempresa'));
     //console.log(localStorage.getItem('user'));
 
-    const permissionRequest:LoginMainRequest = {
-      codempresa: '08',
-      codpais: this.loginForm.getRawValue().country,
-      user: this.loginForm.getRawValue().username,
-      password: this.loginForm.getRawValue().password
+    this.loginMainRequest.codempresa='08';
+    this.loginMainRequest.codpais=this.loginForm.getRawValue().country;
+    this.loginMainRequest.user=this.loginForm.getRawValue().username;
+    this.loginMainRequest.password=this.loginForm.getRawValue().password;
 
-    };
+    // const loginMainRequest:LoginMainRequest = {
+    //   codempresa: '08',
+    //   codpais: this.loginForm.getRawValue().country,
+    //   user: this.loginForm.getRawValue().username,
+    //   password: this.loginForm.getRawValue().password
+    // };
     
-    this.securityService.authenticate(permissionRequest).subscribe(
+    this.securityService.authenticate(this.loginMainRequest).subscribe(
       (response) => {
           // Manejar la respuesta del servicio de permisos aquí
           console.log(response); // Aquí puedes ver la respuesta del servicio
@@ -94,13 +91,6 @@ export class LoginTwoComponent implements OnInit {
           // Manejar errores de la solicitud HTTP aquí
           console.error('Error al obtener los permisos:', error);
       })
-    // this.securityService.authentication().subscribe(res => {
-    //   console.log(res.token);
-    //   console.log(res.expirationDate);
-    //   //this.cookieService.set('token', res.token);
-    //   this.router.navigate(['/auth/loginThree']);
-    // })
-    
   }
 
   togglePasswordVisibility() {
@@ -109,7 +99,6 @@ export class LoginTwoComponent implements OnInit {
 
   getCountry(){
     this.authService.getCountry().subscribe((res) => {
-      //console.log(res);
       this.listCountry = res;
       console.log(this.listCountry);
     });

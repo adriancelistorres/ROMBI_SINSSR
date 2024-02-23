@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../../services/auth.service';
+import { AuthService } from '../../../../services/auth/auth.service';
 import { DataService } from '../../../../services/Data/data.service';
 import { BusinessUserRequest } from '../../../../models/Auth/businessUserRequest';
 import { BusinessUserResponse } from '../../../../models/Auth/businessUserResponse';
@@ -29,10 +29,8 @@ export class LoginThreeComponent {
 
   constructor(
     private router: Router,
-    //private cookieService: CookieService,
     private authService: AuthService,
     private dataService: DataService,
-    //private securityService: SecurityService,
     private fb: UntypedFormBuilder
   ) {
     this.loginForm = this.createFormLogin();
@@ -69,7 +67,6 @@ export class LoginThreeComponent {
   }
 
   getBusiness() {
-
     const codempresa = localStorage.getItem('codempresa');
     const codpais = localStorage.getItem('codpais');
     const user = localStorage.getItem('user');
@@ -93,7 +90,6 @@ export class LoginThreeComponent {
     const idnegocio = (event.target as HTMLSelectElement)?.value;
 
     console.log(idnegocio);
-    
 
     if (idnegocio !== null) {
       const codempresa = localStorage.getItem('codempresa')

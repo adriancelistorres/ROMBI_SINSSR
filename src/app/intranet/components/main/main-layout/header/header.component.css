@@ -2,5 +2,13 @@
     --bs-btn-active-bg: transparent;
 }
 .dropdown-menu-dark{
-    background-color: #000075;
+    background-color: transparent;
+}
+
+.dropdown-menu{
+    background-color: transparent;
+    border: none;
+}
+.fond:hover{
+    background-color: transparent;
 }

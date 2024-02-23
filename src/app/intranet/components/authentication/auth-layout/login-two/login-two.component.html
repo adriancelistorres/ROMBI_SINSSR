@@ -1,16 +1,5 @@
 <h5 class="card-title p-3">Ingresa tus credenciales</h5>
 <form [formGroup]="loginForm" (ngSubmit)="getLogin()">
-    <!-- <div class="row mb-3">
-        <div class="input-group">
-            <div class="input-group-text">
-                <i class="bi bi-person"></i>
-            </div>
-            <input type="text" class="form-control" formControlName="username" placeholder="Username" />
-            <div class="form-text" id="basic-addon4" *ngIf="loginForm.get('username')?.hasError('required')">
-                Username is required
-            </div>
-        </div>
-    </div> -->
     <div class="mb-3">
         <div class="input-group">
             <span class="input-group-text" id="basic-addon3"><i class="bi bi-map"></i></span>
@@ -46,16 +35,6 @@
             Contraseña es requerido
         </div>
     </div>
-    <!-- <div class="row mb-3">
-        <div class="input-group">
-            <div class="input-group-text" (click)="togglePasswordVisibility()" style="cursor: pointer;">
-                <i *ngIf="showPassword" class="bi bi-eye-slash"></i>
-                <i *ngIf="!showPassword" class="bi bi-eye-fill"></i>
-            </div>
-            <input type="{{ showPassword ? 'text' : 'password' }}" type="password" class="form-control"
-                formControlName="password" placeholder="Password" />
-        </div>
-    </div> -->
     <button type="submit" class="btn btn-primary m-3" [disabled]="!loginForm.valid">
         Siguiente
         <i class="bi bi-arrow-right-circle"></i>

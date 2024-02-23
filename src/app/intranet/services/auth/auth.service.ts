@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { BusinessUserRequest } from '../models/Auth/businessUserRequest';
-import { BusinessAccountUserRequest } from '../models/Auth/businessAccountUserRequest';
-import { PermissionRequest } from '../models/Auth/permissionsRequest';
+import { environment } from '../../../environments/environment';
+import { BusinessUserRequest } from '../../models/Auth/businessUserRequest';
+import { BusinessAccountUserRequest } from '../../models/Auth/businessAccountUserRequest';
+import { PermissionRequest } from '../../models/Auth/permissionsRequest';
 
 @Injectable({
   providedIn: 'root'
