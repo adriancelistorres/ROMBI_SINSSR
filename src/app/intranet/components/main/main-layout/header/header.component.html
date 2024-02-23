@@ -22,7 +22,7 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1">
                     <li *ngFor="let modulo of modulos" class="nav-item dropdown">
-                        <a class="nav-link text-white text-start text-capitalize text-wrap text-break btn btn-primary rounded-0 p-2 m-0 dropdown-toggle"
+                        <a class="nav-link text-white text-start text-capitalize text-wrap text-break btn btn-primary rounded-0 p-2 dropdown-toggle"
                             [routerLink]="modulo.ruta"
                             [class.dropdown-toggle]="modulo.submodulos && modulo.submodulos.length > 0"
                             [attr.data-bs-dismiss]="!modulo.submodulos || modulo.submodulos.length <= 0 ? 'offcanvas' : null"
@@ -30,10 +30,10 @@
                             <i class="{{ modulo.icono }}" style="font-size: 1rem;padding-right: 4px;"></i>
                             {{ modulo.nombre }}
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark"
+                        <ul class="dropdown-menu dropdown-menu-dark m-0 p-0 "
                             *ngIf=" modulo.submodulos && modulo.submodulos.length > 0">
                             <li *ngFor="let submodulo of modulo.submodulos">
-                                <div class="dropdown-item">
+                                <div class="dropdown-item ms-3 p-0">
                                     <a class="nav-link text-white text-start text-capitalize text-wrap text-break btn btn-primary rounded-0 p-2 dropdown-toggle fond"
                                         [routerLink]="submodulo.ruta"
                                         [class.dropdown-toggle]="submodulo.items && submodulo.items.length > 0"
@@ -44,10 +44,10 @@
                                             style="font-size: 1rem;padding-right: 4px;"></i>
                                         {{ submodulo.nombre }}
                                     </a>
-                                    <ul class="dropdown-menu dropdown-menu-dark"
+                                    <ul class="dropdown-menu dropdown-menu-dark ms-2 p-0"
                                         *ngIf="submodulo.items && submodulo.items.length > 0">
                                         <li *ngFor="let item of submodulo.items">
-                                            <a class="dropdown-item text-wrap text-break" href="#" data-bs-dismiss="offcanvas"
+                                            <a class="dropdown-item text-wrap text-break pb-2" href="#" data-bs-dismiss="offcanvas"
                                                 [routerLink]="item.ruta">
                                                 <i class="{{ item.icono }}"
                                                     style="font-size: 1rem; padding-right: 4px;"></i>
@@ -58,7 +58,7 @@
                                 </div>
                             </li>
                         </ul>
-                        <hr class="m-0 p-0">
+                        <hr class="m-0 ">
                     </li>
                     
 
