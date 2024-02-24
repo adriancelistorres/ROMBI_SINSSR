@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { BusinessUserRequest } from '../../models/Auth/businessUserRequest';
 import { BusinessAccountUserRequest } from '../../models/Auth/businessAccountUserRequest';
 import { PermissionRequest } from '../../models/Auth/permissionsRequest';
+import { LoginMainRequest } from '../../models/Auth/loginMainRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,11 @@ export class AuthService {
   getCountry(): Observable<any>{
     return this.http.get<any>(`${this.apiUrl}Country`);
   }
+
+  getUserData(user: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}AuthLogin/GetUserData`, {user} );
+  }
+  
   
   getBusiness(businessUserRequest: BusinessUserRequest): Observable<any>{
     return this.http.post<any>(`${this.apiUrl}AuthLogin/GetBusinessUser`, businessUserRequest);
