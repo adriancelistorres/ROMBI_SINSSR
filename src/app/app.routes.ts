@@ -5,12 +5,12 @@ export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'auth'
+        redirectTo: ''
     },
-    // {
-    //     path: '', //INICIO
-    //     loadChildren: () => import('./intranet/modules/starts/starts.module').then(m => m.StartsModule)
-    // },
+    {
+        path: '', //
+        loadChildren: () => import('./intranet/components/start-main/start-main.routes').then(m => m.routes)
+    },
     {
         path: 'auth',//INTRANET
         loadChildren: () => import('./intranet/components/authentication/authentication.routes').then(m => m.routes)

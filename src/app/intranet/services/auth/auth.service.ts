@@ -18,6 +18,11 @@ export class AuthService {
     private http: HttpClient
   ) { }
 
+
+  getCompany(): Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}Company`);
+    
+  }
   getCountry(): Observable<any>{
     return this.http.get<any>(`${this.apiUrl}Country`);
   }

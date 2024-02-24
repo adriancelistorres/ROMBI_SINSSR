@@ -35,7 +35,10 @@ export class LoginTwoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCountry();
-    localStorage.clear();
+    localStorage.removeItem('codpais');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+
   }
 
   createFormLogin(): UntypedFormGroup{
@@ -55,14 +58,13 @@ export class LoginTwoComponent implements OnInit {
   getLogin(){
     console.log(this.loginForm.getRawValue());
     
-    localStorage.setItem('codempresa', "08");
     localStorage.setItem('codpais', this.loginForm.getRawValue().country);
     localStorage.setItem('user', this.loginForm.getRawValue().username);
 
     //console.log(localStorage.getItem('codempresa'));
     //console.log(localStorage.getItem('user'));
-
-    this.loginMainRequest.codempresa='08';
+    let codempresa:any = localStorage.getItem('codempresa');
+    this.loginMainRequest.codempresa=codempresa;
     this.loginMainRequest.codpais=this.loginForm.getRawValue().country;
     this.loginMainRequest.user=this.loginForm.getRawValue().username;
     this.loginMainRequest.password=this.loginForm.getRawValue().password;
