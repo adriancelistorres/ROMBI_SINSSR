@@ -1,45 +1,39 @@
 <nav class="navbar navbar-dark bg-primary">
 
     <div class="">
-
         <button class="navbar-toggler me-0" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation"
             style="margin-right: 30px;margin-left: 30px;">
             <i class="navbar-toggler-icon" style="color: rgb(255, 255, 255);"></i>
+
         </button>
-        <a class="navbar-brand"><img src="assets/img/Rom/ROM_sobre azul2.png" class="img-fluid"
-                style="max-height: 40px;margin-left: 30px;"></a>
-        <!-- <li class=""></li> -->
-        <!-- <button class="nav-link text-white text-start text-capitalize btn btn-primary rounded-0 p-2" aria-current="page"
-                routerLink="start" data-bs-dismiss="offcanvas">
-                <i class="bi bi-house-door-fill" style="font-size: 1rem;padding-right: 4px;"></i>
-                Home
-            </button> -->
-        <button class="navbar-toggler border-0">
-            <i class="bi bi-house-door-fill" style="font-size: 1rem;padding-right: 4px;"></i>
+        <a class="navbar-brand pe-0">
+            <img src="assets/img/Rom/ROM_sobre azul2.png" class="img-fluid" style="max-height: 40px;margin-left: 30px;">
+        </a>
+        <a class="navbar-brand mt-2 btn btn-primary ps-0 text-wrap text-break" [routerLink]="['/main/start']">
+            <i class="bi bi-house-door-fill "></i>
             Home
-        </button>
+        </a> 
+        
         <div class="offcanvas offcanvas-start p-3" style="background-color: #00002e;" tabindex="-1"
             id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
             <div class="offcanvas-header">
                 <img src="assets/img/avatar.jpg" class="img-fluid rounded-5" style="max-height: 50px;">
                 <h5 class="offcanvas-title text-white text-center" id="offcanvasDarkNavbarLabel">
-                    Bienvenido<br>{{ userData?.nombres?.split(' ')[0]}} {{ userData.apellidopaterno }} {{
-                    userData.apellidomaterno }}
-
+                    Bienvenido<br>{{ userData?.nombres?.split(' ')[0]}} {{ userData.apellidopaterno}} 
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
                     aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1">
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link text-white text-start text-capitalize btn btn-primary rounded-0 p-2"
                             aria-current="page" routerLink="start" data-bs-dismiss="offcanvas">
                             <i class="bi bi-house-door-fill" style="font-size: 1rem;padding-right: 4px;"></i>
                             Home
                         </a>
-                    </li>
+                    </li> -->
 
                     <li *ngFor="let modulo of modulos" class="nav-item dropdown">
                         <a class="nav-link text-white text-start text-capitalize text-wrap text-break btn btn-primary rounded-0 p-2 dropdown-toggle"

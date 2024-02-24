@@ -9,18 +9,18 @@
                     {{country.DESCRIPCION}}</option>
             </select>
         </div>
-        <div class="form-text text-danger" id="basic-addon4" *ngIf="loginForm.get('country')?.hasError('required')">
+        <!-- <div class="form-text text-danger" id="basic-addon4" *ngIf="loginForm.get('country')?.hasError('required')">
             Country is required
-        </div>
+        </div> -->
     </div>
     <div class="mb-3">
         <div class="input-group">
             <span class="input-group-text" id="basic-addon3"><i class="bi bi-person"></i></span>
             <input type="text" class="form-control" formControlName="username" placeholder="Username" />
         </div>
-        <div class="form-text text-danger" id="basic-addon4" *ngIf="loginForm.get('username')?.hasError('required')">
+        <!-- <div class="form-text text-danger" id="basic-addon4" *ngIf="loginForm.get('username')?.hasError('required')">
             Nombre usuario es requerido
-        </div>
+        </div> -->
     </div>
     <div class="mb-3">
         <div class="input-group">
@@ -31,9 +31,9 @@
             <input type="{{ showPassword ? 'text' : 'password' }}" type="password" class="form-control"
                 formControlName="password" placeholder="Password" />
         </div>
-        <div class="form-text text-danger" id="basic-addon4" *ngIf="loginForm.get('password')?.hasError('required')">
+        <!-- <div class="form-text text-danger" id="basic-addon4" *ngIf="loginForm.get('password')?.hasError('required')">
             Contraseña es requerido
-        </div>
+        </div> -->
     </div>
     <button type="submit" class="btn btn-primary m-3" [disabled]="!loginForm.valid">
         Siguiente
