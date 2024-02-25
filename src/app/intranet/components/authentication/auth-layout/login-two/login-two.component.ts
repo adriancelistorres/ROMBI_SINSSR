@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth/auth.service';
 import { LoginMainRequest } from '../../../../models/Auth/loginMainRequest';
 import { SecurityService } from '../../../../services/auth/security.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login-two',
@@ -13,7 +14,7 @@ import { SecurityService } from '../../../../services/auth/security.service';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './login-two.component.html',
   styleUrl: './login-two.component.css'
@@ -29,6 +30,7 @@ export class LoginTwoComponent implements OnInit {
     private authService: AuthService,
     private securityService: SecurityService,
     private fb: UntypedFormBuilder,
+    private toastr: ToastrService
   ){
     this.loginForm = this.createFormLogin();
   }
@@ -85,12 +87,16 @@ export class LoginTwoComponent implements OnInit {
               // Si el acceso es concedido, redirige a la página de autenticación tres
               this.router.navigate(['/auth/loginThree']);
           } else {
+            this.toastr.error('Se produjo un error durante la autenticación.', 'ERROR DE DATOS', {
+              timeOut: 3000,
+            });
               // Si el acceso es denegado, maneja el caso apropiado aquí  
               console.log('Acceso denegado');
           }
       },
       (error) => {
           // Manejar errores de la solicitud HTTP aquí
+          this.toastr.error('Se produjo un error durante la autenticación.');
 
           console.error('Error al obtener los permisos:', error);
       })
