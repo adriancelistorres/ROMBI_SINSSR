@@ -6,9 +6,9 @@ import { StartComponent } from './start/start.component';
   selector: 'app-layout',
   standalone: true,
   imports: [RouterOutlet, StartComponent],
-  templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css'
+  templateUrl: './start-layout.component.html',
+  styleUrl: './start-layout.component.css'
 })
-export class LayoutComponent {
+export class StartLayoutComponent {
 
 }

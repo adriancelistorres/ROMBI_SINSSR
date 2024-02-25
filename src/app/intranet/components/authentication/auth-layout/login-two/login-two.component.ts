@@ -28,7 +28,7 @@ export class LoginTwoComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private securityService: SecurityService,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
   ){
     this.loginForm = this.createFormLogin();
   }
@@ -85,12 +85,13 @@ export class LoginTwoComponent implements OnInit {
               // Si el acceso es concedido, redirige a la página de autenticación tres
               this.router.navigate(['/auth/loginThree']);
           } else {
-              // Si el acceso es denegado, maneja el caso apropiado aquí
+              // Si el acceso es denegado, maneja el caso apropiado aquí  
               console.log('Acceso denegado');
           }
       },
       (error) => {
           // Manejar errores de la solicitud HTTP aquí
+
           console.error('Error al obtener los permisos:', error);
       })
   }
