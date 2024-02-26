@@ -21,6 +21,11 @@ export const routes: Routes = [
             loadChildren: () =>
             import('./../entel-retail/entel-retail.routes').then((m) => m.routes),
         },
+        {
+            path: 'Seguridad',
+            loadChildren: () =>
+            import('./../seguridad/seguridad.routes').then((m) => m.routes),
+        },
         ],
   },
 ];
