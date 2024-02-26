@@ -17,7 +17,7 @@ export const routes: Routes = [
     },
     {
         path: 'main',//PRINCIPAL DE INTRANET
-        loadChildren: () => import('./intranet/components/main/main.routes').then(m => m.routes)
+        loadChildren: () => import('./intranet/components/ROM/main/main.routes').then(m => m.routes)
     },
     {
         path: '**', component: NotFoundComponent,

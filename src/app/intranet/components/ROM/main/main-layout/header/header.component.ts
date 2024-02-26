@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { PermissionRequest } from '../../../../models/Auth/permissionsRequest';
-import { AuthService } from '../../../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { PermissionRequest } from '../../../../../models/Auth/permissionsRequest';
+import { AuthService } from '../../../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-header',
