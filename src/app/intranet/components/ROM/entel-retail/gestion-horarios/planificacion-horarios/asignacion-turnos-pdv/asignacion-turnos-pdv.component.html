@@ -72,20 +72,21 @@
                         </div>
                         <div class="modal-body">
                             <form [formGroup]="turnForm" (ngSubmit)="getTurnForm()">
-                                <div class="row justify-content-md-start">
-                                    <div class="col-sm-3 mt-1">
-                                        <label for="input2" class="form-label">Descripción</label>
-                                        <input type="text" id="input2" class="form-control" formControlName="description">
-                                    </div>
+                                <div class="row justify-content-md-start m-2">
                                     <div class="col-sm-3 mt-1">
                                         <label for="input2" class="form-label">H. Entrada</label>
-                                        <input type="time" id="input2" class="form-control" 
-                                        formControlName="hentry" (change)="formatTime($event, 'hentry')">
+                                        <input type="time" id="input2" class="form-control" formControlName="hentry"
+                                            (change)="formatTime($event)">
                                     </div>
                                     <div class="col-sm-3 mt-1">
-                                        <label for="input2" class="form-label">H. Salida</label>
-                                        <input type="time" id="input2" class="form-control" 
-                                        formControlName="hexit" (change)="formatTime($event, 'hexit')">
+                                        <label for="input3" class="form-label">H. Salida</label>
+                                        <input type="time" id="input3" class="form-control" formControlName="hexit"
+                                            (change)="formatTime($event)">
+                                    </div>
+                                    <div class="col-sm-3 mt-1">
+                                        <label for="input1" class="form-label">Descripción</label>
+                                        <input type="text" id="input1" class="form-control"
+                                            formControlName="description">
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary m-3" [disabled]="!turnForm.valid">
@@ -105,44 +106,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>mdo</td>
+                                        <tr *ngFor="let turno of listTurnosSupervisor; let i = index">
+                                            <th scope="row">{{ i + 1 }}</th>
+                                            <td>{{ turno.descripcion }}</td>
+                                            <td>{{ turno.horarioentrada }}</td>
+                                            <td>{{ turno.horariosalida }}</td>
                                             <td>
                                                 <a (click)="editRow()">
                                                     <i class="bi bi-pencil-square"
-                                                        style="color: #4f8bd9;font-size: 1.4rem;"></i>&nbsp;&nbsp;
+                                                        style="color: #4f8bd9; font-size: 1.4rem;"></i>&nbsp;&nbsp;
                                                 </a>
                                                 <a (click)="deleteRow()">
                                                     <i class="bi bi-trash-fill"
-                                                        style="color: #d9534f;font-size: 1.4rem;"></i>
+                                                        style="color: #d9534f; font-size: 1.4rem;"></i>
                                                 </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>fat</td>
-                                            <td>
-                                                <i class="bi bi-pencil-square"
-                                                    style="color: #4f8bd9;font-size: 1.4rem;"></i>&nbsp;&nbsp;
-                                                <i class="bi bi-trash-fill"
-                                                    style="color: #d9534f;font-size: 1.4rem;"></i>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry the Bird</td>
-                                            <td>twitter</td>
-                                            <td>twitter</td>
-                                            <td>
-                                                <i class="bi bi-pencil-square"
-                                                    style="color: #4f8bd9;font-size: 1.4rem;"></i>&nbsp;&nbsp;
-                                                <i class="bi bi-trash-fill"
-                                                    style="color: #d9534f;font-size: 1.4rem;"></i>
                                             </td>
                                         </tr>
                                     </tbody>

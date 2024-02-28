@@ -2476,7 +2476,7 @@ progress {
 
 .form-control:disabled {
     background-color: #eceeef;
-    opacity: 1
+    opacity: 0.8
 }
 
 .form-control::-webkit-file-upload-button {

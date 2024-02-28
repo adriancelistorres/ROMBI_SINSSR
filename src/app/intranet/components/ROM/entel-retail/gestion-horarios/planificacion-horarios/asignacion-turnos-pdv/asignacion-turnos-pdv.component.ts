@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { AsignarTurnosService } from '../../../../../../services/entel-retail/planificacion-horarios/asignar-turnos.service';
+import { UsuarioSupervisor } from '../../../../../../models/planificacion-horarios/usuarioSupervisor';
+import { TurnosSupervisor } from '../../../../../../models/planificacion-horarios/turnosSupervisor';
 
 @Component({
   selector: 'app-asignacion-turnos-pdv',
@@ -14,97 +17,91 @@ import Swal from 'sweetalert2';
   templateUrl: './asignacion-turnos-pdv.component.html',
   styleUrl: './asignacion-turnos-pdv.component.css'
 })
-export class AsignacionTurnosPDVComponent {
+export class AsignacionTurnosPDVComponent implements OnInit {
 
   turnForm: UntypedFormGroup;
-
-  HEmin!: string;
-  HEmax!: string;
+  usuarioSupervisor: UsuarioSupervisor = new UsuarioSupervisor();
+  listTurnosSupervisor: TurnosSupervisor[] = [];
+  turnosSupervisor: TurnosSupervisor = new TurnosSupervisor();
 
   constructor(
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private asignarTurnos: AsignarTurnosService
   ) {
     this.turnForm = this.createFormTurn();
+    this.usuarioSupervisor.usuario = localStorage.getItem('user')
+  }
+
+  ngOnInit(): void {
+    // Suscribe a los cambios en los campos hentry y hexit
+    this.turnForm.get('hentry')?.valueChanges.subscribe(() => {
+      this.actualizarDescripcion();
+    });
+
+    this.turnForm.get('hexit')?.valueChanges.subscribe(() => {
+      this.actualizarDescripcion();
+    });
+
+    this.getTurnosSupervisor();
   }
 
   createFormTurn(): UntypedFormGroup {
     return this.fb.group({
-      description: new FormControl('', Validators.compose([
+      description: new FormControl({value:'', disabled: true}, Validators.compose([
         Validators.required,
       ])),
-      hentry: new FormControl('08:00', Validators.compose([
+      hentry: new FormControl('00:00', Validators.compose([
         Validators.required,
       ])),
-      // aperturaMin: ['08:00'],
-      // aperturaMax: ['15:00'],
-      hexit: new FormControl('22:00', Validators.compose([
+      hexit: new FormControl('00:00', Validators.compose([
         Validators.required
       ])),
-      // salidaMin: ['21:00'],
-      // salidaMax: ['22:00']
     });
   }
 
-  formatTime(event: any, controlName: string) {
+  formatTime(event: any) {
     const input = event.target;
     const value = input.value.split(':');
     if (value.length > 1) {
       input.value = `${value[0]}:00`;
     }
+  }
 
-    // Validar el rango de horas
-    //const selectedTime = new Date();
-    // const [hours, minutes] = value.split(':');
-    // console.log([hours, minutes]);
+  actualizarDescripcion() {
+    const hentry = this.turnForm.get('hentry')?.value;
+    const hexit = this.turnForm.get('hexit')?.value;
 
-    //selectedTime.setHours(Number(hours), Number(minutes));
+    // Separar las horas y minutos de la hora de entrada
+    let [hentryHour, hentryMinute] = hentry.split(':');
+    // Separar las horas y minutos de la hora de salida
+    let [hexitHour, hexitMinute] = hexit.split(':');
 
-    //console.log(selectedTime);
+    //Si los minutos son diferentes de cero, formatear a '00'
+    if(Number(hentryMinute)!==0 || Number(hexitMinute)!==0){
+      hentryMinute='00';
+      hexitMinute='00';
+    }
+    // Concatenar las horas con minutos en cero
+    const description = `${hentryHour}:${hentryMinute || '00'} - ${hexitHour}:${hexitMinute || '00'}`;
 
-    // if (controlName === 'hentry') {
-    //   if (Number(hours) <= 7 || Number(hours) >= 15) {
-    //     const formattedValue = '08:00';
-    //     console.log(formattedValue);
+    // Actualizar el valor de description en el formulario
+    this.turnForm.patchValue({
+      description: description
+    });
+  }
 
-    //     // Establecer el valor en el input
-    //     input.value = formattedValue;
-
-    //     // Actualizar el valor en el formulario
-    //     this.turnForm.get(controlName)?.setValue(formattedValue);
-    //   }
-    // } else if (controlName === 'hexit') {
-    //   if (Number(hours) <= 21 || Number(hours) >= 22) {
-    //     const formattedValue = '22:00';
-    //     console.log(formattedValue);
-
-    //     // Establecer el valor en el input
-    //     input.value = formattedValue;
-
-    //     // Actualizar el valor en el formulario
-    //     this.turnForm.get(controlName)?.setValue(formattedValue);
-    //   }
+  getTurnosSupervisor(){
+    // const supervisor = {
+    //   usuario : localStorage.getItem('user')
     // }
-    // if (controlName === 'hentry') {
-    //   const minTime = new Date();
-    //   minTime.setHours(8, 0); // 08:00
-    //   const maxTime = new Date();
-    //   maxTime.setHours(12, 0); // 12:00
-    //   if (selectedTime < minTime || selectedTime > maxTime) {
-    //     selectedTime.setHours(8, 0);
-    //   }
-    // } else if (controlName === 'hexit') {
-    //   const minTime = new Date();
-    //   minTime.setHours(12, 0); // 12:00
-    //   const maxTime = new Date();
-    //   maxTime.setHours(22, 0); // 22:00
-    //   if (selectedTime < minTime || selectedTime > maxTime) {
-    //     selectedTime.setHours(22, 0);
-    //   }
-    // }
-    // Formatear el valor a una cadena con el formato correcto "HH:mm"
-    //const formattedValue = selectedTime.toTimeString().substring(0, 5);
-
-    //CONCATENAR
+    
+    if (this.usuarioSupervisor.usuario !== null) {
+      this.asignarTurnos.getTurnosSupervisor(this.usuarioSupervisor).subscribe(res=>{
+        console.log(res);
+        this.listTurnosSupervisor = res;
+      })
+    }
+    
   }
 
   getTurnForm() {
@@ -124,21 +121,86 @@ export class AsignacionTurnosPDVComponent {
       return;
     }
 
-    if(hexit<21 || hexit>22){
+    if(hexit>22){
       console.log('El Horario de salida debe ser entre las 21 y las 22 hrs', hexit);
       Swal.fire({
         title: 'Error!',
         text: 'El Horario de salida debe ser entre las 21 y las 22 hrs',
         icon: 'error',
-        confirmButtonText: 'Ok'
+        confirmButtonText: 'Ok',
+        customClass: {
+          confirmButton: 'swalBtnColor'
+        }
       })
       return;
     }
 
+    if(hentry==hexit){
+      console.log('El horario de entrada no puede ser igual al horario de salida', hexit);
+      Swal.fire({
+        title: 'Error!',
+        text: 'El horario de entrada no puede ser igual al horario de salida',
+        icon: 'error',
+        confirmButtonText: 'Ok',
+        customClass: {
+          confirmButton: 'swalBtnColor'
+        }
+      })
+      return;
+    }
+
+    this.turnosSupervisor.usuario=this.usuarioSupervisor.usuario;
+    this.turnosSupervisor.horarioentrada=this.turnForm.getRawValue().hentry;
+    this.turnosSupervisor.horariosalida=this.turnForm.getRawValue().hexit;
+    this.turnosSupervisor.descripcion=this.turnForm.getRawValue().description;
+    this.turnosSupervisor.idtipoturno=1;
+
+    this.asignarTurnos.postTurnosSupervisor(this.turnosSupervisor).subscribe(res=>{
+      console.log(res);
+      if(res.mensaje==='OK'){
+        Swal.fire({
+          title: 'Listo!',
+          text: 'Registro guardado 🥳',
+          icon: 'success',
+          confirmButtonText: 'Ok',
+          customClass: {
+            confirmButton: 'swalBtnColor'
+          }
+        })
+      }
+    })
+
   }
 
   deleteRow() {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Aquí puedes llamar a la función para eliminar el registro
+        this.confirmarEliminacion();
+      }
+    });
+  }
 
+  confirmarEliminacion() {
+    console.log('ELIMINADO');
+    setTimeout(() => {
+      // Aquí va tu lógica para eliminar el registro
+      // Una vez que el registro ha sido eliminado, muestra un alert de confirmación
+      Swal.fire(
+        'Eliminado!',
+        'El registro ha sido eliminado exitosamente.',
+        'success'
+      );
+    }, 1000);
   }
 
   editRow() {
