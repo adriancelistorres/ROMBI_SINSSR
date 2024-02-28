@@ -88,7 +88,6 @@ export class LoginTwoComponent implements OnInit {
               this.router.navigate(['/auth/loginThree']);
           } else {
             this.toastr.error('Se produjo un error durante la autenticación.', 'ERROR DE DATOS', {
-              timeOut: 3000,
             });
               // Si el acceso es denegado, maneja el caso apropiado aquí  
               console.log('Acceso denegado');

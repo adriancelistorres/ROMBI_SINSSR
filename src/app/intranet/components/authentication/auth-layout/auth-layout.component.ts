@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-auth-layout',
@@ -17,6 +18,7 @@ export class AuthLayoutComponent implements OnInit{
     // Aquí obtienes el valor de codeEmpresa del localStorage
     this.codeEmpresa = localStorage.getItem('codempresa');
     console.log('empresita',this.codeEmpresa);
+    
   }
 
   getImagePath(codeEmpresa: string): string {
