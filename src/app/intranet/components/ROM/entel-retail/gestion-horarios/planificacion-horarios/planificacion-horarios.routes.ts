@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
 import { AsignacionTurnosPDVComponent } from "./asignacion-turnos-pdv/asignacion-turnos-pdv.component";
+import { AsignacionHorariosPDVComponent } from "./asignacion-horarios-pdv/asignacion-horarios-pdv.component";
 
 export const routes: Routes = [
     {
@@ -11,7 +12,8 @@ export const routes: Routes = [
         path:'AsignacionTurnosPDV',
         component: AsignacionTurnosPDVComponent
     },
-    // {
-    //     path:'AsignacionHorariosPDV'
-    // }
+    {
+        path:'AsignacionHorariosPDV',
+        component: AsignacionHorariosPDVComponent
+    }
 ]

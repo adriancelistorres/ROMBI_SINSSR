@@ -6,6 +6,7 @@ import { UsuarioSupervisor } from '../../../models/planificacion-horarios/usuari
 import { TurnosSupervisor } from '../../../models/planificacion-horarios/turnosSupervisor';
 import { TurnosSupervisorDelRequest } from '../../../models/planificacion-horarios/turnosSupervisorDelRequest';
 import { TurnosDisponiblesPDVRequest } from '../../../models/planificacion-horarios/turnosDisponiblesPDVRequest';
+import { TurnosAsignadosPDVpostRequest } from '../../../models/planificacion-horarios/turnosAsignadosPDVpostRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,17 @@ export class AsignarTurnosService {
 
   getTurnosDisponiblePDV(turnosDisponiblesPDVRequest: TurnosDisponiblesPDVRequest): Observable<any>{
     return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/GetTurnosDisponiblePDV`, turnosDisponiblesPDVRequest);
+  }
+
+  getTurnosAsignadosPDV(turnosDisponiblesPDVRequest: TurnosDisponiblesPDVRequest): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/GetTurnosAsignadosPDV`, turnosDisponiblesPDVRequest);
+  }
+
+  postTurnosPDV(turnosAsignadosPDVpostRequest: TurnosAsignadosPDVpostRequest[]): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/PostTurnosPDV`, turnosAsignadosPDVpostRequest);
+  }
+
+  deleteTurnosPDV(pdvTurno: any): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/DeleteTurnosPDV`, pdvTurno);
   }
 }
