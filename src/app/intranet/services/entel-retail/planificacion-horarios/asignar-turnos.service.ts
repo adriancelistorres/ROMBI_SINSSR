@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UsuarioSupervisor } from '../../../models/planificacion-horarios/usuarioSupervisor';
 import { TurnosSupervisor } from '../../../models/planificacion-horarios/turnosSupervisor';
+import { TurnosSupervisorDelRequest } from '../../../models/planificacion-horarios/turnosSupervisorDelRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -24,4 +25,14 @@ export class AsignarTurnosService {
   postTurnosSupervisor(turnosSupervisor: TurnosSupervisor): Observable<any>{
     return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/PostTurnosSupervisor`, turnosSupervisor);
   }
+
+  putTurnosSupervisor(turnosSupervisor: TurnosSupervisor): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/PutTurnosSupervisor`, turnosSupervisor);
+  }
+
+  deleteTurnosSupervisor(turnosSupervisorDelRequest: TurnosSupervisorDelRequest): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/DeleteTurnosSupervisor`, turnosSupervisorDelRequest);
+  }
+
+
 }

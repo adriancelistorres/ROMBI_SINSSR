@@ -92,10 +92,23 @@
                                 <button type="submit" class="btn btn-primary m-3" [disabled]="!turnForm.valid">
                                     Guardar
                                 </button>
+                                <button type="button" class="btn btn-info m-3" (click)="limpiarFormulario()">
+                                    Limpiar Campos
+                                </button>
                             </form>
                             <div class="table-responsive-sm mt-4">
                                 <table
-                                    class="table table-dark table-hover table-bordered text-center table-sm rounded-2">
+                                    class="table table-dark caption-top table-hover table-bordered text-center table-sm rounded-2">
+                                    <!-- <caption>
+                                        <div class="row justify-content-md-start">
+                                            <div class="col-sm-3 m-1" style="min-width: 150px;">
+                                                <button class="btn btn-outline-info btn-sm" type="button">
+                                                    <i class="bi bi-arrow-clockwise"></i>
+                                                    Recargar Datos
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </caption> -->
                                     <thead class="table-light">
                                         <tr>
                                             <th scope="col">Item</th>
@@ -107,16 +120,16 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let turno of listTurnosSupervisor; let i = index">
-                                            <th scope="row">{{ i + 1 }}</th>
+                                            <th scope="row">{{ turno.idturnos }}</th>
                                             <td>{{ turno.descripcion }}</td>
                                             <td>{{ turno.horarioentrada }}</td>
                                             <td>{{ turno.horariosalida }}</td>
                                             <td>
-                                                <a (click)="editRow()">
+                                                <a (click)="editRow(turno)">
                                                     <i class="bi bi-pencil-square"
                                                         style="color: #4f8bd9; font-size: 1.4rem;"></i>&nbsp;&nbsp;
                                                 </a>
-                                                <a (click)="deleteRow()">
+                                                <a (click)="deleteRow(turno.idturnos,turno.usuario!)">
                                                     <i class="bi bi-trash-fill"
                                                         style="color: #d9534f; font-size: 1.4rem;"></i>
                                                 </a>
@@ -128,7 +141,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                         </div>
                     </div>
                 </div>
@@ -213,7 +226,7 @@
                             <td>Otto</td>
                             <td>mdo</td>
                             <td>
-                                <a (click)="deleteRow()">
+                                <a >
                                     <i class="bi bi-trash-fill" style="color: #d9534f;font-size: 1.4rem;"></i>
                                 </a>
                             </td>

@@ -1,5 +1,5 @@
 export class TurnosSupervisor {
-    idturnos: number | null = null;
+    idturnos: number = 0;
     usuario: string | null = null;
     horarioentrada: string | null = null;
     horariosalida: string | null = null;
