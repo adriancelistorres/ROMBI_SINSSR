@@ -6,6 +6,8 @@ import { AsignarTurnosService } from '../../../../../../services/entel-retail/pl
 import { UsuarioSupervisor } from '../../../../../../models/planificacion-horarios/usuarioSupervisor';
 import { TurnosSupervisor } from '../../../../../../models/planificacion-horarios/turnosSupervisor';
 import { TurnosSupervisorDelRequest } from '../../../../../../models/planificacion-horarios/turnosSupervisorDelRequest';
+import { SupervisorPDV } from '../../../../../../models/planificacion-horarios/supervisorPDV';
+import { TurnosDisponiblesPDVRequest } from '../../../../../../models/planificacion-horarios/turnosDisponiblesPDVRequest';
 
 @Component({
   selector: 'app-asignacion-turnos-pdv',
@@ -25,6 +27,9 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   listTurnosSupervisor: TurnosSupervisor[] = [];
   turnosSupervisor: TurnosSupervisor = new TurnosSupervisor();
   turnosSupervisorDelRequest: TurnosSupervisorDelRequest = new TurnosSupervisorDelRequest();
+  listSupervisorPDV: SupervisorPDV[] = [];
+  turnosDisponiblesPDVRequest: TurnosDisponiblesPDVRequest = new TurnosDisponiblesPDVRequest();
+  listTurnosDisponiblesPDV: TurnosSupervisor[] = [];
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -46,6 +51,10 @@ export class AsignacionTurnosPDVComponent implements OnInit {
 
     //Obtener lista de turnos
     this.getTurnosSupervisor();
+
+    //** ASIGNAR TURNOS */
+    //Obtener PDV por Supervisor
+    this.getSupervisorPDV();
   }
 
   createFormTurn(): UntypedFormGroup {
@@ -251,6 +260,18 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     });
 
     this.turnosSupervisor.idturnos = turno.idturnos;
+
+    (async () => {
+      const { value: email } = await Swal.fire({
+        title: "Input email address",
+        input: "email",
+        inputLabel: "Your email address",
+        inputPlaceholder: "Enter your email address"
+      });
+      if (email) {
+        Swal.fire(`Entered email: ${email}`);
+      }
+    })()
   }
 
   deleteRow(idturno: number, usuario: string) {
@@ -269,7 +290,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
         this.turnosSupervisorDelRequest.idturnos = idturno;
         this.turnosSupervisorDelRequest.usuario = usuario;
         this.asignarTurnos.deleteTurnosSupervisor(this.turnosSupervisorDelRequest).subscribe(res => {
-          console.log('DELETE',res);
+          console.log('DELETE', res);
           if (res.mensaje === 'OK') {
             this.confirmarEliminacion();
             this.getTurnosSupervisor();
@@ -281,4 +302,36 @@ export class AsignacionTurnosPDVComponent implements OnInit {
       }
     });
   }
+
+  ///*************ASIGNACION DE TURNOS*************/
+
+  getSupervisorPDV() {
+    if (this.usuarioSupervisor.usuario !== null) {
+      this.asignarTurnos.getSupervisorPDV(this.usuarioSupervisor).subscribe(res => {
+        console.log(res);
+        this.listSupervisorPDV = res;
+      })
+    }
+  }
+
+  ongetPDV(event: any){
+    const idpdv = (event.target as HTMLSelectElement)?.value;
+
+    localStorage.setItem('idpdv',idpdv);
+
+    this.getTurnosDisponiblesPDV();
+  }
+
+  getTurnosDisponiblesPDV(){
+    const idpdv = localStorage.getItem('idpdv');
+    if(idpdv!==null){
+      this.turnosDisponiblesPDVRequest.usuario = this.usuarioSupervisor.usuario!;
+      this.turnosDisponiblesPDVRequest.idpdv = Number(idpdv);
+      this.asignarTurnos.getTurnosDisponiblePDV(this.turnosDisponiblesPDVRequest).subscribe(res=>{
+        console.log(res)
+        this.listTurnosDisponiblesPDV = res;
+      })
+    }
+  }
+
 }
