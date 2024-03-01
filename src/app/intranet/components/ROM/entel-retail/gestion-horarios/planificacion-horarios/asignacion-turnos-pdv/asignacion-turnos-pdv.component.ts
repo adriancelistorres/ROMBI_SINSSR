@@ -39,10 +39,6 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
     '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
 
-  enablechange = true
-
-
-
   constructor(
     private fb: UntypedFormBuilder,
     private asignarTurnosService: AsignarTurnosService
@@ -51,6 +47,26 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     this.usuarioSupervisor.usuario = localStorage.getItem('user')
 
   }
+
+  ngOnInit(): void {
+    // Suscribe a los cambios en los campos hentry y hexit
+    this.turnForm.get('hentry')?.valueChanges.subscribe(() => {
+      this.actualizarDescripcion();
+    });
+
+    this.turnForm.get('hexit')?.valueChanges.subscribe(() => {
+      this.actualizarDescripcion();
+    });
+
+    //Obtener lista de turnos
+    this.getTurnosSupervisor();
+
+    //** ASIGNAR TURNOS */
+    //Obtener PDV por Supervisor
+    this.getSupervisorPDV();
+  }
+
+
 
   enableEditing(turno: any) {
     this.listTurnosSupervisor.forEach(t => {
@@ -116,33 +132,16 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     // Puedes restaurar los valores originales del turno si fuera necesario
   }
 
-  ngOnInit(): void {
-    // Suscribe a los cambios en los campos hentry y hexit
-    this.turnForm.get('hentry')?.valueChanges.subscribe(() => {
-      this.actualizarDescripcion();
-    });
-
-    this.turnForm.get('hexit')?.valueChanges.subscribe(() => {
-      this.actualizarDescripcion();
-    });
-
-    //Obtener lista de turnos
-    this.getTurnosSupervisor();
-
-    //** ASIGNAR TURNOS */
-    //Obtener PDV por Supervisor
-    this.getSupervisorPDV();
-  }
-
+  
   createFormTurn(): UntypedFormGroup {
     return this.fb.group({
       description: new FormControl({ value: '00:00 - 00:00', disabled: true }, Validators.compose([
         Validators.required,
       ])),
-      hentry: new FormControl('00:00', Validators.compose([
+      hentry: new FormControl("", Validators.compose([
         Validators.required,
       ])),
-      hexit: new FormControl('00:00', Validators.compose([
+      hexit: new FormControl("", Validators.compose([
         Validators.required
       ])),
     });
@@ -152,8 +151,8 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     // Restablecer el formulario a su estado inicial
     this.turnForm.reset({
       description: { value: '00:00 - 00:00', disabled: true },
-      hentry: '00:00',
-      hexit: '00:00'
+      hentry: "",
+      hexit: ""
     }, { emitEvent: false, onlySelf: true });
 
     this.turnosSupervisor = new TurnosSupervisor();
@@ -161,21 +160,12 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     console.log('limpiarFormulario', this.turnosSupervisor.editing);
   }
 
-  formatTime(event: any) {
-
+  formatTime() {
     this.listTurnosSupervisor.forEach(t => {
-
       t.editing = false;
     });
 
-    // const input = event.target;
-    // const value = input.value.split(':');
-    // if (value.length > 1) {
-
-    //   input.value = `${value[0]}:00`;
-    //   console.log('sss',input.value);
-    // }
-    // console.log('sss2',input.value);
+  
   }
 
   actualizarDescripcion() {
@@ -186,18 +176,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     hentry = this.turnForm.get('hentry')?.value;
     hexit = this.turnForm.get('hexit')?.value;
 
-    // Separar las horas y minutos de la hora de entrada
-    // let [hentryHour, hentryMinute] = hentry.split(':');
-    // Separar las horas y minutos de la hora de salida
-    // let [hexitHour, hexitMinute] = hexit.split(':');
 
-    //Si los minutos son diferentes de cero, formatear a '00'
-    // if (Number(hentryMinute) !== 0 || Number(hexitMinute) !== 0) {
-    //   hentryMinute = '00';
-    //   hexitMinute = '00';
-    // }
-    // Concatenar las horas con minutos en cero
-    //const description = `${hentryHour}:${hentryMinute || '00'} - ${hexitHour}:${hexitMinute || '00'}`;
 
     // Concatenar hora de entrada con hora de salida
     const description = `${hentry} - ${hexit}`;
@@ -306,27 +285,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
         }
       })
     }
-    // else if (this.turnosSupervisor.idturnos > 0) {
-    //   this.asignarTurnosService.putTurnosSupervisor(this.turnosSupervisor).subscribe(res => {
-    //     console.log(res);
-    //     if (res.mensaje === 'OK') {
-    //       Swal.fire({
-    //         title: 'Listo!',
-    //         text: 'Registro actualizado 👍',
-    //         icon: 'success',
-    //         confirmButtonText: 'Ok',
-    //         customClass: {
-    //           confirmButton: 'swalBtnColor'
-    //         }
-    //       }).then((result) => {
-    //         if (result.isConfirmed) {
-    //           this.getTurnosSupervisor();
-    //           this.limpiarFormulario();
-    //         }
-    //       });
-    //     }
-    //   })
-    // }
+    
   }
 
   confirmarEliminacion() {
@@ -372,7 +331,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   deleteRow(idturno: number, usuario: string) {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Esta acción no se puede deshacer',
+      text: 'Esta acción no se puede deshacer y también se borraran los turnos asignados en el apartado: ASIGNACIÓN DE TURNOS POR PDV',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
