@@ -4,10 +4,12 @@ import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Unty
 import Swal from 'sweetalert2';
 import { AsignarTurnosService } from '../../../../../../services/entel-retail/planificacion-horarios/asignar-turnos.service';
 import { UsuarioSupervisor } from '../../../../../../models/planificacion-horarios/usuarioSupervisor';
-import { TurnosSupervisor } from '../../../../../../models/planificacion-horarios/turnosSupervisor';
+import { TurnosAsignadosSupervisor, TurnosSupervisor } from '../../../../../../models/planificacion-horarios/turnosSupervisor';
 import { TurnosSupervisorDelRequest } from '../../../../../../models/planificacion-horarios/turnosSupervisorDelRequest';
 import { SupervisorPDV } from '../../../../../../models/planificacion-horarios/supervisorPDV';
 import { TurnosDisponiblesPDVRequest } from '../../../../../../models/planificacion-horarios/turnosDisponiblesPDVRequest';
+import { TurnosAsignadosPDVRequest } from '../../../../../../models/planificacion-horarios/turnosAsignadosPDVRequest';
+import { TurnosAsignadosPDVpostRequest } from '../../../../../../models/planificacion-horarios/turnosAsignadosPDVpostRequest';
 
 @Component({
   selector: 'app-asignacion-turnos-pdv',
@@ -29,13 +31,18 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   listSupervisorPDV: SupervisorPDV[] = [];
   turnosDisponiblesPDVRequest: TurnosDisponiblesPDVRequest = new TurnosDisponiblesPDVRequest();
   listTurnosDisponiblesPDV: TurnosSupervisor[] = [];
-  // mio adrian
+  turnosAsignadosPDVRequest: TurnosAsignadosPDVRequest = new TurnosAsignadosPDVRequest();
+  listTurnosAsignadosPDV: TurnosAsignadosSupervisor[] = [];
+  supervisorPDV: SupervisorPDV[] = [];
+  listTurnosAsignadosPDVpostRequest: TurnosAsignadosPDVpostRequest[] = [];
   hours: string[] = ['07:00', '08:00', '09:00', '10:00', 
   '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', 
   '17:00', '18:00', '19:00', '20:00', '21:00','22:00'];
 
   enablechange=true
   
+
+
   constructor(
     private fb: UntypedFormBuilder,
     private asignarTurnosService: AsignarTurnosService
@@ -397,6 +404,7 @@ console.log('limpiarFormulario',this.turnosSupervisor.editing);
 
   getSupervisorPDV() {
     if (this.usuarioSupervisor.usuario !== null) {
+      this.listSupervisorPDV = [];
       this.asignarTurnosService.getSupervisorPDV(this.usuarioSupervisor).subscribe(res => {
         console.log(res);
         this.listSupervisorPDV = res;
@@ -404,24 +412,90 @@ console.log('limpiarFormulario',this.turnosSupervisor.editing);
     }
   }
 
-  ongetPDV(event: any){
+  ongetPDV(event: any) {
     const idpdv = (event.target as HTMLSelectElement)?.value;
+    const puntoventa = this.listSupervisorPDV.find(item => item.idpuntoventarol === Number(idpdv))?.puntoventa;
 
-    localStorage.setItem('idpdv',idpdv);
+    localStorage.setItem('idpdv', idpdv);
+    localStorage.setItem('puntoventa', puntoventa!);
 
     this.getTurnosDisponiblesPDV();
+    this.getTurnosAsignadosPDV();
   }
 
-  getTurnosDisponiblesPDV(){
+  getTurnosDisponiblesPDV() {
     const idpdv = localStorage.getItem('idpdv');
-    if(idpdv!==null){
+    if (idpdv !== null) {
       this.turnosDisponiblesPDVRequest.usuario = this.usuarioSupervisor.usuario!;
       this.turnosDisponiblesPDVRequest.idpdv = Number(idpdv);
-      this.asignarTurnosService.getTurnosDisponiblePDV(this.turnosDisponiblesPDVRequest).subscribe(res=>{
+      this.asignarTurnosService.getTurnosDisponiblePDV(this.turnosDisponiblesPDVRequest).subscribe(res => {
         console.log(res)
         this.listTurnosDisponiblesPDV = res;
       })
     }
   }
 
+  getTurnosAsignadosPDV() {
+    const idpdv = localStorage.getItem('idpdv');
+    if (idpdv !== null) {
+
+      this.turnosAsignadosPDVRequest.usuario = this.usuarioSupervisor.usuario!;
+      this.turnosAsignadosPDVRequest.idpdv = Number(idpdv);
+      this.asignarTurnosService.getTurnosAsignadosPDV(this.turnosAsignadosPDVRequest).subscribe(res => {
+        console.log(res)
+        this.listTurnosAsignadosPDV = res;
+      })
+    }
+  }
+
+  asignarTurnos(idTabla: string) {
+    this.listTurnosAsignadosPDVpostRequest = []
+
+    const table = document.getElementById(idTabla);
+    if (!table) {
+      console.error('No se encontró la tabla con el ID proporcionado.');
+      return;
+    }
+
+    const rows = table.querySelectorAll('tr');
+    const data: any[] = [];
+
+    const idpdv = localStorage.getItem('idpdv')
+    const puntoventa = localStorage.getItem('puntoventa')
+
+    rows.forEach((row: any) => {
+      const rowData: any = {};
+      const cells = row.querySelectorAll('td');
+
+      if (cells.length > 0 && cells[4].querySelector('input').checked === true) {
+        rowData['usuario'] = this.usuarioSupervisor.usuario;
+        rowData['idpdv'] = idpdv;
+        rowData['puntoventa'] = puntoventa;
+        rowData['idturnos'] = cells[0].innerText;
+        //rowData['checkbox'] = cells[4].querySelector('input').checked; //PARA VER SI MANDA SOLO TRUE
+        data.push(rowData);
+      }
+    });
+
+    const jsonDataForma = JSON.stringify(data);
+    this.listTurnosAsignadosPDVpostRequest = JSON.parse(jsonDataForma);
+    console.log(this.listTurnosAsignadosPDVpostRequest);
+
+    this.asignarTurnosService.postTurnosPDV(this.listTurnosAsignadosPDVpostRequest).subscribe(res => {
+      console.log(res);
+      this.getTurnosDisponiblesPDV();
+      this.getTurnosAsignadosPDV();
+    })
+  }
+
+  deleteRowAsignados(idpdvturno:number){
+    const pdvTurno ={
+      idpdvturno: idpdvturno
+    }
+    this.asignarTurnosService.deleteTurnosPDV(pdvTurno).subscribe(res=>{
+      console.log(res);
+      this.getTurnosDisponiblesPDV();
+      this.getTurnosAsignadosPDV();
+    })
+  }
 }
