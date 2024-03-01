@@ -10,4 +10,8 @@ export class TurnosSupervisor {
     fecha_modificacion: Date | null = null;
     usuario_creacion: string | null = null;
     usuario_modificacion: string | null = null;
+
+
+    editing?: boolean; // Agregamos un campo para controlar si se está editando este turno
+
   }

@@ -21,7 +21,6 @@ import { TurnosDisponiblesPDVRequest } from '../../../../../../models/planificac
   styleUrl: './asignacion-turnos-pdv.component.css'
 })
 export class AsignacionTurnosPDVComponent implements OnInit {
-
   turnForm: UntypedFormGroup;
   usuarioSupervisor: UsuarioSupervisor = new UsuarioSupervisor();
   listTurnosSupervisor: TurnosSupervisor[] = [];
@@ -30,13 +29,84 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   listSupervisorPDV: SupervisorPDV[] = [];
   turnosDisponiblesPDVRequest: TurnosDisponiblesPDVRequest = new TurnosDisponiblesPDVRequest();
   listTurnosDisponiblesPDV: TurnosSupervisor[] = [];
+  // mio adrian
+  hours: string[] = ['07:00', '08:00', '09:00', '10:00', 
+  '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', 
+  '17:00', '18:00', '19:00', '20:00', '21:00','22:00'];
 
+  enablechange=true
+  
   constructor(
     private fb: UntypedFormBuilder,
-    private asignarTurnos: AsignarTurnosService
+    private asignarTurnosService: AsignarTurnosService
   ) {
     this.turnForm = this.createFormTurn();
     this.usuarioSupervisor.usuario = localStorage.getItem('user')
+    
+  }
+
+  enableEditing(turno: any) {
+    this.listTurnosSupervisor.forEach(t => {
+      if (t !== turno) {
+        t.editing = false; // Desactiva la edición de todos los demás turnos
+      }
+    });
+    turno.editing = true; // Activa la edición del turno seleccionado
+    
+  }
+
+  saveChanges(turno: any) {
+    turno.editing = false;
+    // Aquí puedes implementar la lógica para guardar los cambios en tu base de datos o donde sea necesario
+    this.asignarTurnosService.putTurnosSupervisor(turno).subscribe(res => {
+      console.log(res);
+      if (res.mensaje === 'OK') {
+        Swal.fire({
+          title: 'Listo!',
+          text: 'Registro actualizado 👍',
+          icon: 'success',
+          confirmButtonText: 'Ok',
+          customClass: {
+            confirmButton: 'swalBtnColor'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log('ACTUALIZADO');
+            this.getTurnosSupervisor();
+            this.limpiarFormulario();
+          }
+        });
+      }
+      if (res.mensaje === 'Ya existe un turno con el mismo horario para este usuario'){
+        Swal.fire({
+          title: 'Error!',
+          text: 'Ya existe un turno con el mismo horario para este usuario',
+          icon: 'error',
+          confirmButtonText: 'Ok',
+          customClass: {
+            confirmButton: 'swalBtnColor'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log('ERROR');
+            this.getTurnosSupervisor();
+            this.limpiarFormulario();
+          }
+        });
+      }
+    })
+  }
+
+
+  cancelEditing(turno: any) {
+    turno.editing = false;
+    // Puedes restaurar los valores originales del turno si fuera necesario
+  }
+  deleteTurno(turno: any) {
+    turno.editing = false;
+    this.deleteRow(turno.idturnos, turno.usuario); // Llama al método deleteRow() con los parámetros correspondientes
+
+    // Puedes restaurar los valores originales del turno si fuera necesario
   }
 
   ngOnInit(): void {
@@ -80,14 +150,30 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     }, { emitEvent: false, onlySelf: true });
 
     this.turnosSupervisor = new TurnosSupervisor();
+    this.turnosSupervisor.editing = false;
+console.log('limpiarFormulario',this.turnosSupervisor.editing);
   }
 
+
+  
+  
+
   formatTime(event: any) {
+
+    this.listTurnosSupervisor.forEach(t => {
+
+        t.editing = false; 
+    });
+
     const input = event.target;
     const value = input.value.split(':');
     if (value.length > 1) {
+
       input.value = `${value[0]}:00`;
+      console.log('sss',input.value);
     }
+    console.log('sss2',input.value);
+
   }
 
   actualizarDescripcion() {
@@ -115,7 +201,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
 
   getTurnosSupervisor() {
     if (this.usuarioSupervisor.usuario !== null) {
-      this.asignarTurnos.getTurnosSupervisor(this.usuarioSupervisor).subscribe(res => {
+      this.asignarTurnosService.getTurnosSupervisor(this.usuarioSupervisor).subscribe(res => {
         console.log(res);
         if (res !== null) {
           // Inicializar un array para almacenar los elementos filtrados
@@ -137,6 +223,9 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     }
   }
 
+
+
+  
   getTurnForm() {
     console.log(this.turnForm.getRawValue());
 
@@ -191,7 +280,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
 
       this.turnosSupervisor.idtipoturno = 1;
 
-      this.asignarTurnos.postTurnosSupervisor(this.turnosSupervisor).subscribe(res => {
+      this.asignarTurnosService.postTurnosSupervisor(this.turnosSupervisor).subscribe(res => {
         console.log('POST', res);
         if (res.mensaje === 'OK') {
           Swal.fire({
@@ -211,27 +300,28 @@ export class AsignacionTurnosPDVComponent implements OnInit {
           });
         }
       })
-    } else if (this.turnosSupervisor.idturnos > 0) {
-      this.asignarTurnos.putTurnosSupervisor(this.turnosSupervisor).subscribe(res => {
-        console.log(res);
-        if (res.mensaje === 'OK') {
-          Swal.fire({
-            title: 'Listo!',
-            text: 'Registro actualizado 👍',
-            icon: 'success',
-            confirmButtonText: 'Ok',
-            customClass: {
-              confirmButton: 'swalBtnColor'
-            }
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.getTurnosSupervisor();
-              this.limpiarFormulario();
-            }
-          });
-        }
-      })
-    }
+    } 
+    // else if (this.turnosSupervisor.idturnos > 0) {
+    //   this.asignarTurnosService.putTurnosSupervisor(this.turnosSupervisor).subscribe(res => {
+    //     console.log(res);
+    //     if (res.mensaje === 'OK') {
+    //       Swal.fire({
+    //         title: 'Listo!',
+    //         text: 'Registro actualizado 👍',
+    //         icon: 'success',
+    //         confirmButtonText: 'Ok',
+    //         customClass: {
+    //           confirmButton: 'swalBtnColor'
+    //         }
+    //       }).then((result) => {
+    //         if (result.isConfirmed) {
+    //           this.getTurnosSupervisor();
+    //           this.limpiarFormulario();
+    //         }
+    //       });
+    //     }
+    //   })
+    // }
   }
 
   confirmarEliminacion() {
@@ -289,7 +379,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
         // Aquí puedes llamar a la función para eliminar el registro
         this.turnosSupervisorDelRequest.idturnos = idturno;
         this.turnosSupervisorDelRequest.usuario = usuario;
-        this.asignarTurnos.deleteTurnosSupervisor(this.turnosSupervisorDelRequest).subscribe(res => {
+        this.asignarTurnosService.deleteTurnosSupervisor(this.turnosSupervisorDelRequest).subscribe(res => {
           console.log('DELETE', res);
           if (res.mensaje === 'OK') {
             this.confirmarEliminacion();
@@ -307,7 +397,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
 
   getSupervisorPDV() {
     if (this.usuarioSupervisor.usuario !== null) {
-      this.asignarTurnos.getSupervisorPDV(this.usuarioSupervisor).subscribe(res => {
+      this.asignarTurnosService.getSupervisorPDV(this.usuarioSupervisor).subscribe(res => {
         console.log(res);
         this.listSupervisorPDV = res;
       })
@@ -327,7 +417,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     if(idpdv!==null){
       this.turnosDisponiblesPDVRequest.usuario = this.usuarioSupervisor.usuario!;
       this.turnosDisponiblesPDVRequest.idpdv = Number(idpdv);
-      this.asignarTurnos.getTurnosDisponiblePDV(this.turnosDisponiblesPDVRequest).subscribe(res=>{
+      this.asignarTurnosService.getTurnosDisponiblePDV(this.turnosDisponiblesPDVRequest).subscribe(res=>{
         console.log(res)
         this.listTurnosDisponiblesPDV = res;
       })
