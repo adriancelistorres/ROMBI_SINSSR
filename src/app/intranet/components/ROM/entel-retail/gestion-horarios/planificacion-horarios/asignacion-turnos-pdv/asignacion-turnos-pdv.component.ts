@@ -35,12 +35,12 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   listTurnosAsignadosPDV: TurnosAsignadosSupervisor[] = [];
   supervisorPDV: SupervisorPDV[] = [];
   listTurnosAsignadosPDVpostRequest: TurnosAsignadosPDVpostRequest[] = [];
-  hours: string[] = ['07:00', '08:00', '09:00', '10:00', 
-  '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', 
-  '17:00', '18:00', '19:00', '20:00', '21:00','22:00'];
+  hours: string[] = ['07:00', '08:00', '09:00', '10:00',
+    '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
+    '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
 
-  enablechange=true
-  
+  enablechange = true
+
 
 
   constructor(
@@ -49,7 +49,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   ) {
     this.turnForm = this.createFormTurn();
     this.usuarioSupervisor.usuario = localStorage.getItem('user')
-    
+
   }
 
   enableEditing(turno: any) {
@@ -59,7 +59,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
       }
     });
     turno.editing = true; // Activa la edición del turno seleccionado
-    
+
   }
 
   saveChanges(turno: any) {
@@ -84,7 +84,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
           }
         });
       }
-      if (res.mensaje === 'Ya existe un turno con el mismo horario para este usuario'){
+      if (res.mensaje === 'Ya existe un turno con el mismo horario para este usuario') {
         Swal.fire({
           title: 'Error!',
           text: 'Ya existe un turno con el mismo horario para este usuario',
@@ -136,7 +136,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
 
   createFormTurn(): UntypedFormGroup {
     return this.fb.group({
-      description: new FormControl({ value: '', disabled: true }, Validators.compose([
+      description: new FormControl({ value: '00:00 - 00:00', disabled: true }, Validators.compose([
         Validators.required,
       ])),
       hentry: new FormControl('00:00', Validators.compose([
@@ -151,55 +151,56 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   limpiarFormulario() {
     // Restablecer el formulario a su estado inicial
     this.turnForm.reset({
-      description: { value: '', disabled: true },
+      description: { value: '00:00 - 00:00', disabled: true },
       hentry: '00:00',
       hexit: '00:00'
     }, { emitEvent: false, onlySelf: true });
 
     this.turnosSupervisor = new TurnosSupervisor();
     this.turnosSupervisor.editing = false;
-console.log('limpiarFormulario',this.turnosSupervisor.editing);
+    console.log('limpiarFormulario', this.turnosSupervisor.editing);
   }
-
-
-  
-  
 
   formatTime(event: any) {
 
     this.listTurnosSupervisor.forEach(t => {
 
-        t.editing = false; 
+      t.editing = false;
     });
 
-    const input = event.target;
-    const value = input.value.split(':');
-    if (value.length > 1) {
+    // const input = event.target;
+    // const value = input.value.split(':');
+    // if (value.length > 1) {
 
-      input.value = `${value[0]}:00`;
-      console.log('sss',input.value);
-    }
-    console.log('sss2',input.value);
-
+    //   input.value = `${value[0]}:00`;
+    //   console.log('sss',input.value);
+    // }
+    // console.log('sss2',input.value);
   }
 
   actualizarDescripcion() {
-    const hentry = this.turnForm.get('hentry')?.value;
-    const hexit = this.turnForm.get('hexit')?.value;
+
+    let hentry = '00:00'
+    let hexit = '00:00'
+
+    hentry = this.turnForm.get('hentry')?.value;
+    hexit = this.turnForm.get('hexit')?.value;
 
     // Separar las horas y minutos de la hora de entrada
-    let [hentryHour, hentryMinute] = hentry.split(':');
+    // let [hentryHour, hentryMinute] = hentry.split(':');
     // Separar las horas y minutos de la hora de salida
-    let [hexitHour, hexitMinute] = hexit.split(':');
+    // let [hexitHour, hexitMinute] = hexit.split(':');
 
     //Si los minutos son diferentes de cero, formatear a '00'
-    if (Number(hentryMinute) !== 0 || Number(hexitMinute) !== 0) {
-      hentryMinute = '00';
-      hexitMinute = '00';
-    }
+    // if (Number(hentryMinute) !== 0 || Number(hexitMinute) !== 0) {
+    //   hentryMinute = '00';
+    //   hexitMinute = '00';
+    // }
     // Concatenar las horas con minutos en cero
-    const description = `${hentryHour}:${hentryMinute || '00'} - ${hexitHour}:${hexitMinute || '00'}`;
+    //const description = `${hentryHour}:${hentryMinute || '00'} - ${hexitHour}:${hexitMinute || '00'}`;
 
+    // Concatenar hora de entrada con hora de salida
+    const description = `${hentry} - ${hexit}`;
     // Actualizar el valor de description en el formulario
     this.turnForm.patchValue({
       description: description
@@ -230,9 +231,6 @@ console.log('limpiarFormulario',this.turnosSupervisor.editing);
     }
   }
 
-
-
-  
   getTurnForm() {
     console.log(this.turnForm.getRawValue());
 
@@ -307,7 +305,7 @@ console.log('limpiarFormulario',this.turnosSupervisor.editing);
           });
         }
       })
-    } 
+    }
     // else if (this.turnosSupervisor.idturnos > 0) {
     //   this.asignarTurnosService.putTurnosSupervisor(this.turnosSupervisor).subscribe(res => {
     //     console.log(res);
@@ -400,6 +398,11 @@ console.log('limpiarFormulario',this.turnosSupervisor.editing);
     });
   }
 
+  closeModal(){
+    this.getTurnosDisponiblesPDV();
+    this.getTurnosAsignadosPDV();
+  }
+
   ///*************ASIGNACION DE TURNOS*************/
 
   getSupervisorPDV() {
@@ -488,11 +491,11 @@ console.log('limpiarFormulario',this.turnosSupervisor.editing);
     })
   }
 
-  deleteRowAsignados(idpdvturno:number){
-    const pdvTurno ={
+  deleteRowAsignados(idpdvturno: number) {
+    const pdvTurno = {
       idpdvturno: idpdvturno
     }
-    this.asignarTurnosService.deleteTurnosPDV(pdvTurno).subscribe(res=>{
+    this.asignarTurnosService.deleteTurnosPDV(pdvTurno).subscribe(res => {
       console.log(res);
       this.getTurnosDisponiblesPDV();
       this.getTurnosAsignadosPDV();
