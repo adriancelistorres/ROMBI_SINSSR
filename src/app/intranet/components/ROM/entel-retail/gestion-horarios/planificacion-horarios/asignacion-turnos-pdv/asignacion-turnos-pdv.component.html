@@ -3,7 +3,7 @@
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item fw-bold">
-                    <a class="text-decoration-none" (click)="closeModal()">
+                    <a class="text-decoration-none">
                         Asignación de Turnos por PDV
                     </a>
                 </li>
@@ -180,21 +180,21 @@
                                 </td>
                                 <td>
                                     <a *ngIf="!turno.editing" (click)="enableEditing(turno)">
-                                        <i class="bi bi-pencil-square"
-                                            style="color: #4f8bd9; font-size: 1.4rem;"></i>&nbsp;&nbsp;
+                                        <i class="bi bi-pencil-square me-3"
+                                            style="color: #4f8bd9; font-size: 1.4rem;"></i>
                                     </a>
 
                                     <a *ngIf="turno.editing" (click)="saveChanges(turno)">
-                                        <i class="bi bi-check2-circle"
-                                            style="color: #4fd976; font-size: 1.4rem;"></i>&nbsp;&nbsp;
+                                        <i class="bi bi-check2-circle me-3"
+                                            style="color: #4fd976; font-size: 1.4rem;"></i>
                                     </a>
                                     <a *ngIf="turno.editing" (click)="cancelEditing(turno)">
-                                        <i class="bi bi-x-square"
-                                            style="color: #d9534f; font-size: 1.4rem;"></i>&nbsp;&nbsp;
+                                        <i class="bi bi-x-square me-3"
+                                            style="color: #d9534f; font-size: 1.4rem;"></i>
                                     </a>
                                     <a *ngIf="!turno.editing" (click)="deleteTurno(turno)">
                                         <i class="bi bi-trash"
-                                            style="color: #d9534f; font-size: 1.4rem;"></i>&nbsp;&nbsp;
+                                            style="color: #d9534f; font-size: 1.4rem;"></i>
                                     </a>
                                 </td>
                             </tr>

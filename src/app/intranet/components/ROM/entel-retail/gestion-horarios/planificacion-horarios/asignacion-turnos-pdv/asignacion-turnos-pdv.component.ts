@@ -45,6 +45,9 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   ) {
     this.turnForm = this.createFormTurn();
     this.usuarioSupervisor.usuario = localStorage.getItem('user')
+    localStorage.setItem('idpdv', '');
+    localStorage.setItem('puntoventa', '');
+
 
   }
 
@@ -86,19 +89,23 @@ export class AsignacionTurnosPDVComponent implements OnInit {
       if (res.mensaje === 'OK') {
         Swal.fire({
           title: 'Listo!',
-          text: 'Registro actualizado 👍',
+          text: 'Esta acción también impactará los turnos asignados en el apartado: ASIGNACIÓN DE TURNOS POR PDV',
           icon: 'success',
           confirmButtonText: 'Ok',
           customClass: {
             confirmButton: 'swalBtnColor'
           }
+          
         }).then((result) => {
           if (result.isConfirmed) {
             console.log('ACTUALIZADO');
             this.getTurnosSupervisor();
             this.limpiarFormulario();
+            
           }
         });
+        this.closeModal()
+
       }
       if (res.mensaje === 'Ya existe un turno con el mismo horario para este usuario') {
         Swal.fire({
