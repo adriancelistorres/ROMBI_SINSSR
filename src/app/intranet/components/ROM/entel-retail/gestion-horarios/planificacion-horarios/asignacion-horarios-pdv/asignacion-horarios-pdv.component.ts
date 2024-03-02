@@ -4,6 +4,10 @@ import { AsignarTurnosService } from '../../../../../../services/entel-retail/pl
 import { UsuarioSupervisor } from '../../../../../../models/planificacion-horarios/usuarioSupervisor';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {MatDatepickerInputEvent, MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {DateAdapter, provideNativeDateAdapter} from '@angular/material/core';
 
 @Component({
   selector: 'app-asignacion-horarios-pdv',
@@ -12,7 +16,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatDatepickerModule
   ],
+  providers: [provideNativeDateAdapter()],
+
   templateUrl: './asignacion-horarios-pdv.component.html',
   styleUrl: './asignacion-horarios-pdv.component.css'
 })
@@ -58,15 +67,41 @@ export class AsignacionHorariosPDVComponent implements OnInit{
     },
     // Puedes agregar más filas si es necesario
   ];
-
+  selectedStartDate!: Date;
+  selectedEndDate!: Date;
   constructor(
-    private asignarTurnosService: AsignarTurnosService,
+    private asignarTurnosService: AsignarTurnosService,private _adapter: DateAdapter<any>
   ){
     this.usuarioSupervisor.usuario = localStorage.getItem('user')
     localStorage.removeItem('idpdv');
     localStorage.removeItem('puntoventa');
+    this._adapter.setLocale('en'); // Cambia 'en' por tu idioma preferido
   }
-
+  onDateChange(event: MatDatepickerInputEvent<Date>) {
+    if (event.value) {
+      const selectedDate = event.value;
+      this.selectedStartDate = this.getFirstDayOfWeek(selectedDate);
+      this.selectedEndDate = this.getLastDayOfWeek(this.selectedStartDate); // Configurar automáticamente el domingo de la semana
+    }
+  }
+  
+  
+  getFirstDayOfWeek(date: Date): Date {
+    const dayOfWeek = date.getDay(); // 0: Domingo, 1: Lunes, ..., 6: Sábado
+    const diff = date.getDate() - dayOfWeek + (dayOfWeek === 1 ? 0 : (dayOfWeek === 0 ? -6 : 1)); // Asegura que el inicio de la semana sea el lunes
+    return new Date(date.setDate(diff));
+  }
+  
+  getLastDayOfWeek(date: Date): Date {
+    const lastDayOfWeek = new Date(date);
+    const dayOfWeek = date.getDay();
+    const diff = 7 - dayOfWeek + 1; // Asegura que el fin de la semana sea el domingo
+    lastDayOfWeek.setDate(date.getDate() + diff);
+    return lastDayOfWeek;
+  }
+  
+  
+  
   ngOnInit(): void {
     this.getSupervisorPDV();
   }

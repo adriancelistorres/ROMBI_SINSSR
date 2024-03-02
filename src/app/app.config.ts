@@ -6,6 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/interceptor/auth.interceptor';
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 export const appConfig: ApplicationConfig = {
@@ -18,6 +19,6 @@ export const appConfig: ApplicationConfig = {
       closeButton: true, // Habilita el botón de cierre
       progressBar: true, // Habilita la barra de progreso
     }), 
-    provideAnimations(),
+    provideAnimations(), provideAnimationsAsync(),
   ],
 };
