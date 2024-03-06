@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RangoSemana } from '../../../models/planificacion-horarios/rangoSemana';
 import { SupervisorPDV } from '../../../models/planificacion-horarios/supervisorPDV';
+import { TurnosDisponiblesPDVRequest } from '../../../models/planificacion-horarios/turnosDisponiblesPDVRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,10 @@ export class AsignarHorariosService {
 
   getPromotorSupervisorPDV(supervisorPDV: SupervisorPDV): Observable<any>{
     return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/GetPromotorSupervisorPDV`,supervisorPDV);
+  }
+  
+  getTurnosSupervisorPDVHorarios(SuperPDV: TurnosDisponiblesPDVRequest): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/GetTurnosSupervisorPDVHorarios`, SuperPDV);
   }
 
 

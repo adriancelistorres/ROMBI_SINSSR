@@ -47,8 +47,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
   headers: DiasSemana[] = [];  // Cabeceras superiores
   promotorList: PromotorPDVResponse [] = [];
-  listTurnosAsignadosPDV: TurnosAsignadosSupervisor[] = [];
-  listHorarios: any[] = []
+  listTurnosAsignadosPDV: any[] = [];
+  listHorario: any[][] = []
 
   // rows: any[] = [{
   //   header: [] = []
@@ -103,6 +103,9 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    for (let i = 0; i < 7; i++) {
+      this.listHorario.push([]);
+  }
     this.getSupervisorPDV();
     this.getRangoSemana();
     const fechaHoy = new Date();
@@ -175,7 +178,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       this.turnosAsignadosPDVRequest.idpdv = Number(idpdv);
       console.log(this.turnosAsignadosPDVRequest);
       
-      this.asignarTurnosService.getTurnosAsignadosPDV(this.turnosAsignadosPDVRequest).subscribe(res => {
+      this.asignarHorariosService.getTurnosSupervisorPDVHorarios(this.turnosAsignadosPDVRequest).subscribe(res => {
         console.log(res);
         this.listTurnosAsignadosPDV = res;
       })
