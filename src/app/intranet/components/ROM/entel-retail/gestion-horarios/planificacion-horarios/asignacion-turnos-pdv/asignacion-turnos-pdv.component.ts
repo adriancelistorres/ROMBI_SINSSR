@@ -69,8 +69,6 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     this.getSupervisorPDV();
   }
 
-
-
   enableEditing(turno: any) {
     this.listTurnosSupervisor.forEach(t => {
       if (t !== turno) {

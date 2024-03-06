@@ -19,8 +19,8 @@
                                 <label for="input1" class="form-label">Punto de Venta:</label>
                                 <select class="form-select" id="input1" (change)="ongetPDV($event)">
                                     <option selected>Seleccionar PDV</option>
-                                    <option *ngFor="let item of listSupervisorPDV" [value]="item.idpuntoventarol">
-                                        {{ item.puntoventa }}
+                                    <option *ngFor="let pdv of listSupervisorPDV" [value]="pdv.idpuntoventarol">
+                                        {{ pdv.puntoventa }}
                                     </option>
                                 </select>
                             </div>
@@ -29,36 +29,80 @@
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional
-                                    content.</p>
+                                <div class="row justify-content-md-start">
+                                    <!-- <div class="col-sm-2 text-center">
+                                        <i class="bi bi-calendar4-range" style="font-size: 2rem; color: #FF455C;"></i>
+                                    </div> -->
+                                    <div class="col-sm-12">
+                                        <label for="input2" class="form-label">
+                                            <i class="bi bi-calendar4-range" style="font-size: 1rem; color: #FF455C;"></i>
+                                            Rangos Semanales:
+                                        </label>
+                                        <select class="form-select" id="input2" (change)="ongetRangoSemana($event)">
+                                            <option selected>Seleccionar</option>
+                                            <option *ngFor="let rango of listRangoSemana" [value]="(rango.lunes + ',' + rango.domingo)">
+                                                Lunes {{ rango.lunes | date:"dd/MM/yyyy" }} - Domingo {{rango.domingo
+                                                | date:"dd/MM/yyyy" }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- <div class="row justify-content-md-end">
+                                    <div class="col-sm-4 mt-1">
+                                        <button class="btn btn-primary mt-1" style="min-width: 100%;"
+                                            type="button">Buscar</button>
+                                    </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="table-responsive-sm mt-4">
-                    <table class="table table-dark caption-top table-hover table-bordered text-center table-sm rounded-2">
+                <div class="table-responsive mt-4">
+                    <table
+                        class="table table-dark caption-top table-hover table-bordered text-center table-sm rounded-2">
                         <thead>
                             <tr>
-                              <th></th>
-                              <!-- Cabeceras superiores -->
-                              <th *ngFor="let header of headers" class="text-center font-weight-bold">{{ header }}</th>
+                                <th style="margin: 0px; padding-left: 0px; padding-right: 0px;"></th>
+                                <th></th>
+                                <th class="text-center font-weight-bold">Lunes</th>
+                                <th class="text-center font-weight-bold">Martes</th>
+                                <th class="text-center font-weight-bold">Miércoles</th>
+                                <th class="text-center font-weight-bold">Jueves</th>
+                                <th class="text-center font-weight-bold">Viernes</th>
+                                <th class="text-center font-weight-bold">Sábado</th>
+                                <th class="text-center font-weight-bold">Domingo</th>
                             </tr>
-                          </thead>
-                          <tbody>
+                            <tr>
+                                <th style="margin: 0px; padding-left: 0px; padding-right: 0px;">Promotores</th>
+                                <th></th>
+                                <!-- Cabeceras superiores -->
+                                <th class="text-center font-weight-bold" *ngFor="let dias of headers">{{ dias.fecha| date:"dd/MM" }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <!-- Filas -->
-                            <tr *ngFor="let row of rows; let rowIndex = index">
-                              <!-- Cabecera lateral -->
-                              <th scope="row" class="font-weight-bold">{{ row.header }}</th>
-                              <!-- Celdas de datos -->
-                              <td *ngFor="let option of row.options; let cellIndex = index">
-                                <select class="form-control" [(ngModel)]="row.selectedOptions[cellIndex]">
-                                    
-                                  <option *ngFor="let item of option.items" [value]="item.value">{{ item.label }}</option>
-                                </select>
-                              </td>
+                            <tr *ngFor="let promotor of promotorList">
+                                <!-- Cabecera lateral -->
+                                <th scope="row" class="font-weight-bold" style="margin: 0px; padding-left: 0px; padding-right: 0px;">
+                                    {{ promotor.nombrepromotor }}
+                                    {{ promotor.apellidopaternopromotor }} {{ promotor.apellidomaternopromotor }}
+                                </th>
+                                <th scope="row" class="font-weight-bold">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                      Repetir <br> <i class="bi bi-arrow-right"></i>
+                                    </label>
+                                </th>
+                                <!-- Celdas de datos -->
+                                <td *ngFor="let dias of headers; index as i">
+                                    <select class="form-control" style="padding: 10px;" [(ngModel)]="listHorarios[i]">
+                                        <option *ngFor="let item of listTurnosAsignadosPDV" [value]="(item.horarioentrada + ',' + item.horariosalida)">
+                                            {{item.descripcion}}
+                                        </option>
+                                    </select>
+                                </td>
                             </tr>
-                          </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
