@@ -212,33 +212,39 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     console.log('sies?',this.listHorario)
   }
 
-  // Suponiendo que esta función se llama cuando se hace clic en el botón de guardar
   guardar() {
     const arregloFinal: any[] = []; // Arreglo para almacenar todos los objetos
-
+  
     // Iterar sobre los promotores
     this.promotorList.forEach((promotor, indexPromotor) => {
-      // Iterar sobre los días y horarios
-      this.listHorario.forEach((horarioPorDia, indexDia) => {
-        const horarioPromotor = horarioPorDia[indexPromotor];
-
-        // Crear un objeto para cada horario de cada día
+      // Iterar sobre los días de la semana
+      const promotorPorDia: any[] = [];
+      this.headers.forEach((dia, indexDia) => {
+        // Obtener el horario del promotor para el día actual
+        const horario = this.listHorario[indexPromotor][indexDia];
+  
+        // Crear un objeto para el horario actual
         const objetoHorario = {
           dni: promotor.dnipromotor,
           nombre: promotor.nombrepromotor,
-          fecha: this.headers[indexDia].fecha,
-          horario: horarioPromotor
+          fecha: dia.fecha,
+          horario: horario ? horario.horario : 'no laborable'
         };
-
-        // Agregar el objeto al arreglo final
-        arregloFinal.push(objetoHorario);
+  
+        // Agregar el objeto al arreglo de promotorPorDia
+        promotorPorDia.push(objetoHorario);
       });
+  
+      // Agregar el arreglo de promotorPorDia al arregloFinal
+      arregloFinal.push(promotorPorDia);
     });
-
+  
     // Mostrar en consola el arreglo final
     console.log('Arreglo final:', arregloFinal);
   }
-
+  
+  
+  
 
 
 
