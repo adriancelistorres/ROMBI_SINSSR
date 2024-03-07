@@ -71,40 +71,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Filas -->
-                            <!-- <tr *ngFor="let promotor of promotorList">
-                                
-                                <th scope="row" class="font-weight-bold" style="margin: 0px; padding-left: 0px; padding-right: 0px;">
-                                    {{ promotor.nombrepromotor }}
-                                    {{ promotor.apellidopaternopromotor }} {{ promotor.apellidomaternopromotor }}
-                                </th>
-                                <th scope="row" class="font-weight-bold">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                      Repetir <br> <i class="bi bi-arrow-right"></i>
-                                    </label>
-                                </th>
-                                
-                                <td *ngFor="let dias of headers; index as i">
-                                    <select class="form-control" style="padding: 10px;" [(ngModel)]="listHorarios1[i]">
-                                        <option *ngFor="let item of listTurnosAsignadosPDV" [value]="(item.horarioentrada + ',' + item.horariosalida)">
-                                            {{item.descripcion}}
-                                        </option>
-                                    </select>
-                                </td>
-                            </tr> -->
+                            
                             <tr *ngFor="let promotor of promotorList; let in = index">
                                 <!-- Cabecera lateral -->
                                 <th scope="row" class="font-weight-bold">
                                     {{ promotor.nombrepromotor }}
                                     {{ promotor.apellidopaternopromotor }} {{ promotor.apellidomaternopromotor }}
                                 </th>
-                                <!-- <th scope="row" class="font-weight-bold">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                        Repetir <br> <i class="bi bi-arrow-right"></i>
-                                    </label>
-                                </th> -->
+                                
                                 <!-- Celdas de datos -->
                                 <td *ngFor="let dia of listHorario; let i = index">
                                     <select class="form-control" style="padding: 10px;" [(ngModel)]="listHorario[i][in]">
@@ -123,6 +97,8 @@
                         <button class="btn btn-primary" type="menu" (click)="guardarHorarios('tablaTurnosAsignadosHorarios')">
                             Guardar
                         </button>
+                        <button (click)="guardar()">Guardar</button>
+
                     </div>
                 </div>
             </div>

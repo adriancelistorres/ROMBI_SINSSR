@@ -102,6 +102,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     localStorage.setItem('puntoventa', '');
   }
 
+  
   ngOnInit(): void {
 
     //para que la dimension horizontal listhorario sea 7, como 7 dias
@@ -221,6 +222,36 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       this.contarFilasColumnas(idTabla);
     }
   }
+
+  // Suponiendo que esta función se llama cuando se hace clic en el botón de guardar
+  guardar() {
+  const arregloFinal: any[] = []; // Arreglo para almacenar todos los objetos
+
+  // Iterar sobre los promotores
+  this.promotorList.forEach((promotor, indexPromotor) => {
+    // Iterar sobre los días y horarios
+    this.listHorario.forEach((horarioPorDia, indexDia) => {
+      const horarioPromotor = horarioPorDia[indexPromotor];
+
+      // Crear un objeto para cada horario de cada día
+      const objetoHorario = {
+        dni: promotor.dnipromotor,
+        nombre: promotor.nombrepromotor,
+        fecha: this.headers[indexDia].fecha,
+        horario: horarioPromotor
+      };
+
+      // Agregar el objeto al arreglo final
+      arregloFinal.push(objetoHorario);
+    });
+  });
+
+  // Mostrar en consola el arreglo final
+  console.log('Arreglo final:', arregloFinal);
+}
+
+  
+  
 
   contarFilasColumnas(idTabla: string) {
     const tabla = document.getElementById(idTabla);
