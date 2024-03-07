@@ -49,6 +49,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   promotorList: PromotorPDVResponse[] = [];
   listTurnosSupervisorPDVHorarios: any[] = [];
   listHorario: any[][] = []
+  columnas: number=0;
+  filas: number=0;
 
   // rows: any[] = [{
   //   header: [] = []
@@ -102,7 +104,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     localStorage.setItem('puntoventa', '');
   }
 
-  
+
   ngOnInit(): void {
 
     //para que la dimension horizontal listhorario sea 7, como 7 dias
@@ -139,23 +141,11 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     localStorage.setItem('idpdv', idpdv);
     localStorage.setItem('puntoventa', puntoventa!);
 
-    // Limpiar las listas
-    // this.promotorList = [];
-    // this.listTurnosAsignadosPDV = [];
-
     this.getPromotorSupervisorPDV();
     this.getTurnosSupervisorPDVHorarios();
 
     // Reinicializar listHorario manteniendo su estructura bidimensional
     this.listHorario = [];
-
-    for (let i = 0; i < this.headers.length; i++) {
-      const innerArray = [];
-      for (let j = 0; j < this.promotorList.length; j++) {
-        innerArray.push(""); // Puedes inicializar con null o cualquier otro valor inicial
-      }
-      this.listHorario.push(innerArray);
-    }
 
   }
 
@@ -188,6 +178,18 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.asignarHorariosService.getPromotorSupervisorPDV(this.supervisorPDV).subscribe(res => {
       this.promotorList = res;
       console.log(this.promotorList);
+
+      for (let i = 0; i < this.promotorList.length; i++) {
+        const innerArray = [];
+        for (let j = 0; j < this.headers.length; j++) {
+          innerArray.push({
+            horario: "", // Valor inicial del select
+            fila: i, // Coordenada de fila
+            columna: j // Coordenada de columna
+          });
+        }
+        this.listHorario.push(innerArray);
+      }
     })
   }
 
@@ -206,52 +208,39 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   guardarHorarios(idTabla: string) {
-    const tabla = document.getElementById(idTabla);
-    if (tabla) {
-      const filas = tabla.getElementsByTagName('tr');
-      for (let i = 1; i < filas.length; i++) {
-        const celdas = filas[i].getElementsByTagName('td');
-        const horariosPromotor = [];
-        for (let j = 0; j < celdas.length; j++) {
-          const select = celdas[j].getElementsByTagName('select')[0];
-          const horarioSeleccionado = select.value;
-          horariosPromotor.push(horarioSeleccionado);
-        }
-        console.log('Horarios del promotor ', i, ': ', horariosPromotor);
-      }
-      this.contarFilasColumnas(idTabla);
-    }
+    
+    console.log('sies?',this.listHorario)
   }
 
   // Suponiendo que esta función se llama cuando se hace clic en el botón de guardar
   guardar() {
-  const arregloFinal: any[] = []; // Arreglo para almacenar todos los objetos
+    const arregloFinal: any[] = []; // Arreglo para almacenar todos los objetos
 
-  // Iterar sobre los promotores
-  this.promotorList.forEach((promotor, indexPromotor) => {
-    // Iterar sobre los días y horarios
-    this.listHorario.forEach((horarioPorDia, indexDia) => {
-      const horarioPromotor = horarioPorDia[indexPromotor];
+    // Iterar sobre los promotores
+    this.promotorList.forEach((promotor, indexPromotor) => {
+      // Iterar sobre los días y horarios
+      this.listHorario.forEach((horarioPorDia, indexDia) => {
+        const horarioPromotor = horarioPorDia[indexPromotor];
 
-      // Crear un objeto para cada horario de cada día
-      const objetoHorario = {
-        dni: promotor.dnipromotor,
-        nombre: promotor.nombrepromotor,
-        fecha: this.headers[indexDia].fecha,
-        horario: horarioPromotor
-      };
+        // Crear un objeto para cada horario de cada día
+        const objetoHorario = {
+          dni: promotor.dnipromotor,
+          nombre: promotor.nombrepromotor,
+          fecha: this.headers[indexDia].fecha,
+          horario: horarioPromotor
+        };
 
-      // Agregar el objeto al arreglo final
-      arregloFinal.push(objetoHorario);
+        // Agregar el objeto al arreglo final
+        arregloFinal.push(objetoHorario);
+      });
     });
-  });
 
-  // Mostrar en consola el arreglo final
-  console.log('Arreglo final:', arregloFinal);
-}
+    // Mostrar en consola el arreglo final
+    console.log('Arreglo final:', arregloFinal);
+  }
 
-  
-  
+
+
 
   contarFilasColumnas(idTabla: string) {
     const tabla = document.getElementById(idTabla);
@@ -259,7 +248,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       const filas = tabla.getElementsByTagName('tr');
       const numRows = filas.length;
 
-     
+
 
       let maxCols = 0;
       for (let i = 0; i < filas.length; i++) {
