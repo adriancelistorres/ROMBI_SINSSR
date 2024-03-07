@@ -49,12 +49,12 @@
                     </div>
                 </div>
                 <div class="table-responsive mt-4">
-                    <table
+                    <table id="tablaTurnosAsignadosHorarios"
                         class="table table-dark caption-top table-hover table-bordered text-center table-sm rounded-2">
                         <thead>
                             <tr>
                                 <th style="margin: 0px; padding-left: 0px; padding-right: 0px;"></th>
-                                <th></th>
+                                <!-- <th></th> -->
                                 <th class="text-center font-weight-bold">Lunes</th>
                                 <th class="text-center font-weight-bold">Martes</th>
                                 <th class="text-center font-weight-bold">Miércoles</th>
@@ -65,7 +65,7 @@
                             </tr>
                             <tr>
                                 <th style="margin: 0px; padding-left: 0px; padding-right: 0px;">Promotores</th>
-                                <th></th>
+                                <!-- <th></th> -->
                                 <!-- Cabeceras superiores -->
                                 <th class="text-center font-weight-bold" *ngFor="let dias of headers">{{ dias.fecha| date:"dd/MM" }}</th>
                             </tr>
@@ -99,12 +99,12 @@
                                     {{ promotor.nombrepromotor }}
                                     {{ promotor.apellidopaternopromotor }} {{ promotor.apellidomaternopromotor }}
                                 </th>
-                                <th scope="row" class="font-weight-bold">
+                                <!-- <th scope="row" class="font-weight-bold">
                                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Repetir <br> <i class="bi bi-arrow-right"></i>
                                     </label>
-                                </th>
+                                </th> -->
                                 <!-- Celdas de datos -->
                                 <td *ngFor="let dia of listHorario; let i = index">
                                     <select class="form-control" style="padding: 10px;" [(ngModel)]="listHorario[i][in]">
@@ -117,6 +117,13 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="row justify-content-md-end">
+                    <div class="col-sm-3">
+                        <button class="btn btn-primary" type="menu" (click)="guardarHorarios('tablaTurnosAsignadosHorarios')">
+                            Guardar
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-4 mt-1">

@@ -204,4 +204,40 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     }
   }
 
+  guardarHorarios(idTabla: string) {
+    const tabla = document.getElementById(idTabla);
+    if (tabla) {
+      const filas = tabla.getElementsByTagName('tr');
+      for (let i = 1; i < filas.length; i++) {
+        const celdas = filas[i].getElementsByTagName('td');
+        const horariosPromotor = [];
+        for (let j = 0; j < celdas.length; j++) {
+          const select = celdas[j].getElementsByTagName('select')[0];
+          const horarioSeleccionado = select.value;
+          horariosPromotor.push(horarioSeleccionado);
+        }
+        console.log('Horarios del promotor ', i, ': ', horariosPromotor);
+      }
+      this.contarFilasColumnas(idTabla);
+    }
+  }
+
+  contarFilasColumnas(idTabla: string) {
+    const tabla = document.getElementById(idTabla);
+    if (tabla) {
+      const filas = tabla.getElementsByTagName('tr');
+      const numRows = filas.length;
+
+     
+
+      let maxCols = 0;
+      for (let i = 0; i < filas.length; i++) {
+        const celdas = filas[i].getElementsByTagName('td');
+        maxCols = Math.max(maxCols, celdas.length);
+      }
+
+      console.log('Número de filas:', numRows);
+      console.log('Número máximo de columnas:', maxCols);
+    }
+  }
 }
