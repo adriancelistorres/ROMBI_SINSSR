@@ -30,9 +30,6 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row justify-content-md-start">
-                                    <!-- <div class="col-sm-2 text-center">
-                                        <i class="bi bi-calendar4-range" style="font-size: 2rem; color: #FF455C;"></i>
-                                    </div> -->
                                     <div class="col-sm-12">
                                         <label for="input2" class="form-label">
                                             <i class="bi bi-calendar4-range" style="font-size: 1rem; color: #FF455C;"></i>
@@ -47,12 +44,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                <!-- <div class="row justify-content-md-end">
-                                    <div class="col-sm-4 mt-1">
-                                        <button class="btn btn-primary mt-1" style="min-width: 100%;"
-                                            type="button">Buscar</button>
-                                    </div>
-                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -117,7 +108,8 @@
                                 <!-- Celdas de datos -->
                                 <td *ngFor="let dia of listHorario; let i = index">
                                     <select class="form-control" style="padding: 10px;" [(ngModel)]="listHorario[i][in]">
-                                        <option *ngFor="let item of listTurnosAsignadosPDV" [value]="(item.horarioentrada + ',' + item.horariosalida)">
+                                        <option value="" selected>Seleccionar</option>
+                                        <option *ngFor="let item of listTurnosSupervisorPDVHorarios" [value]="(item.horarioentrada + ',' + item.horariosalida)">
                                             {{ item.descripcion }}
                                         </option>
                                     </select>

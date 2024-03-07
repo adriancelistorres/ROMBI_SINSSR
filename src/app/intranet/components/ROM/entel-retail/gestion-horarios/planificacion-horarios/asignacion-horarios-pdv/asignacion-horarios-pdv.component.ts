@@ -46,8 +46,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   turnosAsignadosPDVRequest: TurnosAsignadosPDVRequest = new TurnosAsignadosPDVRequest();
 
   headers: DiasSemana[] = [];  // Cabeceras superiores
-  promotorList: PromotorPDVResponse [] = [];
-  listTurnosAsignadosPDV: any[] = [];
+  promotorList: PromotorPDVResponse[] = [];
+  listTurnosSupervisorPDVHorarios: any[] = [];
   listHorario: any[][] = []
 
   // rows: any[] = [{
@@ -63,35 +63,35 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   //     selectedOptions: []
   //   },
   //];
-    rows: any[] = [
-    {
-      header: 'Row 2', 
-      options: [
-        { items: [{ label: 'Option 3', value: 'option3' }, { label: 'Option 4', value: 'option4' }] },
-        { items: [{ label: 'Option C', value: 'optionC' }, { label: 'Option D', value: 'optionD' }] },
-        { items: [{ label: 'Option Z', value: 'optionZ' }, { label: 'Option W', value: 'optionW' }] },
-        { items: [{ label: 'Option C', value: 'optionC' }, { label: 'Option D', value: 'optionD' }] },
-        { items: [{ label: 'Option Z', value: 'optionZ' }, { label: 'Option W', value: 'optionW' }] },
-        { items: [{ label: 'Option C', value: 'optionC' }, { label: 'Option D', value: 'optionD' }] },
-        { items: [{ label: 'Option Z', value: 'optionZ' }, { label: 'Option W', value: 'optionW' }] }
-      ],
-      selectedOptions: ['option3', 'optionC', 'optionZ', 'optionZ', 'optionZ', 'optionZ', 'optionZ']
-    },
-    {
-      header: 'Row 3', 
-      options: [
-        { items: [{ label: 'Option 5', value: 'option5' }, { label: 'Option 6', value: 'option6' }] },
-        { items: [{ label: 'Option E', value: 'optionE' }, { label: 'Option F', value: 'optionF' }] },
-        { items: [{ label: 'Option M', value: 'optionM' }, { label: 'Option N', value: 'optionN' }] },
-        { items: [{ label: 'Option E', value: 'optionE' }, { label: 'Option F', value: 'optionF' }] },
-        { items: [{ label: 'Option M', value: 'optionM' }, { label: 'Option N', value: 'optionN' }] },
-        { items: [{ label: 'Option E', value: 'optionE' }, { label: 'Option F', value: 'optionF' }] },
-        { items: [{ label: 'Option M', value: 'optionM' }, { label: 'Option N', value: 'optionN' }] }
-      ],
-      selectedOptions: ['option5', 'optionE', 'optionM', 'optionM', 'optionM', 'optionM', 'optionM']
-    },
-    //Puedes agregar más filas si es necesario
-  ];
+  // rows: any[] = [
+  //   {
+  //     header: 'Row 2',
+  //     options: [
+  //       { items: [{ label: 'Option 3', value: 'option3' }, { label: 'Option 4', value: 'option4' }] },
+  //       { items: [{ label: 'Option C', value: 'optionC' }, { label: 'Option D', value: 'optionD' }] },
+  //       { items: [{ label: 'Option Z', value: 'optionZ' }, { label: 'Option W', value: 'optionW' }] },
+  //       { items: [{ label: 'Option C', value: 'optionC' }, { label: 'Option D', value: 'optionD' }] },
+  //       { items: [{ label: 'Option Z', value: 'optionZ' }, { label: 'Option W', value: 'optionW' }] },
+  //       { items: [{ label: 'Option C', value: 'optionC' }, { label: 'Option D', value: 'optionD' }] },
+  //       { items: [{ label: 'Option Z', value: 'optionZ' }, { label: 'Option W', value: 'optionW' }] }
+  //     ],
+  //     selectedOptions: ['option3', 'optionC', 'optionZ', 'optionZ', 'optionZ', 'optionZ', 'optionZ']
+  //   },
+  //   {
+  //     header: 'Row 3',
+  //     options: [
+  //       { items: [{ label: 'Option 5', value: 'option5' }, { label: 'Option 6', value: 'option6' }] },
+  //       { items: [{ label: 'Option E', value: 'optionE' }, { label: 'Option F', value: 'optionF' }] },
+  //       { items: [{ label: 'Option M', value: 'optionM' }, { label: 'Option N', value: 'optionN' }] },
+  //       { items: [{ label: 'Option E', value: 'optionE' }, { label: 'Option F', value: 'optionF' }] },
+  //       { items: [{ label: 'Option M', value: 'optionM' }, { label: 'Option N', value: 'optionN' }] },
+  //       { items: [{ label: 'Option E', value: 'optionE' }, { label: 'Option F', value: 'optionF' }] },
+  //       { items: [{ label: 'Option M', value: 'optionM' }, { label: 'Option N', value: 'optionN' }] }
+  //     ],
+  //     selectedOptions: ['option5', 'optionE', 'optionM', 'optionM', 'optionM', 'optionM', 'optionM']
+  //   },
+  //   //Puedes agregar más filas si es necesario
+  // ];
 
   constructor(
     private asignarTurnosService: AsignarTurnosService,
@@ -103,14 +103,18 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    //para que la dimension horizontal listhorario sea 7, como 7 dias
     for (let i = 0; i < 7; i++) {
       this.listHorario.push([]);
-  }
+    }
+
     this.getSupervisorPDV();
     this.getRangoSemana();
+
+    //Obtener fecha Hoy para inicializar la lista de dias
     const fechaHoy = new Date();
-    //console.log(fechaHoy.getDate().toString(), (fechaHoy.getMonth()+1).toString(), fechaHoy.getFullYear().toString());
-    const Hoy:string = fechaHoy.getFullYear().toString() + '-' + (fechaHoy.getMonth()+1).toString() + '-' + fechaHoy.getDate().toString();
+    const Hoy: string = fechaHoy.getFullYear().toString() + '-' + (fechaHoy.getMonth() + 1).toString() + '-' + fechaHoy.getDate().toString();
     console.log(Hoy);
     this.diasSemana.lunes = Hoy;
     this.diasSemana.domingo = Hoy;
@@ -133,8 +137,25 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
     localStorage.setItem('idpdv', idpdv);
     localStorage.setItem('puntoventa', puntoventa!);
+
+    // Limpiar las listas
+    // this.promotorList = [];
+    // this.listTurnosAsignadosPDV = [];
+
     this.getPromotorSupervisorPDV();
-    this.getTurnosAsignadosPDV();
+    this.getTurnosSupervisorPDVHorarios();
+
+    // Reinicializar listHorario manteniendo su estructura bidimensional
+    this.listHorario = [];
+
+    for (let i = 0; i < this.headers.length; i++) {
+      const innerArray = [];
+      for (let j = 0; j < this.promotorList.length; j++) {
+        innerArray.push(""); // Puedes inicializar con null o cualquier otro valor inicial
+      }
+      this.listHorario.push(innerArray);
+    }
+
   }
 
   getRangoSemana() {
@@ -146,70 +167,41 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   ongetRangoSemana(event: any) {
     const rangoSeleccionado = event.target.value; // Obtener el valor seleccionado
     console.log('Rango seleccionado:', rangoSeleccionado);
-    const [fechaInicio,fechaFin] = rangoSeleccionado.split(',');
-    console.log([fechaInicio,fechaFin]);
+    const [fechaInicio, fechaFin] = rangoSeleccionado.split(',');
+    console.log([fechaInicio, fechaFin]);
     this.diasSemana.lunes = fechaInicio;
     this.diasSemana.domingo = fechaFin;
     this.getDiasSemana();
   }
 
   getDiasSemana() {
-    // this.diasSemana.lunes = '2024-03-04';
-    // this.diasSemana.domingo = '2024-03-10';
     this.asignarHorariosService.getDiasSemana(this.diasSemana).subscribe(res => {
       console.log(res);
       this.headers = res;
     })
   }
 
-  getPromotorSupervisorPDV(){
+  getPromotorSupervisorPDV() {
     this.supervisorPDV.usuario = this.usuarioSupervisor.usuario!;
     this.supervisorPDV.idpuntoventarol = Number(localStorage.getItem('idpdv')!);
-    this.asignarHorariosService.getPromotorSupervisorPDV(this.supervisorPDV).subscribe(res=>{
+    this.asignarHorariosService.getPromotorSupervisorPDV(this.supervisorPDV).subscribe(res => {
       this.promotorList = res;
       console.log(this.promotorList);
     })
   }
 
-  getTurnosAsignadosPDV() {
+  getTurnosSupervisorPDVHorarios() {
     const idpdv = localStorage.getItem('idpdv');
     if (idpdv !== null) {
       this.turnosAsignadosPDVRequest.usuario = this.usuarioSupervisor.usuario!;
       this.turnosAsignadosPDVRequest.idpdv = Number(idpdv);
       console.log(this.turnosAsignadosPDVRequest);
-      
+
       this.asignarHorariosService.getTurnosSupervisorPDVHorarios(this.turnosAsignadosPDVRequest).subscribe(res => {
         console.log(res);
-        this.listTurnosAsignadosPDV = res;
+        this.listTurnosSupervisorPDVHorarios = res;
       })
     }
   }
 
-  // getPromotorSupervisorPDV() {
-  //   this.supervisorPDV.usuario = this.usuarioSupervisor.usuario!;
-  //   this.supervisorPDV.idpuntoventarol = Number(localStorage.getItem('idpdv')!);
-    
-  //   this.asignarHorariosService.getPromotorSupervisorPDV(this.supervisorPDV).subscribe((encabezados: Encabezado[]) => {
-  //     console.log(encabezados);
-      
-  //     encabezados.forEach((encabezado, index) => {
-  //       this.asignarTurnosService.getTurnosSupervisor(this.usuarioSupervisor).subscribe((horarios: Horario[]) => {
-  //         console.log(horarios);
-          
-  //         if (horarios.length > 0) { // Verificar si hay datos de horarios
-  //           const row = {
-  //             header: encabezado.nombrepromotor + ' ' + encabezado.apellidopaternopromotor,
-  //             options: horarios.map(horario => ({
-  //               items: [{ label: horario.horarioentrada + ' - ' + horario.horariosalida, value: horario.idturnos }]
-  //             })),
-  //             selectedOptions: horarios.map(horario => horario.idturnos) // Puedes ajustar esto según tus necesidades
-  //           };
-  //           this.rows.push(row);
-  //           console.log(this.rows);
-  //         }
-  //       });
-  //     });
-  //   });
-  // }
-  
 }
