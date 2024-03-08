@@ -75,25 +75,30 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let promotor of promotorList; let in = index">
-                                <!-- Cabecera lateral -->
+                            <tr *ngFor="let promotor of promotorList; let i = index">
                                 <th scope="row" class="font-weight-bold">
-                                    {{ promotor.nombrepromotor }}
-                                    {{ promotor.apellidopaternopromotor }} {{ promotor.apellidomaternopromotor }}
+                                    {{ promotor.nombrepromotor }} {{ promotor.apellidopaternopromotor }} {{ promotor.apellidomaternopromotor }}
                                 </th>
-                                <!-- Celdas de datos -->
-                                <td *ngFor="let celda of listHorario[in]; let j = index">
+                                <td *ngFor="let dia of listDiasSemana; let j = index">
                                     <select class="form-control" style="padding: 10px; font-size: 10pt;text-align: center;"
-                                        [(ngModel)]="listHorario[in][j].horario">
+                                        [(ngModel)]="listHorario[i][j].horario">
                                         <option value="" selected>Seleccionar</option>
                                         <option *ngFor="let item of listTurnosSupervisorPDVHorarios" style="text-align: left;"
                                             [value]="(item.descripcion + ',' + item.horarioentrada + ',' + item.horariosalida)">
                                             {{ item.descripcion }}
                                         </option>
                                     </select>
+                                    <ng-container *ngIf="datosHorarioPlanificado.length > 0">
+                                        <ng-container *ngFor="let horario of datosHorarioPlanificado">
+                                            <ng-container *ngIf="horario.dnipromotor === promotor.dnipromotor && horario.fecha === dia.fecha">
+                                                {{ horario.descripcion }}
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
                                 </td>
                             </tr>
                         </tbody>
+                        
 
                     </table>
                 </div>

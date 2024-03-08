@@ -37,6 +37,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   listHorario: any[][] = []
   columnas: number = 0;
   filas: number = 0;
+  datosHorarioPlanificado: any[] = [];
 
   constructor(
     private asignarTurnosService: AsignarTurnosService,
@@ -128,6 +129,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
         }
         this.listHorario.push(innerArray);
       }
+
+      //Obtener Horario Planificado
       this.getHorarioPlanificado();
 
     })
@@ -210,6 +213,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     });
     this.asignarHorariosService.getHorarioPlanificado(horarioPlanificadoPromotorRequestArray).subscribe(res=>{
       console.log(res);
+      this.datosHorarioPlanificado = res; // Almacenar los datos obtenidos en la variable datosHorarioPlanificado
+      console.log(this.datosHorarioPlanificado); // Para verificar que los datos se han almacenado correctamente
     })
   }
 }
