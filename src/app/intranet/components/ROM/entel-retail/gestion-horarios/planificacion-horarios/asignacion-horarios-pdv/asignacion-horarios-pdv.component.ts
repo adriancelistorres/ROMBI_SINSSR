@@ -108,9 +108,9 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   ngOnInit(): void {
 
     //para que la dimension horizontal listhorario sea 7, como 7 dias
-    for (let i = 0; i < 7; i++) {
-      this.listHorario.push([]);
-    }
+    // for (let i = 0; i < 7; i++) {
+    //   this.listHorario.push([]);
+    // }
 
     this.getSupervisorPDV();
     this.getRangoSemana();
@@ -207,12 +207,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     }
   }
 
-  guardarHorarios(idTabla: string) {
-    
-    console.log('sies?',this.listHorario)
-  }
-
-  guardar() {
+  guardarHorarios() {
     const arregloFinal: any[] = []; // Arreglo para almacenar todos los objetos
   
     // Iterar sobre los promotores
@@ -225,10 +220,15 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   
         // Crear un objeto para el horario actual
         const objetoHorario = {
-          dni: promotor.dnipromotor,
-          nombre: promotor.nombrepromotor,
+          dnipromotor: promotor.dnipromotor,
+          nombrepromotor: promotor.nombrepromotor,
+          apellidopaternopromotor: promotor.apellidopaternopromotor,
+          apellidomaternopromotor: promotor.apellidomaternopromotor,
           fecha: dia.fecha,
-          horario: horario ? horario.horario : 'no laborable'
+          horario: horario ? horario.horario.replace(/\s/g, '') : '00:00-00:00',
+          descripcion: horario.horario.split('-')[0],
+          horarioentrada: horario.horario.split('-')[2],
+          horariosalida: horario.horario.split('-')[1]
         };
   
         // Agregar el objeto al arreglo de promotorPorDia
@@ -241,29 +241,5 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   
     // Mostrar en consola el arreglo final
     console.log('Arreglo final:', arregloFinal);
-  }
-  
-  
-  
-
-
-
-  contarFilasColumnas(idTabla: string) {
-    const tabla = document.getElementById(idTabla);
-    if (tabla) {
-      const filas = tabla.getElementsByTagName('tr');
-      const numRows = filas.length;
-
-
-
-      let maxCols = 0;
-      for (let i = 0; i < filas.length; i++) {
-        const celdas = filas[i].getElementsByTagName('td');
-        maxCols = Math.max(maxCols, celdas.length);
-      }
-
-      console.log('Número de filas:', numRows);
-      console.log('Número máximo de columnas:', maxCols);
-    }
   }
 }

@@ -56,7 +56,6 @@
                         <thead>
                             <tr>
                                 <!-- Celda vacía para la cabecera lateral -->
-
                                 <th style="margin: 0px; padding-left: 0px; padding-right: 0px;"></th>
                                 <!-- <th></th> -->
                                 <th class="text-center font-weight-bold">Lunes</th>
@@ -69,12 +68,10 @@
                                 <!-- Encabezado de los días -->
                             </tr>
                             <tr>
-                                <th style="margin: 0px; padding-left: 0px; padding-right: 0px;">sss</th>
-
+                                <th style="margin: 0px; padding-left: 0px; padding-right: 0px;">Promotores</th>
                                 <th class="text-center font-weight-bold" *ngFor="let dia of headers">
                                     {{ dia.fecha | date:"dd/MM" }}
                                 </th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -84,14 +81,13 @@
                                     {{ promotor.nombrepromotor }}
                                     {{ promotor.apellidopaternopromotor }} {{ promotor.apellidomaternopromotor }}
                                 </th>
-
                                 <!-- Celdas de datos -->
                                 <td *ngFor="let celda of listHorario[in]; let j = index">
                                     <select class="form-control" style="padding: 10px;"
                                         [(ngModel)]="listHorario[in][j].horario">
                                         <option value="" selected>Seleccionar</option>
                                         <option *ngFor="let item of listTurnosSupervisorPDVHorarios"
-                                            [value]="(item.horarioentrada + ',' + item.horariosalida)">
+                                            [value]="(item.descripcion + '-' + item.horarioentrada + '-' + item.horariosalida)">
                                             {{ item.descripcion }}
                                         </option>
                                     </select>
@@ -104,11 +100,9 @@
                 <div class="row justify-content-md-end">
                     <div class="col-sm-3">
                         <button class="btn btn-primary" type="menu"
-                            (click)="guardarHorarios('tablaTurnosAsignadosHorarios')">
+                            (click)="guardarHorarios()">
                             Guardar
                         </button>
-                        <button (click)="guardar()">Guardar</button>
-
                     </div>
                 </div>
             </div>
