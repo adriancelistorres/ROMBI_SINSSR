@@ -81,7 +81,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
     this.getPromotorSupervisorPDV();
     this.getTurnosSupervisorPDVHorarios();
-    this.getHorarioPlanificado();
 
     // Reinicializar listHorario manteniendo su estructura bidimensional
     this.listHorario = [];
@@ -129,7 +128,10 @@ export class AsignacionHorariosPDVComponent implements OnInit {
         }
         this.listHorario.push(innerArray);
       }
+      this.getHorarioPlanificado();
+
     })
+
   }
 
   getTurnosSupervisorPDVHorarios() {
