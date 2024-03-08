@@ -81,10 +81,11 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
     this.getPromotorSupervisorPDV();
     this.getTurnosSupervisorPDVHorarios();
+    this.getHorarioPlanificado();
 
     // Reinicializar listHorario manteniendo su estructura bidimensional
     this.listHorario = [];
-
+    
   }
 
   getRangoSemana() {
