@@ -9,6 +9,7 @@ import { DiasSemana, RangoSemana } from '../../../../../../models/planificacion-
 import { PromotorPDVResponse } from '../../../../../../models/planificacion-horarios/promotorPDVResponse';
 import { TurnosAsignadosPDVRequest } from '../../../../../../models/planificacion-horarios/turnosAsignadosPDVRequest';
 import { HorarioPlanificadoRequest } from '../../../../../../models/planificacion-horarios/horarioPlanificadoRequest';
+import { HorarioPlanificadoPromotorRequest } from '../../../../../../models/planificacion-horarios/horarioPlanificadoPromotorRequest';
 
 @Component({
   selector: 'app-asignacion-horarios-pdv',
@@ -34,8 +35,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   promotorList: PromotorPDVResponse[] = [];
   listTurnosSupervisorPDVHorarios: any[] = [];
   listHorario: any[][] = []
-  columnas: number=0;
-  filas: number=0;
+  columnas: number = 0;
+  filas: number = 0;
 
   constructor(
     private asignarTurnosService: AsignarTurnosService,
@@ -115,7 +116,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.asignarHorariosService.getPromotorSupervisorPDV(this.supervisorPDV).subscribe(res => {
       this.promotorList = res;
       console.log(this.promotorList);
-      
+
       for (let i = 0; i < this.promotorList.length; i++) {
         const innerArray = [];
         for (let j = 0; j < this.listDiasSemana.length; j++) {
@@ -146,7 +147,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
   guardarHorarios() {
     const arregloFinal: any[] = []; // Arreglo para almacenar todos los objetos
-  
+
     // Iterar sobre los promotores
     this.promotorList.forEach((promotor, indexPromotor) => {
       // Iterar sobre los días de la semana
@@ -154,7 +155,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       this.listDiasSemana.forEach((dia, indexDia) => {
         // Obtener el horario del promotor para el día actual
         const horario = this.listHorario[indexPromotor][indexDia];
-  
+
         // Crear un objeto para el horario actual
         const objetoHorario = {
           dnipromotor: promotor.dnipromotor || "",
@@ -170,25 +171,42 @@ export class AsignacionHorariosPDVComponent implements OnInit {
           horariosalida: horario.horario.split(',')[2] || "",
           usuario_creacion: this.usuarioSupervisor.usuario || ""
         };
-  
+
         // Agregar el objeto al arreglo de promotorPorDia
         promotorPorDia.push(objetoHorario);
       });
-  
+
       // Agregar el arreglo de promotorPorDia al arregloFinal
       arregloFinal.push(promotorPorDia);
     });
-  
+
     // Mostrar en consola el arreglo final
     console.log('Arreglo final:', arregloFinal);
     let arrayRequest: HorarioPlanificadoRequest[] = arregloFinal;
 
     console.log(arrayRequest);
-    
-    this.asignarHorariosService.postHorarioPlanificado(arrayRequest).subscribe(res=>{
+
+    this.asignarHorariosService.postHorarioPlanificado(arrayRequest).subscribe(res => {
 
       console.log(res);
-      
+
+    })
+  }
+
+  getHorarioPlanificado() {
+    let horarioPlanificadoPromotorRequestArray: HorarioPlanificadoPromotorRequest[] = [];
+
+    this.promotorList.forEach(promotor => {
+      let horarioPlanificadoPromotorRequest: HorarioPlanificadoPromotorRequest = {
+        inicio: this.listDiasSemana[0].fecha,
+        fin: this.listDiasSemana[6].fecha,
+        idpdv: Number(localStorage.getItem('idpdv')),
+        dnipromotor: promotor.dnipromotor // Suponiendo que el DNI del promotor está almacenado en la propiedad 'dni' del objeto promotor
+      };
+      horarioPlanificadoPromotorRequestArray.push(horarioPlanificadoPromotorRequest);
+    });
+    this.asignarHorariosService.getHorarioPlanificado(horarioPlanificadoPromotorRequestArray).subscribe(res=>{
+      console.log(res);
     })
   }
 }

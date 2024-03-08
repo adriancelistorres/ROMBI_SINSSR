@@ -6,6 +6,7 @@ import { RangoSemana } from '../../../models/planificacion-horarios/rangoSemana'
 import { SupervisorPDV } from '../../../models/planificacion-horarios/supervisorPDV';
 import { TurnosDisponiblesPDVRequest } from '../../../models/planificacion-horarios/turnosDisponiblesPDVRequest';
 import { HorarioPlanificadoRequest } from '../../../models/planificacion-horarios/horarioPlanificadoRequest';
+import { HorarioPlanificadoPromotorRequest } from '../../../models/planificacion-horarios/horarioPlanificadoPromotorRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +39,9 @@ export class AsignarHorariosService {
   //Guardar grilla de horario planificado
   postHorarioPlanificado(horarioPlanificadoRequest: HorarioPlanificadoRequest[]){
     return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/PostHorarioPlanificado`, horarioPlanificadoRequest);
+  }
+
+  getHorarioPlanificado(horarioPlanificadoPromotorRequest: HorarioPlanificadoPromotorRequest[]){
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/GetHorarioPlanificado`, horarioPlanificadoPromotorRequest);
   }
 }
