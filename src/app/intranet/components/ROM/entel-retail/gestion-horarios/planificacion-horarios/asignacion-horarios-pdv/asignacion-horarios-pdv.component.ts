@@ -8,6 +8,7 @@ import { AsignarHorariosService } from '../../../../../../services/entel-retail/
 import { DiasSemana, RangoSemana } from '../../../../../../models/planificacion-horarios/rangoSemana';
 import { PromotorPDVResponse } from '../../../../../../models/planificacion-horarios/promotorPDVResponse';
 import { TurnosAsignadosPDVRequest } from '../../../../../../models/planificacion-horarios/turnosAsignadosPDVRequest';
+import { HorarioPlanificadoRequest } from '../../../../../../models/planificacion-horarios/horarioPlanificadoRequest';
 
 @Component({
   selector: 'app-asignacion-horarios-pdv',
@@ -114,7 +115,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.asignarHorariosService.getPromotorSupervisorPDV(this.supervisorPDV).subscribe(res => {
       this.promotorList = res;
       console.log(this.promotorList);
-
+      
       for (let i = 0; i < this.promotorList.length; i++) {
         const innerArray = [];
         for (let j = 0; j < this.listDiasSemana.length; j++) {
@@ -156,10 +157,10 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   
         // Crear un objeto para el horario actual
         const objetoHorario = {
-          dnipromotor: promotor.dnipromotor,
-          nombrepromotor: promotor.nombrepromotor,
-          apellidopaternopromotor: promotor.apellidopaternopromotor,
-          apellidomaternopromotor: promotor.apellidomaternopromotor,
+          dnipromotor: promotor.dnipromotor || "",
+          nombrepromotor: promotor.nombrepromotor || "",
+          apellidopaternopromotor: promotor.apellidopaternopromotor || "",
+          apellidomaternopromotor: promotor.apellidomaternopromotor || "",
           idpdv: Number(localStorage.getItem('idpdv')) || 0,
           puntoventa: localStorage.getItem('puntoventa') || "",
           fecha: dia.fecha || "",
@@ -179,5 +180,14 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   
     // Mostrar en consola el arreglo final
     console.log('Arreglo final:', arregloFinal);
+    let arrayRequest: HorarioPlanificadoRequest[] = arregloFinal;
+    
+    console.log(arrayRequest);
+    
+    this.asignarHorariosService.postHorarioPlanificado(arrayRequest).subscribe(res=>{
+
+      console.log(res);
+      
+    })
   }
 }

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { RangoSemana } from '../../../models/planificacion-horarios/rangoSemana';
 import { SupervisorPDV } from '../../../models/planificacion-horarios/supervisorPDV';
 import { TurnosDisponiblesPDVRequest } from '../../../models/planificacion-horarios/turnosDisponiblesPDVRequest';
+import { HorarioPlanificadoRequest } from '../../../models/planificacion-horarios/horarioPlanificadoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,8 @@ export class AsignarHorariosService {
     return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/GetTurnosSupervisorPDVHorarios`, SuperPDV);
   }
 
-
+  //Guardar grilla de horario planificado
+  postHorarioPlanificado(horarioPlanificadoRequest: HorarioPlanificadoRequest[]){
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/PostHorarioPlanificado`, horarioPlanificadoRequest);
+  }
 }
