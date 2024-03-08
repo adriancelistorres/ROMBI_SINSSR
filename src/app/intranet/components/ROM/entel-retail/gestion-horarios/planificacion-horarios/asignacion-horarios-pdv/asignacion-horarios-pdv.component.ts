@@ -167,7 +167,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
           horario: horario.horario.replace(/\s/g, '') || '00:00-00:00',
           descripcion: horario.horario.split(',')[0] || "",
           horarioentrada: horario.horario.split(',')[1] || "",
-          horariosalida: horario.horario.split(',')[2] || ""
+          horariosalida: horario.horario.split(',')[2] || "",
+          usuario_creacion: this.usuarioSupervisor.usuario || ""
         };
   
         // Agregar el objeto al arreglo de promotorPorDia
@@ -181,7 +182,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     // Mostrar en consola el arreglo final
     console.log('Arreglo final:', arregloFinal);
     let arrayRequest: HorarioPlanificadoRequest[] = arregloFinal;
-    
+
     console.log(arrayRequest);
     
     this.asignarHorariosService.postHorarioPlanificado(arrayRequest).subscribe(res=>{
