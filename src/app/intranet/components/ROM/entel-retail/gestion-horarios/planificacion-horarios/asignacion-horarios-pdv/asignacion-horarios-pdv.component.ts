@@ -85,6 +85,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
     // Reinicializar listHorario manteniendo su estructura bidimensional
     this.listHorario = [];
+    this.datosHorarioPlanificado = [];
     
   }
 
