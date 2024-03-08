@@ -8,22 +8,6 @@ import { AsignarHorariosService } from '../../../../../../services/entel-retail/
 import { DiasSemana, RangoSemana } from '../../../../../../models/planificacion-horarios/rangoSemana';
 import { PromotorPDVResponse } from '../../../../../../models/planificacion-horarios/promotorPDVResponse';
 import { TurnosAsignadosPDVRequest } from '../../../../../../models/planificacion-horarios/turnosAsignadosPDVRequest';
-import { TurnosAsignadosSupervisor } from '../../../../../../models/planificacion-horarios/turnosSupervisor';
-
-// Define una interfaz para el formato de datos del encabezado
-interface Encabezado {
-  dnipromotor: string;
-  nombrepromotor: string;
-  apellidopaternopromotor: string;
-  apellidomaternopromotor: string;
-}
-
-// Define una interfaz para el formato de datos de los horarios
-interface Horario {
-  idturnos: string;
-  horarioentrada: string;
-  horariosalida: string;
-}
 
 @Component({
   selector: 'app-asignacion-horarios-pdv',
@@ -45,55 +29,12 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   supervisorPDV: SupervisorPDV = new SupervisorPDV();
   turnosAsignadosPDVRequest: TurnosAsignadosPDVRequest = new TurnosAsignadosPDVRequest();
 
-  headers: DiasSemana[] = [];  // Cabeceras superiores
+  listDiasSemana: DiasSemana[] = [];  // Cabeceras superiores
   promotorList: PromotorPDVResponse[] = [];
   listTurnosSupervisorPDVHorarios: any[] = [];
   listHorario: any[][] = []
   columnas: number=0;
   filas: number=0;
-
-  // rows: any[] = [{
-  //   header: [] = []
-  // }];
-
-  // rows: any[] = [ // Datos de las filas
-  //   {
-  //     header: '',
-  //     options: [
-  //       { items: [] }
-  //     ],
-  //     selectedOptions: []
-  //   },
-  //];
-  // rows: any[] = [
-  //   {
-  //     header: 'Row 2',
-  //     options: [
-  //       { items: [{ label: 'Option 3', value: 'option3' }, { label: 'Option 4', value: 'option4' }] },
-  //       { items: [{ label: 'Option C', value: 'optionC' }, { label: 'Option D', value: 'optionD' }] },
-  //       { items: [{ label: 'Option Z', value: 'optionZ' }, { label: 'Option W', value: 'optionW' }] },
-  //       { items: [{ label: 'Option C', value: 'optionC' }, { label: 'Option D', value: 'optionD' }] },
-  //       { items: [{ label: 'Option Z', value: 'optionZ' }, { label: 'Option W', value: 'optionW' }] },
-  //       { items: [{ label: 'Option C', value: 'optionC' }, { label: 'Option D', value: 'optionD' }] },
-  //       { items: [{ label: 'Option Z', value: 'optionZ' }, { label: 'Option W', value: 'optionW' }] }
-  //     ],
-  //     selectedOptions: ['option3', 'optionC', 'optionZ', 'optionZ', 'optionZ', 'optionZ', 'optionZ']
-  //   },
-  //   {
-  //     header: 'Row 3',
-  //     options: [
-  //       { items: [{ label: 'Option 5', value: 'option5' }, { label: 'Option 6', value: 'option6' }] },
-  //       { items: [{ label: 'Option E', value: 'optionE' }, { label: 'Option F', value: 'optionF' }] },
-  //       { items: [{ label: 'Option M', value: 'optionM' }, { label: 'Option N', value: 'optionN' }] },
-  //       { items: [{ label: 'Option E', value: 'optionE' }, { label: 'Option F', value: 'optionF' }] },
-  //       { items: [{ label: 'Option M', value: 'optionM' }, { label: 'Option N', value: 'optionN' }] },
-  //       { items: [{ label: 'Option E', value: 'optionE' }, { label: 'Option F', value: 'optionF' }] },
-  //       { items: [{ label: 'Option M', value: 'optionM' }, { label: 'Option N', value: 'optionN' }] }
-  //     ],
-  //     selectedOptions: ['option5', 'optionE', 'optionM', 'optionM', 'optionM', 'optionM', 'optionM']
-  //   },
-  //   //Puedes agregar más filas si es necesario
-  // ];
 
   constructor(
     private asignarTurnosService: AsignarTurnosService,
@@ -106,11 +47,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-    //para que la dimension horizontal listhorario sea 7, como 7 dias
-    // for (let i = 0; i < 7; i++) {
-    //   this.listHorario.push([]);
-    // }
 
     this.getSupervisorPDV();
     this.getRangoSemana();
@@ -168,7 +104,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   getDiasSemana() {
     this.asignarHorariosService.getDiasSemana(this.diasSemana).subscribe(res => {
       console.log(res);
-      this.headers = res;
+      this.listDiasSemana = res;
     })
   }
 
@@ -181,7 +117,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
       for (let i = 0; i < this.promotorList.length; i++) {
         const innerArray = [];
-        for (let j = 0; j < this.headers.length; j++) {
+        for (let j = 0; j < this.listDiasSemana.length; j++) {
           innerArray.push({
             horario: "", // Valor inicial del select
             fila: i, // Coordenada de fila
@@ -214,7 +150,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.promotorList.forEach((promotor, indexPromotor) => {
       // Iterar sobre los días de la semana
       const promotorPorDia: any[] = [];
-      this.headers.forEach((dia, indexDia) => {
+      this.listDiasSemana.forEach((dia, indexDia) => {
         // Obtener el horario del promotor para el día actual
         const horario = this.listHorario[indexPromotor][indexDia];
   
@@ -224,7 +160,9 @@ export class AsignacionHorariosPDVComponent implements OnInit {
           nombrepromotor: promotor.nombrepromotor,
           apellidopaternopromotor: promotor.apellidopaternopromotor,
           apellidomaternopromotor: promotor.apellidomaternopromotor,
-          fecha: dia.fecha,
+          idpdv: Number(localStorage.getItem('idpdv')) || 0,
+          puntoventa: localStorage.getItem('puntoventa') || "",
+          fecha: dia.fecha || "",
           horario: horario.horario.replace(/\s/g, '') || '00:00-00:00',
           descripcion: horario.horario.split(',')[0] || "",
           horarioentrada: horario.horario.split(',')[1] || "",

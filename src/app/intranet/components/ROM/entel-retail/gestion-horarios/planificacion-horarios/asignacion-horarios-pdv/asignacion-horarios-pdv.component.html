@@ -69,7 +69,7 @@
                             </tr>
                             <tr>
                                 <th style="margin: 0px; padding-left: 0px; padding-right: 0px;">Promotores</th>
-                                <th class="text-center font-weight-bold" *ngFor="let dia of headers">
+                                <th class="text-center font-weight-bold" *ngFor="let dia of listDiasSemana">
                                     {{ dia.fecha | date:"dd/MM" }}
                                 </th>
                             </tr>
@@ -83,10 +83,10 @@
                                 </th>
                                 <!-- Celdas de datos -->
                                 <td *ngFor="let celda of listHorario[in]; let j = index">
-                                    <select class="form-control" style="padding: 10px;"
+                                    <select class="form-control" style="padding: 10px; font-size: 10pt;text-align: center;"
                                         [(ngModel)]="listHorario[in][j].horario">
                                         <option value="" selected>Seleccionar</option>
-                                        <option *ngFor="let item of listTurnosSupervisorPDVHorarios"
+                                        <option *ngFor="let item of listTurnosSupervisorPDVHorarios" style="text-align: left;"
                                             [value]="(item.descripcion + ',' + item.horarioentrada + ',' + item.horariosalida)">
                                             {{ item.descripcion }}
                                         </option>
@@ -98,7 +98,7 @@
                     </table>
                 </div>
                 <div class="row justify-content-md-end">
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <button class="btn btn-primary" type="menu"
                             (click)="guardarHorarios()">
                             Guardar
