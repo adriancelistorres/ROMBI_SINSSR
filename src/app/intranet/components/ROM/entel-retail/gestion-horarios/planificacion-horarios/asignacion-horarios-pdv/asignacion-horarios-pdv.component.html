@@ -87,7 +87,7 @@
                                         [(ngModel)]="listHorario[in][j].horario">
                                         <option value="" selected>Seleccionar</option>
                                         <option *ngFor="let item of listTurnosSupervisorPDVHorarios"
-                                            [value]="(item.descripcion + '-' + item.horarioentrada + '-' + item.horariosalida)">
+                                            [value]="(item.descripcion + ',' + item.horarioentrada + ',' + item.horariosalida)">
                                             {{ item.descripcion }}
                                         </option>
                                     </select>

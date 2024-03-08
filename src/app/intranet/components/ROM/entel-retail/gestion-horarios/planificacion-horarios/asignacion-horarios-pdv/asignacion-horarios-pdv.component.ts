@@ -225,10 +225,10 @@ export class AsignacionHorariosPDVComponent implements OnInit {
           apellidopaternopromotor: promotor.apellidopaternopromotor,
           apellidomaternopromotor: promotor.apellidomaternopromotor,
           fecha: dia.fecha,
-          horario: horario ? horario.horario.replace(/\s/g, '') : '00:00-00:00',
-          descripcion: horario.horario.split('-')[0],
-          horarioentrada: horario.horario.split('-')[2],
-          horariosalida: horario.horario.split('-')[1]
+          horario: horario.horario.replace(/\s/g, '') || '00:00-00:00',
+          descripcion: horario.horario.split(',')[0] || "",
+          horarioentrada: horario.horario.split(',')[1] || "",
+          horariosalida: horario.horario.split(',')[2] || ""
         };
   
         // Agregar el objeto al arreglo de promotorPorDia
