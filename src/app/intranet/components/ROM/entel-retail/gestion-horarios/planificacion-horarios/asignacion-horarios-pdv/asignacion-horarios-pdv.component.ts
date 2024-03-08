@@ -201,20 +201,39 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
   getHorarioPlanificado() {
     let horarioPlanificadoPromotorRequestArray: HorarioPlanificadoPromotorRequest[] = [];
-
-    this.promotorList.forEach(promotor => {
+  
+    this.promotorList.forEach((promotor, i) => {
       let horarioPlanificadoPromotorRequest: HorarioPlanificadoPromotorRequest = {
         inicio: this.listDiasSemana[0].fecha,
         fin: this.listDiasSemana[6].fecha,
         idpdv: Number(localStorage.getItem('idpdv')),
-        dnipromotor: promotor.dnipromotor // Suponiendo que el DNI del promotor está almacenado en la propiedad 'dni' del objeto promotor
+        dnipromotor: promotor.dnipromotor
       };
       horarioPlanificadoPromotorRequestArray.push(horarioPlanificadoPromotorRequest);
     });
-    this.asignarHorariosService.getHorarioPlanificado(horarioPlanificadoPromotorRequestArray).subscribe(res=>{
-      console.log(res);
-      this.datosHorarioPlanificado = res; // Almacenar los datos obtenidos en la variable datosHorarioPlanificado
-      console.log(this.datosHorarioPlanificado); // Para verificar que los datos se han almacenado correctamente
-    })
+  
+    this.asignarHorariosService.getHorarioPlanificado(horarioPlanificadoPromotorRequestArray).subscribe(res => {
+      this.datosHorarioPlanificado = res;
+      // Verificar si hay datos
+      if (this.datosHorarioPlanificado && this.datosHorarioPlanificado.length > 0) {
+        // Iterar sobre los datos obtenidos y establecer los valores seleccionados en listHorario
+        this.datosHorarioPlanificado.forEach((horarioPlanificado) => {
+          const fechaIndex = this.listDiasSemana.findIndex((dia) => dia.fecha === horarioPlanificado.fecha);
+          const promotorIndex = this.promotorList.findIndex((promotor) => promotor.dnipromotor === horarioPlanificado.dnipromotor);
+          if (fechaIndex !== -1 && promotorIndex !== -1) {
+            const horario = `${horarioPlanificado.descripcion},${horarioPlanificado.horarioentrada},${horarioPlanificado.horariosalida}`;
+            this.listHorario[promotorIndex][fechaIndex].horario = horario;
+          }
+        });
+      } else {
+        console.log('No hay datos disponibles.'); // Imprimir en la consola si no hay datos
+      }
+    }, error => {
+      console.error('Error al obtener los datos:', error); // Manejar cualquier error de la llamada al servicio
+    });
+    
   }
+  
+  
+
 }

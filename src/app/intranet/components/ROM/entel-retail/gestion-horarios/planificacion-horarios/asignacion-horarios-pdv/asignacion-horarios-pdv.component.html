@@ -88,13 +88,7 @@
                                             {{ item.descripcion }}
                                         </option>
                                     </select>
-                                    <ng-container *ngIf="datosHorarioPlanificado.length > 0">
-                                        <ng-container *ngFor="let horario of datosHorarioPlanificado">
-                                            <ng-container *ngIf="horario.dnipromotor === promotor.dnipromotor && horario.fecha === dia.fecha">
-                                                {{ horario.descripcion }}
-                                            </ng-container>
-                                        </ng-container>
-                                    </ng-container>
+                                   
                                 </td>
                             </tr>
                         </tbody>
