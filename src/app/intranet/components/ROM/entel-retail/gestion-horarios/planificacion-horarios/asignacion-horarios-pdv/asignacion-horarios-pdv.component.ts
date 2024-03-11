@@ -10,6 +10,7 @@ import { PromotorPDVResponse } from '../../../../../../models/planificacion-hora
 import { TurnosAsignadosPDVRequest } from '../../../../../../models/planificacion-horarios/turnosAsignadosPDVRequest';
 import { HorarioPlanificadoRequest } from '../../../../../../models/planificacion-horarios/horarioPlanificadoRequest';
 import { HorarioPlanificadoPromotorRequest } from '../../../../../../models/planificacion-horarios/horarioPlanificadoPromotorRequest';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-asignacion-horarios-pdv',
@@ -67,6 +68,37 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   filtrar() {
+    this.datosHorarioPlanificado = [];
+    console.log('QUESESTO:', this.datosHorarioPlanificado);
+    let timerInterval:any;
+    Swal.fire({
+      html: '<div style="text-align:center;"><img src="https://i.imgur.com/7c4Iqrl.gif" style="max-width: 100%; height: auto; width:350px" /> </br> <p>Cargando Datos...</p></div>',
+      timer: 1200,
+      timerProgressBar: true,
+        backdrop: `
+        rgba(0,0,123,0.4)
+        left top
+        no-repeat
+      `,
+      didOpen: () => {
+        Swal.showLoading();
+        const timer:any = Swal.getPopup()?.querySelector("b");
+        timerInterval = setInterval(() => {
+          if (timer) {
+            timer.textContent = `${Swal.getTimerLeft()}`;
+          }
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      }
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log("I was closed by the timer");
+      }
+    });
+   
     const puntoventa = this.listSupervisorPDV.find(item => item.idpuntoventarol === Number(this.pdvFiltro))?.puntoventa;
     localStorage.setItem('idpdv', String(this.pdvFiltro));
     localStorage.setItem('puntoventa', puntoventa!);
@@ -79,9 +111,11 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     console.log(this.diasSemana);
 
     this.getDiasSemana();
-
     this.getPromotorSupervisorPDV();
     this.getTurnosSupervisorPDVHorarios();
+    this.getHorarioPlanificado()
+    // this.pdvFiltro=0;
+    // this.rangoFiltro="";
 
   }
 
@@ -149,6 +183,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   guardarHorarios() {
+   
     const arregloFinal: any[] = []; // Arreglo para almacenar todos los objetos
 
     // Iterar sobre los promotores
@@ -191,11 +226,44 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
     this.asignarHorariosService.postHorarioPlanificado(arrayRequest).subscribe(res => {
       console.log(res);
-      this.getHorarioPlanificado();
     })
+    let timerInterval:any;
+    Swal.fire({
+      title: "Cargando datos...",
+      html: "I will close in <b></b> milliseconds.",
+      timer: 900,
+      timerProgressBar: true,
+        backdrop: `
+        rgba(0,0,123,0.4)
+        url("https://i.gifer.com/PYh.gif")
+        left top
+        no-repeat
+      `,
+      didOpen: () => {
+        Swal.showLoading();
+        const timer:any = Swal.getPopup()?.querySelector("b");
+        timerInterval = setInterval(() => {
+          if (timer) {
+            timer.textContent = `${Swal.getTimerLeft()}`;
+          }
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      }
+    }).then((result) => {
+      this.getHorarioPlanificado();
+      console.log('Arreglo final:', 'entro?');
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log("I was closed by the timer");
+      }
+    });
   }
 
   getHorarioPlanificado() {
+    this.datosHorarioPlanificado = [];
+
     let horarioPlanificadoPromotorRequestArray: HorarioPlanificadoPromotorRequest[] = [];
 
     this.promotorList.forEach((promotor, i) => {
