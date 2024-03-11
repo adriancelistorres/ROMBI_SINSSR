@@ -17,8 +17,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <label for="input1" class="form-label">Punto de Venta:</label>
-                                <select class="form-select" id="input1" (change)="ongetPDV($event)">
-                                    <option selected>Seleccionar PDV</option>
+                                <select class="form-select" id="input1" [(ngModel)]="pdvFiltro">
+                                    <option value="0">Seleccionar PDV</option>
                                     <option *ngFor="let pdv of listSupervisorPDV" [value]="pdv.idpuntoventarol">
                                         {{ pdv.puntoventa }}
                                     </option>
@@ -36,8 +36,8 @@
                                                 style="font-size: 1rem; color: #FF455C;"></i>
                                             Rangos Semanales:
                                         </label>
-                                        <select class="form-select" id="input2" (change)="ongetRangoSemana($event)">
-                                            <option selected>Seleccionar</option>
+                                        <select class="form-select" id="input2" [(ngModel)]="rangoFiltro">
+                                            <option value="">Seleccionar</option>
                                             <option *ngFor="let rango of listRangoSemana"
                                                 [value]="(rango.lunes + ',' + rango.domingo)">
                                                 Lunes {{ rango.lunes | date:"dd/MM/yyyy" }} - Domingo {{rango.domingo
@@ -48,6 +48,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        <button class="btn btn-primary" type="button" (click)="filtrar()">Buscar</button>
                     </div>
                 </div>
                 <div class="table-responsive mt-4">
