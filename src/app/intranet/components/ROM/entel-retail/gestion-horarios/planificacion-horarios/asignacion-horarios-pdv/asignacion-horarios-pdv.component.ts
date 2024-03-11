@@ -63,6 +63,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.diasSemana.lunes = this.rangoFiltro;
     this.diasSemana.domingo = this.rangoFiltro;
     this.getDiasSemana();
+    console.log('vacoppop',this.listRangoSemana);
   }
 
   filtrar() {
