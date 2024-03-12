@@ -12,7 +12,46 @@
         <div class="card-body">
             <h4 class="card-title text-uppercase">Asignación de Horarios por PDV</h4>
             <div class="col-sm-12 mt-1">
-                <div class="row">
+                <div class="row px-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                    <label for="input1" class="form-label">Punto de Venta:</label>
+                                    <select class="form-select" id="input1" [(ngModel)]="pdvFiltro">
+                                        <option value="0">Seleccionar PDV</option>
+                                        <option *ngFor="let pdv of listSupervisorPDV" [value]="pdv.idpuntoventarol">
+                                            {{ pdv.puntoventa }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-5">
+                                    <label for="input2" class="form-label">
+                                        <i class="bi bi-calendar4-range" style="font-size: 1rem; color: #FF455C;"></i>
+                                        Rangos Semanales:
+                                    </label>
+                                    <select class="form-select" id="input2" [(ngModel)]="rangoFiltro">
+                                        <option value="" *ngIf="listRangoSemana.length > 0">Seleccionar</option>
+                                        <option value="" *ngIf="listRangoSemana.length === 0" disabled selected>No hay
+                                            rangos disponibles</option>
+                                        <option *ngFor="let rango of listRangoSemana"
+                                            [value]="(rango.lunes + ',' + rango.domingo)">
+                                            Lunes {{ rango.lunes | date:"dd/MM/yyyy" }} - Domingo {{ rango.domingo |
+                                            date:"dd/MM/yyyy" }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3" style="padding-top: 27px;">
+                                    <button class="btn btn-primary" type="button" (click)="filtrar()"
+                                    style="max-width: 100%; height: auto; width:350px">
+                                        Buscar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row">
                     <div class="col-sm-6 mb-3 mb-sm-0">
                         <div class="card">
                             <div class="card-body">
@@ -38,9 +77,12 @@
                                         </label>
                                         <select class="form-select" id="input2" [(ngModel)]="rangoFiltro">
                                             <option value="" *ngIf="listRangoSemana.length > 0">Seleccionar</option>
-                                            <option value="" *ngIf="listRangoSemana.length === 0" disabled selected>No hay rangos disponibles</option>
-                                            <option *ngFor="let rango of listRangoSemana" [value]="(rango.lunes + ',' + rango.domingo)">
-                                              Lunes {{ rango.lunes | date:"dd/MM/yyyy" }} - Domingo {{ rango.domingo | date:"dd/MM/yyyy" }}
+                                            <option value="" *ngIf="listRangoSemana.length === 0" disabled selected>No
+                                                hay rangos disponibles</option>
+                                            <option *ngFor="let rango of listRangoSemana"
+                                                [value]="(rango.lunes + ',' + rango.domingo)">
+                                                Lunes {{ rango.lunes | date:"dd/MM/yyyy" }} - Domingo {{ rango.domingo |
+                                                date:"dd/MM/yyyy" }}
                                             </option>
                                         </select>
                                     </div>
@@ -53,7 +95,7 @@
                     <div class="col-sm-6 mb-3 mb-sm-0">
                         <button class="btn btn-primary" type="button" (click)="filtrar()">Buscar</button>
                     </div>
-                </div>
+                </div> -->
                 <div class="table-responsive mt-4">
                     <table id="tablaTurnosAsignadosHorarios"
                         class="table table-dark caption-top table-hover table-bordered text-center table-sm rounded-2">
@@ -81,35 +123,39 @@
                         <tbody>
                             <tr *ngFor="let promotor of promotorList; let i = index">
                                 <th scope="row" class="font-weight-bold">
-                                    {{ promotor.nombrepromotor }} {{ promotor.apellidopaternopromotor }} {{ promotor.apellidomaternopromotor }}
+                                    {{ promotor.nombrepromotor }} {{ promotor.apellidopaternopromotor }} {{
+                                    promotor.apellidomaternopromotor }}
                                 </th>
                                 <td *ngFor="let dia of listDiasSemana; let j = index">
-                                    <select class="form-control" style="padding: 10px; font-size: 10pt;text-align: center;"
+                                    <select class="form-control"
+                                        style="padding: 10px; font-size: 10pt;text-align: center;"
                                         [(ngModel)]="listHorario[i][j].horario">
                                         <option value="" selected>Seleccionar</option>
-                                        <option *ngFor="let item of listTurnosSupervisorPDVHorarios" style="text-align: left;"
+                                        <option *ngFor="let item of listTurnosSupervisorPDVHorarios"
+                                            style="text-align: left;"
                                             [value]="(item.descripcion + ',' + item.horarioentrada + ',' + item.horariosalida)">
                                             {{ item.descripcion }}
                                         </option>
                                     </select>
-                                   
+
                                 </td>
                             </tr>
                         </tbody>
-                        
+
 
                     </table>
                 </div>
                 <div class="row justify-content-md-end">
                     <div class="col-sm-2" *ngIf="!datosHorarioPlanificado || datosHorarioPlanificado.length === 0">
-                        <button class="btn btn-primary" type="menu" (click)="guardarHorarios()">
+                        <button class="btn btn-primary" type="menu" (click)="guardarHorarios()"
+                        style="max-width: 100%; height: auto; width:350px">
                             Guardar
                         </button>
-                    </div>                    
+                    </div>
                     <div class="col-sm-2" *ngIf="datosHorarioPlanificado && datosHorarioPlanificado.length >0">
-                        <button class="btn btn-success" type="menu "
-                        (click)="guardarHorarios()">
-                            🖊
+                        <button class="btn btn-success" type="menu " (click)="guardarHorarios()"
+                        style="max-width: 100%; height: auto; width:350px">
+                            🖊 Editar
                         </button>
                     </div>
                 </div>
