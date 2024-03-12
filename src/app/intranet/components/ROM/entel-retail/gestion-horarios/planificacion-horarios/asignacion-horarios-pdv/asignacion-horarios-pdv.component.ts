@@ -41,6 +41,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   datosHorarioPlanificado: any[] = [];
   pdvFiltro: number = 0;
   rangoFiltro: string = "";
+  horarioPlanificadoPromotorRequestArray: HorarioPlanificadoPromotorRequest[] = [];
+  horarioPlanificadoPromotorRequest: HorarioPlanificadoPromotorRequest =new HorarioPlanificadoPromotorRequest();
 
   constructor(
     private asignarTurnosService: AsignarTurnosService,
@@ -68,8 +70,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   filtrar() {
-    //this.datosHorarioPlanificado = [];
-    console.log('QUESESTO:', this.datosHorarioPlanificado);
+    this.datosHorarioPlanificado = [];
+    console.log('datosHorarioPlanificado1:', this.datosHorarioPlanificado);
 
 
     const puntoventa = this.listSupervisorPDV.find(item => item.idpuntoventarol === Number(this.pdvFiltro))?.puntoventa;
@@ -288,18 +290,30 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   getHorarioPlanificado() {
-    //this.datosHorarioPlanificado = [];
+    this.horarioPlanificadoPromotorRequestArray = [];
 
-    let horarioPlanificadoPromotorRequestArray: HorarioPlanificadoPromotorRequest[] = [];
 
+ console.log('rangoFiltro:', this.rangoFiltro);
+
+    const fechasSeparadas = this.rangoFiltro.split(',');
+
+    const fechaInicio = fechasSeparadas[0];
+    const fechaFin = fechasSeparadas[1];
+    
+    console.log('fechaInicio:', fechaInicio);
+    console.log('fechaFin:', fechaFin);
     this.promotorList.forEach((promotor, i) => {
-      let horarioPlanificadoPromotorRequest: HorarioPlanificadoPromotorRequest = {
-        inicio: this.listDiasSemana[0].fecha,
-        fin: this.listDiasSemana[6].fecha,
+      this.horarioPlanificadoPromotorRequest = {
+        inicio: fechaInicio,
+        fin: fechaFin,
         idpdv: Number(localStorage.getItem('idpdv')),
         dnipromotor: promotor.dnipromotor
       };
-      horarioPlanificadoPromotorRequestArray.push(horarioPlanificadoPromotorRequest);
+      console.log('listDiasSemana:', this.listDiasSemana);
+      console.log('horarioPlanificadoPromotorRequest1:', this.horarioPlanificadoPromotorRequest);
+      this.horarioPlanificadoPromotorRequestArray?.push(this.horarioPlanificadoPromotorRequest);
+      this.horarioPlanificadoPromotorRequest = {};
+      console.log('horarioPlanificadoPromotorRequest2:', this.horarioPlanificadoPromotorRequest);
     });
 
     let timerInterval: any;
@@ -322,25 +336,30 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     });
 
     setTimeout(() => {
-      this.asignarHorariosService.getHorarioPlanificado(horarioPlanificadoPromotorRequestArray).subscribe(res => {
+
+      this.asignarHorariosService.getHorarioPlanificado(this.horarioPlanificadoPromotorRequestArray).subscribe(res => {
+
+
         if (res !== null) { // Verifica si la respuesta no es nula
+          // this.datosHorarioPlanificado = [];
+
           this.datosHorarioPlanificado = res;
 
-          if (this.datosHorarioPlanificado.length > 0) {
+          if (this.datosHorarioPlanificado && this.datosHorarioPlanificado.length > 0) {
             this.datosHorarioPlanificado.forEach((horarioPlanificado) => {
               const fechaIndex = this.listDiasSemana.findIndex((dia) => dia.fecha === horarioPlanificado.fecha);
               const promotorIndex = this.promotorList.findIndex((promotor) => promotor.dnipromotor === horarioPlanificado.dnipromotor);
+              console.log('fechaIndex:', fechaIndex);
+              console.log('promotorIndex:', promotorIndex);
               if (fechaIndex !== -1 && promotorIndex !== -1) {
-                const horario = `${horarioPlanificado.descripcion},${horarioPlanificado.horarioentrada},${horarioPlanificado.horariosalida}`;
-                let rhorario = horario;
-                if (rhorario === ',,') {
-                  rhorario = "";
-                }
+                const horario = `${horarioPlanificado.descripcion || ''},${horarioPlanificado.horarioentrada || ''},${horarioPlanificado.horariosalida || ''}`;
+                const rhorario = horario === ',,' ? '' : horario;
                 this.listHorario[promotorIndex][fechaIndex].horario = rhorario;
               }
+              
             });
             console.log('listHorario:', this.listHorario)
-            console.log('datosHorarioPlanificado:', this.datosHorarioPlanificado)
+            console.log('datosHorarioPlanificado2:', this.datosHorarioPlanificado)
           } else {
             console.log('No hay datos disponibles.');
           }
