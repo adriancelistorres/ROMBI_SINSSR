@@ -247,7 +247,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       willClose: () => {
         // Clear the timer if the Swal is closed
         clearInterval(timerInterval);
-      }
+      },
+      allowOutsideClick: false
     });
 
     let timerInterval: any;
@@ -266,6 +267,21 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       } else {
         Swal.close();
         console.log('Error: Los datos no se han guardado');
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: "Los datos no se han guardado"
+        });
       }
     });
 
@@ -307,7 +323,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       },
       willClose: () => {
         clearInterval(timerInterval);
-      }
+      },
+      allowOutsideClick: false
     });
 
     setTimeout(() => {
