@@ -44,6 +44,9 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   horarioPlanificadoPromotorRequestArray: HorarioPlanificadoPromotorRequest[] = [];
   horarioPlanificadoPromotorRequest: HorarioPlanificadoPromotorRequest =new HorarioPlanificadoPromotorRequest();
 
+  mostrarElemento: boolean = false;
+
+
   constructor(
     private asignarTurnosService: AsignarTurnosService,
     private asignarHorariosService: AsignarHorariosService
@@ -53,6 +56,9 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     localStorage.setItem('puntoventa', '');
   }
 
+  toggleVisibilidad() {
+    this.mostrarElemento = true;
+  }
 
   ngOnInit(): void {
 
@@ -70,6 +76,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   filtrar() {
+    this.toggleVisibilidad()
     this.datosHorarioPlanificado = [];
     console.log('datosHorarioPlanificado1:', this.datosHorarioPlanificado);
 
@@ -195,7 +202,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   guardarHorarios() {
-
+    this.toggleVisibilidad();
     const arregloFinal: any[] = []; // Arreglo para almacenar todos los objetos
 
     // Iterar sobre los promotores
@@ -382,12 +389,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
   }
 
-  limpiarListHorario() {
-    for (let i = 0; i < this.listHorario.length; i++) {
-      for (let j = 0; j < this.listHorario[i].length; j++) {
-        this.listHorario[i][j] = { horario: "" };
-      }
-    }
-  }
+  
 
 }
