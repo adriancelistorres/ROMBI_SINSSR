@@ -113,6 +113,10 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.getDiasSemana();
     this.getPromotorSupervisorPDV();
     this.getTurnosSupervisorPDVHorarios();
+
+    this.listHorario = [];
+    //this.datosHorarioPlanificado = [];
+
     this.getHorarioPlanificado()
     // this.pdvFiltro=0;
     // this.rangoFiltro="";
@@ -293,7 +297,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
             this.listHorario[promotorIndex][fechaIndex].horario = rhorario;
           }
         });
-        console.log(this.listHorario)
+        console.log('listHorario:',this.listHorario)
       } else {
         this.limpiarListHorario();
         console.log('No hay datos disponibles.'); // Imprimir en la consola si no hay datos
