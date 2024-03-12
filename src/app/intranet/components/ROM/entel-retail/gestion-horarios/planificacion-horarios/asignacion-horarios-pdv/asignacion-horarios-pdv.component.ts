@@ -64,25 +64,25 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.diasSemana.lunes = this.rangoFiltro;
     this.diasSemana.domingo = this.rangoFiltro;
     this.getDiasSemana();
-    console.log('vacoppop',this.listRangoSemana);
+    console.log('vacoppop', this.listRangoSemana);
   }
 
   filtrar() {
     //this.datosHorarioPlanificado = [];
     console.log('QUESESTO:', this.datosHorarioPlanificado);
-    let timerInterval:any;
+    let timerInterval: any;
     Swal.fire({
       html: '<div style="text-align:center;"><img src="https://i.imgur.com/7c4Iqrl.gif" style="max-width: 100%; height: auto; width:350px" /> </br> <p>Cargando Datos...</p></div>',
       timer: 1200,
       timerProgressBar: true,
-        backdrop: `
+      backdrop: `
         rgba(0,0,123,0.4)
         left top
         no-repeat
       `,
       didOpen: () => {
         Swal.showLoading();
-        const timer:any = Swal.getPopup()?.querySelector("b");
+        const timer: any = Swal.getPopup()?.querySelector("b");
         timerInterval = setInterval(() => {
           if (timer) {
             timer.textContent = `${Swal.getTimerLeft()}`;
@@ -98,7 +98,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
         console.log("I was closed by the timer");
       }
     });
-   
+
     const puntoventa = this.listSupervisorPDV.find(item => item.idpuntoventarol === Number(this.pdvFiltro))?.puntoventa;
     localStorage.setItem('idpdv', String(this.pdvFiltro));
     localStorage.setItem('puntoventa', puntoventa!);
@@ -187,7 +187,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   guardarHorarios() {
-   
+
     const arregloFinal: any[] = []; // Arreglo para almacenar todos los objetos
 
     // Iterar sobre los promotores
@@ -227,42 +227,37 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     let arrayRequest: HorarioPlanificadoRequest[] = arregloFinal;
 
     console.log(arrayRequest);
-
-    this.asignarHorariosService.postHorarioPlanificado(arrayRequest).subscribe(res => {
-      console.log(res);
-    })
-    let timerInterval:any;
     Swal.fire({
-      title: "Cargando datos...",
-      html: "I will close in <b></b> milliseconds.",
-      timer: 900,
+      html: '<div style="text-align:center;"><img src="https://i.imgur.com/7c4Iqrl.gif" style="max-width: 100%; height: auto; width:350px" /> </br> <p>Guardando Datos...</p></div>',
       timerProgressBar: true,
-        backdrop: `
+      backdrop: `
         rgba(0,0,123,0.4)
-        url("https://i.gifer.com/PYh.gif")
         left top
         no-repeat
       `,
       didOpen: () => {
         Swal.showLoading();
-        const timer:any = Swal.getPopup()?.querySelector("b");
-        timerInterval = setInterval(() => {
-          if (timer) {
-            timer.textContent = `${Swal.getTimerLeft()}`;
-          }
-        }, 100);
       },
       willClose: () => {
+        // Clear the timer if the Swal is closed
         clearInterval(timerInterval);
       }
-    }).then((result) => {
-      this.getHorarioPlanificado();
-      console.log('Arreglo final:', 'entro?');
-      /* Read more about handling dismissals below */
-      if (result.dismiss === Swal.DismissReason.timer) {
-        console.log("I was closed by the timer");
+    });
+    
+    let timerInterval: any;
+    
+    this.asignarHorariosService.postHorarioPlanificado(arrayRequest).subscribe(res => {
+      console.log(res);
+      if (res.mensaje === 'OK') {
+        // Close the Swal when the response is received
+        Swal.close();
+    
+        // Handle your logic after receiving the response
+        this.getHorarioPlanificado();
+        console.log('Arreglo final:', 'entro?');
       }
     });
+
   }
 
   getHorarioPlanificado() {
@@ -291,14 +286,14 @@ export class AsignacionHorariosPDVComponent implements OnInit {
           if (fechaIndex !== -1 && promotorIndex !== -1) {
             const horario = `${horarioPlanificado.descripcion},${horarioPlanificado.horarioentrada},${horarioPlanificado.horariosalida}`;
             let rhorario = horario;
-            if(rhorario === ',,'){
+            if (rhorario === ',,') {
               rhorario = "";
             }
             this.listHorario[promotorIndex][fechaIndex].horario = rhorario;
           }
         });
-        console.log('listHorario:',this.listHorario)
-        console.log('datosHorarioPlanificado:',this.datosHorarioPlanificado)
+        console.log('listHorario:', this.listHorario)
+        console.log('datosHorarioPlanificado:', this.datosHorarioPlanificado)
       } else {
         this.limpiarListHorario();
         console.log('No hay datos disponibles.'); // Imprimir en la consola si no hay datos
