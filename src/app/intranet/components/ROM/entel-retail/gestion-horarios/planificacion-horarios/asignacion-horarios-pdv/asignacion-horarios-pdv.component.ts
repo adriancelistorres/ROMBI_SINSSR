@@ -70,34 +70,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   filtrar() {
     //this.datosHorarioPlanificado = [];
     console.log('QUESESTO:', this.datosHorarioPlanificado);
-    let timerInterval: any;
-    Swal.fire({
-      html: '<div style="text-align:center;"><img src="https://i.imgur.com/7c4Iqrl.gif" style="max-width: 100%; height: auto; width:350px" /> </br> <p>Cargando Datos...</p></div>',
-      timer: 1200,
-      timerProgressBar: true,
-      backdrop: `
-        rgba(0,0,123,0.4)
-        left top
-        no-repeat
-      `,
-      didOpen: () => {
-        Swal.showLoading();
-        const timer: any = Swal.getPopup()?.querySelector("b");
-        timerInterval = setInterval(() => {
-          if (timer) {
-            timer.textContent = `${Swal.getTimerLeft()}`;
-          }
-        }, 100);
-      },
-      willClose: () => {
-        clearInterval(timerInterval);
-      }
-    }).then((result) => {
-      /* Read more about handling dismissals below */
-      if (result.dismiss === Swal.DismissReason.timer) {
-        console.log("I was closed by the timer");
-      }
-    });
+    
 
     const puntoventa = this.listSupervisorPDV.find(item => item.idpuntoventarol === Number(this.pdvFiltro))?.puntoventa;
     localStorage.setItem('idpdv', String(this.pdvFiltro));
@@ -117,9 +90,41 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     //this.listHorario = [];
     //this.datosHorarioPlanificado = [];
 
-    this.getHorarioPlanificado()
+
+    // let timerInterval: any;
+    // Swal.fire({
+    //   html: '<div style="text-align:center;"><img src="https://i.imgur.com/7c4Iqrl.gif" style="max-width: 100%; height: auto; width:350px" /> </br> <p>Cargando Datos...</p></div>',
+    //   //timer: 1300,
+    //   timerProgressBar: true,
+    //   backdrop: `
+    //     rgba(0,0,123,0.4)
+    //     left top
+    //     no-repeat
+    //   `,
+    //   didOpen: () => {
+    //     Swal.showLoading();
+    //     // const timer: any = Swal.getPopup()?.querySelector("b");
+    //     // timerInterval = setInterval(() => {
+    //     //   if (timer) {
+    //     //     timer.textContent = `${Swal.getTimerLeft()}`;
+    //     //   }
+    //     // }, 100);
+    //   },
+    //   willClose: () => {
+    //     clearInterval(timerInterval);
+    //   }
+    // })
+    // .then((result) => {
+    //   this.getHorarioPlanificado()
+    //   /* Read more about handling dismissals below */
+    //   if (result.dismiss === Swal.DismissReason.timer) {
+    //     console.log("I was closed by the timer");
+    //   }
+    // });
+    
     // this.pdvFiltro=0;
     // this.rangoFiltro="";
+    //this.getHorarioPlanificado();
 
   }
 
@@ -152,6 +157,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.asignarHorariosService.getPromotorSupervisorPDV(this.supervisorPDV).subscribe(res => {
       this.promotorList = res;
       console.log(this.promotorList);
+      this.datosHorarioPlanificado = [];
       this.listHorario = [];
       for (let i = 0; i < this.promotorList.length; i++) {
         const innerArray = [];
@@ -243,25 +249,30 @@ export class AsignacionHorariosPDVComponent implements OnInit {
         clearInterval(timerInterval);
       }
     });
-    
+
     let timerInterval: any;
-    
+
     this.asignarHorariosService.postHorarioPlanificado(arrayRequest).subscribe(res => {
       console.log(res);
       if (res.mensaje === 'OK') {
         // Close the Swal when the response is received
         Swal.close();
-    
+
         // Handle your logic after receiving the response
         this.getHorarioPlanificado();
+        // let data:any=this.getHorarioPlanificado();
+        // console.log('dataaa para cerrar swal',data)
         console.log('Arreglo final:', 'entro?');
+      } else {
+        Swal.close();
+        console.log('Error: Los datos no se han guardado');
       }
     });
 
   }
 
   getHorarioPlanificado() {
-    this.datosHorarioPlanificado = [];
+    //this.datosHorarioPlanificado = [];
 
     let horarioPlanificadoPromotorRequestArray: HorarioPlanificadoPromotorRequest[] = [];
 
@@ -275,32 +286,67 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       horarioPlanificadoPromotorRequestArray.push(horarioPlanificadoPromotorRequest);
     });
 
-    this.asignarHorariosService.getHorarioPlanificado(horarioPlanificadoPromotorRequestArray).subscribe(res => {
-      this.datosHorarioPlanificado = res;
-      // Verificar si hay datos
-      if (this.datosHorarioPlanificado && this.datosHorarioPlanificado.length > 0) {
-        // Iterar sobre los datos obtenidos y establecer los valores seleccionados en listHorario
-        this.datosHorarioPlanificado.forEach((horarioPlanificado) => {
-          const fechaIndex = this.listDiasSemana.findIndex((dia) => dia.fecha === horarioPlanificado.fecha);
-          const promotorIndex = this.promotorList.findIndex((promotor) => promotor.dnipromotor === horarioPlanificado.dnipromotor);
-          if (fechaIndex !== -1 && promotorIndex !== -1) {
-            const horario = `${horarioPlanificado.descripcion},${horarioPlanificado.horarioentrada},${horarioPlanificado.horariosalida}`;
-            let rhorario = horario;
-            if (rhorario === ',,') {
-              rhorario = "";
-            }
-            this.listHorario[promotorIndex][fechaIndex].horario = rhorario;
-          }
-        });
-        console.log('listHorario:', this.listHorario)
-        console.log('datosHorarioPlanificado:', this.datosHorarioPlanificado)
-      } else {
-        this.limpiarListHorario();
-        console.log('No hay datos disponibles.'); // Imprimir en la consola si no hay datos
+    let timerInterval: any;
+    Swal.fire({
+      html: '<div style="text-align:center;"><img src="https://i.imgur.com/7c4Iqrl.gif" style="max-width: 100%; height: auto; width:350px" /> </br> <p>Cargando Datos...</p></div>',
+      //timer: 1300,
+      timerProgressBar: true,
+      backdrop: `
+        rgba(0,0,123,0.4)
+        left top
+        no-repeat
+      `,
+      didOpen: () => {
+        Swal.showLoading();
+        // const timer: any = Swal.getPopup()?.querySelector("b");
+        // timerInterval = setInterval(() => {
+        //   if (timer) {
+        //     timer.textContent = `${Swal.getTimerLeft()}`;
+        //   }
+        // }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
       }
-    }, error => {
-      console.error('Error al obtener los datos:', error); // Manejar cualquier error de la llamada al servicio
     });
+
+    setTimeout(() => {
+      this.asignarHorariosService.getHorarioPlanificado(horarioPlanificadoPromotorRequestArray).subscribe(res => {
+        this.datosHorarioPlanificado = res;
+        // Verificar si hay datos
+        console.log('Rpta getHorarioPlanificado', res);
+
+        if (this.datosHorarioPlanificado && this.datosHorarioPlanificado.length > 0) {
+          // Iterar sobre los datos obtenidos y establecer los valores seleccionados en listHorario
+          this.datosHorarioPlanificado.forEach((horarioPlanificado) => {
+            const fechaIndex = this.listDiasSemana.findIndex((dia) => dia.fecha === horarioPlanificado.fecha);
+            const promotorIndex = this.promotorList.findIndex((promotor) => promotor.dnipromotor === horarioPlanificado.dnipromotor);
+            if (fechaIndex !== -1 && promotorIndex !== -1) {
+              const horario = `${horarioPlanificado.descripcion},${horarioPlanificado.horarioentrada},${horarioPlanificado.horariosalida}`;
+              let rhorario = horario;
+              if (rhorario === ',,') {
+                rhorario = "";
+              }
+              this.listHorario[promotorIndex][fechaIndex].horario = rhorario;
+            }
+          });
+          console.log('listHorario:', this.listHorario)
+          console.log('datosHorarioPlanificado:', this.datosHorarioPlanificado)
+        } else {
+          //this.limpiarListHorario();
+          console.log('No hay datos disponibles.'); // Imprimir en la consola si no hay datos
+        }
+        setTimeout(() => {
+          Swal.close();
+        }, 2000);
+      }, error => {
+        console.error('Error al obtener los datos:', error); // Manejar cualquier error de la llamada al servicio
+        setTimeout(() => {
+          Swal.close();
+        }, 2000);
+      });
+    }, 2000);
+
 
   }
 
