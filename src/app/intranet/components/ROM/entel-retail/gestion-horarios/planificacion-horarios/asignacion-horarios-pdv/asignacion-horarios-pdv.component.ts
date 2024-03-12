@@ -68,7 +68,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   filtrar() {
-    this.datosHorarioPlanificado = [];
+    //this.datosHorarioPlanificado = [];
     console.log('QUESESTO:', this.datosHorarioPlanificado);
     let timerInterval:any;
     Swal.fire({
@@ -114,7 +114,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.getPromotorSupervisorPDV();
     this.getTurnosSupervisorPDVHorarios();
 
-    this.listHorario = [];
+    //this.listHorario = [];
     //this.datosHorarioPlanificado = [];
 
     this.getHorarioPlanificado()
@@ -152,7 +152,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.asignarHorariosService.getPromotorSupervisorPDV(this.supervisorPDV).subscribe(res => {
       this.promotorList = res;
       console.log(this.promotorList);
-
+      this.listHorario = [];
       for (let i = 0; i < this.promotorList.length; i++) {
         const innerArray = [];
         for (let j = 0; j < this.listDiasSemana.length; j++) {
@@ -298,6 +298,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
           }
         });
         console.log('listHorario:',this.listHorario)
+        console.log('datosHorarioPlanificado:',this.datosHorarioPlanificado)
       } else {
         this.limpiarListHorario();
         console.log('No hay datos disponibles.'); // Imprimir en la consola si no hay datos
