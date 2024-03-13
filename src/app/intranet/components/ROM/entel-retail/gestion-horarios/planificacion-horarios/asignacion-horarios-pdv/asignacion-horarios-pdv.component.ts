@@ -11,6 +11,7 @@ import { TurnosAsignadosPDVRequest } from '../../../../../../models/planificacio
 import { HorarioPlanificadoRequest } from '../../../../../../models/planificacion-horarios/horarioPlanificadoRequest';
 import { HorarioPlanificadoPromotorRequest } from '../../../../../../models/planificacion-horarios/horarioPlanificadoPromotorRequest';
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-asignacion-horarios-pdv',
@@ -46,7 +47,11 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
   mostrarElemento: boolean = false;
 
+  options: string[] = [];
+  filteredOptions: string[] = [];
+  selectedOption: string = '';
 
+  showOptions: boolean = false;
   constructor(
     private asignarTurnosService: AsignarTurnosService,
     private asignarHorariosService: AsignarHorariosService
@@ -54,6 +59,53 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.usuarioSupervisor.usuario = localStorage.getItem('user')
     localStorage.setItem('idpdv', '');
     localStorage.setItem('puntoventa', '');
+  }
+
+  toggleOptions() {
+    this.showOptions = !this.showOptions;
+  }
+
+
+  fileName = 'ExcelSheet.xlsx';
+
+  filterOptions() {
+    this.filteredOptions = this.options.filter(option =>
+      option.toLowerCase().includes(this.selectedOption.toLowerCase())
+    );
+  }
+
+  selectOption(option: string) {
+    this.selectedOption = option;
+    this.filteredOptions = [];
+  }
+
+  exportexcel() {
+    /** Arreglos de objetos **/
+    const data1 = [
+      { Nombre: 'Juan', Edad: 30, Ciudad: 'Buenos Aires' },
+      { Nombre: 'María', Edad: 25, Ciudad: 'Madrid' },
+      { Nombre: 'Pedro', Edad: 35, Ciudad: 'Lima' },
+      { Nombre: 'Ana', Edad: 28, Ciudad: 'Ciudad de México' },
+    ];
+
+    const data2 = [
+      { Producto: 'Laptop', Precio: 1200, Stock: 10 },
+      { Producto: 'Teléfono', Precio: 800, Stock: 20 },
+      { Producto: 'Tablet', Precio: 400, Stock: 15 },
+    ];
+
+    /** Convertir los arreglos de objetos en hojas de cálculo **/
+    const ws1: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data1);
+    const ws2: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data2);
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+    /** Añadir las hojas de cálculo al libro de trabajo **/
+    XLSX.utils.book_append_sheet(wb, ws1, 'Semana Actual');
+    XLSX.utils.book_append_sheet(wb, ws2, 'Semana Anterior');
+
+    /** Guardar en un archivo **/
+    XLSX.writeFile(wb, this.fileName);
   }
 
   toggleVisibilidad() {
@@ -367,6 +419,9 @@ export class AsignacionHorariosPDVComponent implements OnInit {
             });
             console.log('listHorario:', this.listHorario)
             console.log('datosHorarioPlanificado2:', this.datosHorarioPlanificado)
+            this.selectedOption = this.datosHorarioPlanificado[6].descripcion; // suponiendo que descripcion es el campo de horario
+
+
           } else {
             console.log('No hay datos disponibles.');
           }

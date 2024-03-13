@@ -96,6 +96,9 @@
                         <button class="btn btn-primary" type="button" (click)="filtrar()">Buscar</button>
                     </div>
                 </div> -->
+                <!-- <button (click)="exportexcel()" class="btn btn-primary mb-3">
+                    Download File
+                  </button> -->
                 <div class="table-responsive mt-4">
                     <table id="tablaTurnosAsignadosHorarios"
                         class="table table-dark caption-top table-hover table-bordered text-center table-sm rounded-2">
@@ -165,3 +168,21 @@
         </div>
     </div>
 </div>
+<div>
+    <!-- <input type="text" [(ngModel)]="selectedOption" (input)="filterOptions()">
+    <ul *ngIf="filteredOptions.length > 0">
+      <li *ngFor="let option of filteredOptions" (click)="selectOption(option)">
+        {{ option }}
+      </li>
+    </ul>
+  </div> -->
+  
+  <div class="custom-combobox">
+    <input type="text" [(ngModel)]="selectedOption" (click)="toggleOptions()">
+    <ul *ngIf="showOptions">
+      <li *ngFor="let item of listTurnosSupervisorPDVHorarios" (click)="selectOption(item.descripcion)">
+        {{ item.descripcion }}
+      </li>
+    </ul>
+  </div>
+  
