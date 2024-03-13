@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-sm-3" style="padding-top: 27px;">
                                     <button class="btn btn-primary" type="button" (click)="filtrar()"
-                                    style="max-width: 100%; height: auto; width:350px">
+                                        style="max-width: 100%; height: auto; width:350px">
                                         Buscar
                                     </button>
                                 </div>
@@ -130,7 +130,35 @@
                                     promotor.apellidomaternopromotor }}
                                 </th>
                                 <td *ngFor="let dia of listDiasSemana; let j = index">
-                                    <select class="form-control"
+                                    <div class="custom-select-input">
+                                        <div class="dropdown">
+                                            <button class="btn btn-light dropdown-toggle" type="button" 
+                                                    id="dropdownMenuButton{{i}}{{j}}" data-toggle="dropdown" 
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                {{ listHorario[i][j].horario === '' ? 'Seleccionar' : listHorario[i][j].horario.split(',')[0] }}
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#" 
+                                                   *ngFor="let item of listTurnosSupervisorPDVHorarios" 
+                                                   (click)="selectOption(item.descripcion,item.horarioentrada,item.horariosalida, i, j)">
+                                                    {{ item.descripcion }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="custom-select-input">
+                                        <input type="text" class="form-control" style="padding: 10px; font-size: 10pt;text-align: center;"
+                                            [ngModel]="listHorario[i][j].horario === '' ? 'Seleccionar' : listHorario[i][j].horario.split(',')[0]"
+                                            (ngModelChange)="listHorario[i][j].horario = $event === 'Seleccionar' ? '' : $event"
+                                            (click)="toggleOptions(i, j)">
+                                        <ul *ngIf="showOptions[i][j]">
+                                            <li *ngFor="let item of listTurnosSupervisorPDVHorarios"
+                                                (click)="selectOption(item.descripcion,item.horarioentrada,item.horariosalida, i, j)">
+                                                {{ item.descripcion }}
+                                            </li>
+                                        </ul>
+                                    </div> -->
+                                    <!-- <select class="form-control"
                                         style="padding: 10px; font-size: 10pt;text-align: center;"
                                         [(ngModel)]="listHorario[i][j].horario">
                                         <option value="" selected>Seleccionar</option>
@@ -139,8 +167,7 @@
                                             [value]="(item.descripcion + ',' + item.horarioentrada + ',' + item.horariosalida)">
                                             {{ item.descripcion }}
                                         </option>
-                                    </select>
-
+                                    </select> -->
                                 </td>
                             </tr>
                         </tbody>
@@ -148,16 +175,16 @@
 
                     </table>
                 </div>
-                <div class="row justify-content-md-end" >
+                <div class="row justify-content-md-end">
                     <div class="col-sm-2" *ngIf="!datosHorarioPlanificado || datosHorarioPlanificado.length === 0">
-                        <button  *ngIf="mostrarElemento" class="btn btn-primary" type="menu" (click)="guardarHorarios()"
-                        style="max-width: 100%; height: auto; width:350px">
+                        <button *ngIf="mostrarElemento" class="btn btn-primary" type="menu" (click)="guardarHorarios()"
+                            style="max-width: 100%; height: auto; width:350px">
                             Guardar
                         </button>
                     </div>
                     <div class="col-sm-2" *ngIf="datosHorarioPlanificado && datosHorarioPlanificado.length >0">
                         <button class="btn btn-success" type="menu " (click)="guardarHorarios()"
-                        style="max-width: 100%; height: auto; width:350px">
+                            style="max-width: 100%; height: auto; width:350px">
                             🖊 Editar
                         </button>
                     </div>
@@ -176,13 +203,12 @@
       </li>
     </ul>
   </div> -->
-  
-  <div class="custom-combobox">
+
+    <!-- <div class="custom-combobox">
     <input type="text" [(ngModel)]="selectedOption" (click)="toggleOptions()">
     <ul *ngIf="showOptions">
       <li *ngFor="let item of listTurnosSupervisorPDVHorarios" (click)="selectOption(item.descripcion)">
         {{ item.descripcion }}
       </li>
     </ul>
-  </div>
-  
+  </div> -->

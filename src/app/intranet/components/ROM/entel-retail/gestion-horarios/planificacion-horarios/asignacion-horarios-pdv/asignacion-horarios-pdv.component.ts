@@ -43,15 +43,11 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   pdvFiltro: number = 0;
   rangoFiltro: string = "";
   horarioPlanificadoPromotorRequestArray: HorarioPlanificadoPromotorRequest[] = [];
-  horarioPlanificadoPromotorRequest: HorarioPlanificadoPromotorRequest =new HorarioPlanificadoPromotorRequest();
+  horarioPlanificadoPromotorRequest: HorarioPlanificadoPromotorRequest = new HorarioPlanificadoPromotorRequest();
 
   mostrarElemento: boolean = false;
 
-  options: string[] = [];
-  filteredOptions: string[] = [];
-  selectedOption: string = '';
-
-  showOptions: boolean = false;
+  showOptions!: boolean[][];
   constructor(
     private asignarTurnosService: AsignarTurnosService,
     private asignarHorariosService: AsignarHorariosService
@@ -61,24 +57,20 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     localStorage.setItem('puntoventa', '');
   }
 
-  toggleOptions() {
-    this.showOptions = !this.showOptions;
+  toggleOptions(i: number, j: number) {
+    // Puedes implementar la lógica para mostrar/ocultar las opciones según tu requerimiento
+    // Por ejemplo, puedes usar un arreglo multidimensional para almacenar el estado de cada celda
+    // Aquí se muestra un ejemplo de cómo podrías hacerlo
+    this.showOptions[i][j] = !this.showOptions[i][j];
   }
 
+  selectOption(descripcion: string, horarioentrada: string, horariosalida: string, i: number, j: number) {
+    this.listHorario[i][j].horario = descripcion + ',' + horarioentrada + ',' + horariosalida;
+    // Aquí puedes ocultar las opciones si lo deseas
+    this.showOptions[i][j] = false;
+  }
 
   fileName = 'ExcelSheet.xlsx';
-
-  filterOptions() {
-    this.filteredOptions = this.options.filter(option =>
-      option.toLowerCase().includes(this.selectedOption.toLowerCase())
-    );
-  }
-
-  selectOption(option: string) {
-    this.selectedOption = option;
-    this.filteredOptions = [];
-  }
-
   exportexcel() {
     /** Arreglos de objetos **/
     const data1 = [
@@ -232,6 +224,14 @@ export class AsignacionHorariosPDVComponent implements OnInit {
         this.listHorario.push(innerArray);
       }
 
+      this.showOptions = [];
+      for (let i = 0; i < this.promotorList.length; i++) {
+        this.showOptions[i] = [];
+        for (let j = 0; j < this.listDiasSemana.length; j++) {
+          this.showOptions[i][j] = false; // Inicialmente, todas las opciones están ocultas
+        }
+      }
+
       //Obtener Horario Planificado
       this.getHorarioPlanificado();
 
@@ -264,6 +264,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       this.listDiasSemana.forEach((dia, indexDia) => {
         // Obtener el horario del promotor para el día actual
         const horario = this.listHorario[indexPromotor][indexDia];
+        console.log('como bota?', this.listHorario[indexPromotor][indexDia]);
 
         // Crear un objeto para el horario actual
         const objetoHorario = {
@@ -352,13 +353,13 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.horarioPlanificadoPromotorRequestArray = [];
 
 
- console.log('rangoFiltro:', this.rangoFiltro);
+    console.log('rangoFiltro:', this.rangoFiltro);
 
     const fechasSeparadas = this.rangoFiltro.split(',');
 
     const fechaInicio = fechasSeparadas[0];
     const fechaFin = fechasSeparadas[1];
-    
+
     console.log('fechaInicio:', fechaInicio);
     console.log('fechaFin:', fechaFin);
     this.promotorList.forEach((promotor, i) => {
@@ -415,11 +416,10 @@ export class AsignacionHorariosPDVComponent implements OnInit {
                 const rhorario = horario === ',,' ? '' : horario;
                 this.listHorario[promotorIndex][fechaIndex].horario = rhorario;
               }
-              
+
             });
             console.log('listHorario:', this.listHorario)
             console.log('datosHorarioPlanificado2:', this.datosHorarioPlanificado)
-            this.selectedOption = this.datosHorarioPlanificado[6].descripcion; // suponiendo que descripcion es el campo de horario
 
 
           } else {
@@ -444,6 +444,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
   }
 
-  
+
 
 }
