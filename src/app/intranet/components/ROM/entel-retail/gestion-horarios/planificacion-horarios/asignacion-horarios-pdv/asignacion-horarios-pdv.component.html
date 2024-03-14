@@ -129,8 +129,8 @@
                                     {{ promotor.nombrepromotor }} {{ promotor.apellidopaternopromotor }} {{
                                     promotor.apellidomaternopromotor }}
                                 </th>
-                                <td *ngFor="let dia of listDiasSemana; let j = index" class="p-2"   >
-                                    <div class="input-group" tabindex="0" (focusout)="hideOptions(i, j)" style="position: relative;">
+                                <td *ngFor="let dia of listDiasSemana; let j = index" class="p-2">
+                                    <!-- <div class="input-group" tabindex="0" (focusout)="hideOptions(i, j)" style="position: relative;">
                                         <input type="text" class="form-control" style="padding: 7px; font-size: 10pt; text-align: center; cursor: pointer; border-radius: 10px;min-width: 120px;"
                                             [ngModel]="listHorario[i][j].horario === '' ? 'Seleccionar' : listHorario[i][j].horario.split(',')[0]"
                                             (ngModelChange)="listHorario[i][j].horario = $event === 'Seleccionar' ? '' : $event"
@@ -144,17 +144,24 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    
-                                    <!-- <select class="form-control"
+                                     -->
+                                    <select class="form-control"
                                         style="padding: 10px; font-size: 10pt;text-align: center;"
                                         [(ngModel)]="listHorario[i][j].horario">
                                         <option value="" selected>Seleccionar</option>
+                                        <ng-container
+                                            *ngFor="let horario of listHorario[i][j].horario.split(','); let first = first">
+                                            <option *ngIf="first && !coincidencias[i][j]"
+                                                [value]="listHorario[i][j].horario" style="text-align: left;">
+                                                {{ horario }}
+                                            </option>
+                                        </ng-container>
                                         <option *ngFor="let item of listTurnosSupervisorPDVHorarios"
                                             style="text-align: left;"
                                             [value]="(item.descripcion + ',' + item.horarioentrada + ',' + item.horariosalida)">
                                             {{ item.descripcion }}
                                         </option>
-                                    </select> -->
+                                    </select>
                                 </td>
                             </tr>
                         </tbody>

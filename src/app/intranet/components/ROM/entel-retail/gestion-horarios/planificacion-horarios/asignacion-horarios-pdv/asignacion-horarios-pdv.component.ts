@@ -48,7 +48,9 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   mostrarElemento: boolean = false;
 
   showOptions!: boolean[][];
-  
+
+  coincidencias: boolean[][] = [];
+
   constructor(
     private asignarTurnosService: AsignarTurnosService,
     private asignarHorariosService: AsignarHorariosService
@@ -69,7 +71,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     console.log('debe entrar por el blur');
     //TODO: NO BORRES NUNCA EN TU VIDA SINO NO FUNCIONA EL COMBOBOX, SI PUEDES ARREGLA ESE COMBOBOX, SUERTE 
     setTimeout(() => {
-        this.showOptions[i][j] = false;
+      this.showOptions[i][j] = false;
     }, 200); // Ajusta el tiempo según sea necesario
   }
 
@@ -221,6 +223,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       console.log(this.promotorList);
       this.datosHorarioPlanificado = [];
       this.listHorario = [];
+
       for (let i = 0; i < this.promotorList.length; i++) {
         const innerArray = [];
         for (let j = 0; j < this.listDiasSemana.length; j++) {
@@ -231,6 +234,14 @@ export class AsignacionHorariosPDVComponent implements OnInit {
           });
         }
         this.listHorario.push(innerArray);
+      }
+
+      this.coincidencias = [];
+      for (let i = 0; i < this.promotorList.length; i++) {
+        this.coincidencias[i] = [];
+        for (let j = 0; j < this.listDiasSemana.length; j++) {
+          this.coincidencias[i][j] = false; // Inicialmente, todas las opciones están ocultas
+        }
       }
 
       this.showOptions = [];
@@ -418,17 +429,27 @@ export class AsignacionHorariosPDVComponent implements OnInit {
             this.datosHorarioPlanificado.forEach((horarioPlanificado) => {
               const fechaIndex = this.listDiasSemana.findIndex((dia) => dia.fecha === horarioPlanificado.fecha);
               const promotorIndex = this.promotorList.findIndex((promotor) => promotor.dnipromotor === horarioPlanificado.dnipromotor);
-              console.log('fechaIndex:', fechaIndex);
-              console.log('promotorIndex:', promotorIndex);
+              // console.log('fechaIndex:', fechaIndex);
+              // console.log('promotorIndex:', promotorIndex);
               if (fechaIndex !== -1 && promotorIndex !== -1) {
                 const horario = `${horarioPlanificado.descripcion || ''},${horarioPlanificado.horarioentrada || ''},${horarioPlanificado.horariosalida || ''}`;
                 const rhorario = horario === ',,' ? '' : horario;
                 this.listHorario[promotorIndex][fechaIndex].horario = rhorario;
               }
 
+              for (let i = 0; i < this.listHorario.length; i++) {
+                this.coincidencias[i] = [];
+                for (let j = 0; j < this.listHorario[i].length; j++) {
+                  const horarioActual = this.listHorario[i][j].horario;
+                  const partesHorario = horarioActual.split(',');
+                  const coincidencia = partesHorario.some((part: any) => part === '');
+                  this.coincidencias[i][j] = coincidencia;
+                }
+              }
             });
             console.log('listHorario:', this.listHorario)
             console.log('datosHorarioPlanificado2:', this.datosHorarioPlanificado)
+            console.log('coincidencias', this.coincidencias);
 
 
           } else {
