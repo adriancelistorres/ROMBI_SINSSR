@@ -129,22 +129,24 @@
                                     {{ promotor.nombrepromotor }} {{ promotor.apellidopaternopromotor }} {{
                                     promotor.apellidomaternopromotor }}
                                 </th>
-                                <td *ngFor="let dia of listDiasSemana; let j = index" class="p-2">
-                                    <div class="input-group" tabindex="0" (blur)="hideOptions(i, j)">
-                                        <input type="text"  class="form-control" style="padding: 7px; font-size: 10pt; text-align: center"
+                                <td *ngFor="let dia of listDiasSemana; let j = index" class="p-2"   >
+                                    <div class="input-group" tabindex="0" (focusout)="hideOptions(i, j)" >
+                                        <input  style="cursor: pointer;"  type="text"  class="form-control" style="padding: 7px; cursor: pointer; font-size: 10pt; text-align: center"
                                             [ngModel]="listHorario[i][j].horario === '' ? 'Seleccionar' : listHorario[i][j].horario.split(',')[0]"
                                             (ngModelChange)="listHorario[i][j].horario = $event === 'Seleccionar' ? '' : $event"
                                             (click)="toggleOptions(i, j)" readonly>
-                                        <div class="input-group-text p-1" (click)="toggleOptions(i, j)">
+                                        <!-- <div class="input-group-text p-1" (click)="toggleOptions(i, j)"  >
                                             <i class="bi bi-chevron-down" style="font-size: small; font-weight: 700;"></i>
-                                        </div>
+                                        </div> -->
                                     </div>
-                                    <ul *ngIf="showOptions[i][j]" class="list-unstyled floating-list">
-                                        <li *ngFor="let item of listTurnosSupervisorPDVHorarios"
-                                            (click)="selectOption(item.descripcion, item.horarioentrada, item.horariosalida, i, j)">
-                                            {{ item.descripcion }}
-                                        </li>
-                                    </ul>
+                                    <div (focusout)="hideOptions(i, j)"  style="cursor: pointer;"  >
+                                        <ul *ngIf="showOptions[i][j]" class="list-unstyled floating-list"  style="cursor: pointer;" >
+                                            <li *ngFor="let item of listTurnosSupervisorPDVHorarios"  style="cursor: pointer;" 
+                                                (click)="selectOption(item.descripcion, item.horarioentrada, item.horariosalida, i, j)">
+                                                {{ item.descripcion }}
+                                            </li>
+                                        </ul>
+                                    </div>
                                     
                                     <!-- <select class="form-control"
                                         style="padding: 10px; font-size: 10pt;text-align: center;"

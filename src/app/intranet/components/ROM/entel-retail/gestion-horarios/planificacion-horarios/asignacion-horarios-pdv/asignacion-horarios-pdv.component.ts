@@ -67,8 +67,9 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
   hideOptions(i: number, j: number) {
     console.log('debe entrar por el blur');
-    
-    this.showOptions[i][j] = false;
+    setTimeout(() => {
+      this.showOptions[i][j] = false;
+  }, 200); // Ajusta el tiempo según sea necesario
 }
 
   selectOption(descripcion: string, horarioentrada: string, horariosalida: string, i: number, j: number) {
