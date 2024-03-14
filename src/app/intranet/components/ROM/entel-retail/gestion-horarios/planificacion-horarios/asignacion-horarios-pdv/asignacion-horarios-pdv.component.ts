@@ -47,8 +47,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
   mostrarElemento: boolean = false;
 
-  showOptions!: boolean[][];
-
   coincidencias: boolean[][] = [];
 
   constructor(
@@ -58,31 +56,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.usuarioSupervisor.usuario = localStorage.getItem('user')
     localStorage.setItem('idpdv', '');
     localStorage.setItem('puntoventa', '');
-  }
-
-  horarioNoExisteEnLista(horario: string): boolean {
-    return !this.listTurnosSupervisorPDVHorarios.some(item => item.descripcion === horario);
-  }
-
-  toggleOptions(i: number, j: number) {
-    // Puedes implementar la lógica para mostrar/ocultar las opciones según tu requerimiento
-    // Por ejemplo, puedes usar un arreglo multidimensional para almacenar el estado de cada celda
-    // Aquí se muestra un ejemplo de cómo podrías hacerlo
-    this.showOptions[i][j] = !this.showOptions[i][j];
-  }
-
-  hideOptions(i: number, j: number) {
-    console.log('debe entrar por el blur');
-    //TODO: NO BORRES NUNCA EN TU VIDA SINO NO FUNCIONA EL COMBOBOX, SI PUEDES ARREGLA ESE COMBOBOX, SUERTE 
-    setTimeout(() => {
-      this.showOptions[i][j] = false;
-    }, 200); // Ajusta el tiempo según sea necesario
-  }
-
-  selectOption(descripcion: string, horarioentrada: string, horariosalida: string, i: number, j: number) {
-    this.listHorario[i][j].horario = descripcion + ',' + horarioentrada + ',' + horariosalida;
-    // Aquí puedes ocultar las opciones si lo deseas
-    this.showOptions[i][j] = false;
   }
 
   fileName = 'ExcelSheet.xlsx';
@@ -115,10 +88,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     XLSX.writeFile(wb, this.fileName);
   }
 
-  toggleVisibilidad() {
-    this.mostrarElemento = true;
-  }
-
   ngOnInit(): void {
 
     this.getSupervisorPDV();
@@ -135,7 +104,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   filtrar() {
-    this.toggleVisibilidad()
     this.datosHorarioPlanificado = [];
     console.log('datosHorarioPlanificado1:', this.datosHorarioPlanificado);
 
@@ -154,45 +122,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.getDiasSemana();
     this.getPromotorSupervisorPDV();
     this.getTurnosSupervisorPDVHorarios();
-
-    //this.listHorario = [];
-    //this.datosHorarioPlanificado = [];
-
-
-    // let timerInterval: any;
-    // Swal.fire({
-    //   html: '<div style="text-align:center;"><img src="https://i.imgur.com/7c4Iqrl.gif" style="max-width: 100%; height: auto; width:350px" /> </br> <p>Cargando Datos...</p></div>',
-    //   //timer: 1300,
-    //   timerProgressBar: true,
-    //   backdrop: `
-    //     rgba(0,0,123,0.4)
-    //     left top
-    //     no-repeat
-    //   `,
-    //   didOpen: () => {
-    //     Swal.showLoading();
-    //     // const timer: any = Swal.getPopup()?.querySelector("b");
-    //     // timerInterval = setInterval(() => {
-    //     //   if (timer) {
-    //     //     timer.textContent = `${Swal.getTimerLeft()}`;
-    //     //   }
-    //     // }, 100);
-    //   },
-    //   willClose: () => {
-    //     clearInterval(timerInterval);
-    //   }
-    // })
-    // .then((result) => {
-    //   this.getHorarioPlanificado()
-    //   /* Read more about handling dismissals below */
-    //   if (result.dismiss === Swal.DismissReason.timer) {
-    //     console.log("I was closed by the timer");
-    //   }
-    // });
-
-    // this.pdvFiltro=0;
-    // this.rangoFiltro="";
-    //this.getHorarioPlanificado();
 
   }
 
@@ -248,14 +177,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
         }
       }
 
-      this.showOptions = [];
-      for (let i = 0; i < this.promotorList.length; i++) {
-        this.showOptions[i] = [];
-        for (let j = 0; j < this.listDiasSemana.length; j++) {
-          this.showOptions[i][j] = false; // Inicialmente, todas las opciones están ocultas
-        }
-      }
-
       //Obtener Horario Planificado
       this.getHorarioPlanificado();
 
@@ -278,7 +199,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   guardarHorarios() {
-    this.toggleVisibilidad();
     const arregloFinal: any[] = []; // Arreglo para almacenar todos los objetos
 
     // Iterar sobre los promotores
@@ -474,10 +394,10 @@ export class AsignacionHorariosPDVComponent implements OnInit {
         }, 2000);
       });
     }, 2000);
-
-
   }
 
-
+  horarioNoExisteEnLista(horario: string): boolean {
+    return !this.listTurnosSupervisorPDVHorarios.some(item => item.descripcion === horario);
+  }
 
 }

@@ -25,7 +25,7 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-sm-5">
+                                <div class="col-sm-4">
                                     <label for="input2" class="form-label">
                                         <i class="bi bi-calendar4-range" style="font-size: 1rem; color: #FF455C;"></i>
                                         Rangos Semanales:
@@ -41,64 +41,22 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-sm-3" style="padding-top: 27px;">
+                                <div class="col-sm-2" style="padding-top: 27px;">
                                     <button class="btn btn-primary" type="button" (click)="filtrar()"
                                         style="max-width: 100%; height: auto; width:350px">
                                         Buscar
+                                    </button>
+                                </div>
+                                <div class="col-sm-2" style="padding-top: 27px;">
+                                    <button class="btn btn-primary" type="button" (click)="filtrar()"
+                                        style="max-width: 100%; height: auto; width:350px">
+                                        Exportar
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="row">
-                    <div class="col-sm-6 mb-3 mb-sm-0">
-                        <div class="card">
-                            <div class="card-body">
-                                <label for="input1" class="form-label">Punto de Venta:</label>
-                                <select class="form-select" id="input1" [(ngModel)]="pdvFiltro">
-                                    <option value="0">Seleccionar PDV</option>
-                                    <option *ngFor="let pdv of listSupervisorPDV" [value]="pdv.idpuntoventarol">
-                                        {{ pdv.puntoventa }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row justify-content-md-start">
-                                    <div class="col-sm-12">
-                                        <label for="input2" class="form-label">
-                                            <i class="bi bi-calendar4-range"
-                                                style="font-size: 1rem; color: #FF455C;"></i>
-                                            Rangos Semanales:
-                                        </label>
-                                        <select class="form-select" id="input2" [(ngModel)]="rangoFiltro">
-                                            <option value="" *ngIf="listRangoSemana.length > 0">Seleccionar</option>
-                                            <option value="" *ngIf="listRangoSemana.length === 0" disabled selected>No
-                                                hay rangos disponibles</option>
-                                            <option *ngFor="let rango of listRangoSemana"
-                                                [value]="(rango.lunes + ',' + rango.domingo)">
-                                                Lunes {{ rango.lunes | date:"dd/MM/yyyy" }} - Domingo {{ rango.domingo |
-                                                date:"dd/MM/yyyy" }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 mb-3 mb-sm-0">
-                        <button class="btn btn-primary" type="button" (click)="filtrar()">Buscar</button>
-                    </div>
-                </div> -->
-                <!-- <button (click)="exportexcel()" class="btn btn-primary mb-3">
-                    Download File
-                  </button> -->
                 <div class="table-responsive mt-4">
                     <table id="tablaTurnosAsignadosHorarios"
                         class="table table-dark caption-top table-hover table-bordered text-center table-sm rounded-2">
@@ -130,21 +88,6 @@
                                     promotor.apellidomaternopromotor }}
                                 </th>
                                 <td *ngFor="let dia of listDiasSemana; let j = index" class="p-2">
-                                    <!-- <div class="input-group" tabindex="0" (focusout)="hideOptions(i, j)" style="position: relative;">
-                                        <input type="text" class="form-control" style="padding: 7px; font-size: 10pt; text-align: center; cursor: pointer; border-radius: 10px;min-width: 120px;"
-                                            [ngModel]="listHorario[i][j].horario === '' ? 'Seleccionar' : listHorario[i][j].horario.split(',')[0]"
-                                            (ngModelChange)="listHorario[i][j].horario = $event === 'Seleccionar' ? '' : $event"
-                                            (click)="toggleOptions(i, j)" readonly>
-                                        <div style="position: absolute; width: 100%; bottom: 0; cursor: pointer;">
-                                            <ul *ngIf="showOptions[i][j]" class="list-unstyled floating-list" style="min-width: 120px;">
-                                                <li style="padding: 5px;"  class="list-item border border-bottom-1" *ngFor="let item of listTurnosSupervisorPDVHorarios"
-                                                    (click)="selectOption(item.descripcion, item.horarioentrada, item.horariosalida, i, j)">
-                                                    {{ item.descripcion }}
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                     -->
                                     <select class="form-control"
                                         style="padding: 10px; font-size: 10pt;text-align: center;"
                                         [(ngModel)]="listHorario[i][j].horario">
@@ -163,12 +106,9 @@
                                             {{ item.descripcion }}
                                         </option>
                                     </select>
-
                                 </td>
                             </tr>
                         </tbody>
-
-
                     </table>
                 </div>
                 <div class="row justify-content-md-end">
@@ -192,19 +132,3 @@
     </div>
 </div>
 <div>
-    <!-- <input type="text" [(ngModel)]="selectedOption" (input)="filterOptions()">
-    <ul *ngIf="filteredOptions.length > 0">
-      <li *ngFor="let option of filteredOptions" (click)="selectOption(option)">
-        {{ option }}
-      </li>
-    </ul>
-  </div> -->
-
-    <!-- <div class="custom-combobox">
-    <input type="text" [(ngModel)]="selectedOption" (click)="toggleOptions()">
-    <ul *ngIf="showOptions">
-      <li *ngFor="let item of listTurnosSupervisorPDVHorarios" (click)="selectOption(item.descripcion)">
-        {{ item.descripcion }}
-      </li>
-    </ul>
-  </div> -->
