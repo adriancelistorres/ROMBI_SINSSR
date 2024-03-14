@@ -67,10 +67,11 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
   hideOptions(i: number, j: number) {
     console.log('debe entrar por el blur');
+    //TODO: NO BORRES NUNCA EN TU VIDA SINO NO FUNCIONA EL COMBOBOX, SI PUEDES ARREGLA ESE COMBOBOX, SUERTE 
     setTimeout(() => {
-      this.showOptions[i][j] = false;
-  }, 200); // Ajusta el tiempo según sea necesario
-}
+        this.showOptions[i][j] = false;
+    }, 100); // Ajusta el tiempo según sea necesario
+  }
 
   selectOption(descripcion: string, horarioentrada: string, horariosalida: string, i: number, j: number) {
     this.listHorario[i][j].horario = descripcion + ',' + horarioentrada + ',' + horariosalida;
