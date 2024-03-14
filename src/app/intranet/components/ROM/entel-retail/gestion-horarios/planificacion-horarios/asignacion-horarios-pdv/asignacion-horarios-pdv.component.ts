@@ -12,6 +12,7 @@ import { HorarioPlanificadoRequest } from '../../../../../../models/planificacio
 import { HorarioPlanificadoPromotorRequest } from '../../../../../../models/planificacion-horarios/horarioPlanificadoPromotorRequest';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-asignacion-horarios-pdv',
@@ -58,34 +59,45 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     localStorage.setItem('puntoventa', '');
   }
 
-  fileName = 'ExcelSheet.xlsx';
+ 
+
   exportexcel() {
-    /** Arreglos de objetos **/
-    const data1 = [
-      { Nombre: 'Juan', Edad: 30, Ciudad: 'Buenos Aires' },
-      { Nombre: 'María', Edad: 25, Ciudad: 'Madrid' },
-      { Nombre: 'Pedro', Edad: 35, Ciudad: 'Lima' },
-      { Nombre: 'Ana', Edad: 28, Ciudad: 'Ciudad de México' },
-    ];
 
-    const data2 = [
-      { Producto: 'Laptop', Precio: 1200, Stock: 10 },
-      { Producto: 'Teléfono', Precio: 800, Stock: 20 },
-      { Producto: 'Tablet', Precio: 400, Stock: 15 },
-    ];
+    let promiseSemanaActual = lastValueFrom(this.asignarHorariosService.ReportGetSemanaActual(this.usuarioSupervisor));
+    let promiseSemanaAnterior = lastValueFrom(this.asignarHorariosService.ReportGetSemanaAnterior(this.usuarioSupervisor));
 
-    /** Convertir los arreglos de objetos en hojas de cálculo **/
-    const ws1: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data1);
-    const ws2: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data2);
+    Promise.all([promiseSemanaActual, promiseSemanaAnterior]).then((values: any[]) => {
+      console.log('listReportGetSemanaActual', values[0]);
+      console.log('listReportGetSemanaAnterior', values[1]);
 
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      const data1 = values[0];
+      const data2 = values[1];
 
-    /** Añadir las hojas de cálculo al libro de trabajo **/
-    XLSX.utils.book_append_sheet(wb, ws1, 'Semana Actual');
-    XLSX.utils.book_append_sheet(wb, ws2, 'Semana Anterior');
+      const ws1: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data1);
+      const ws2: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data2);
 
-    /** Guardar en un archivo **/
-    XLSX.writeFile(wb, this.fileName);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+      /** Añadir las hojas de cálculo al libro de trabajo **/
+      XLSX.utils.book_append_sheet(wb, ws1, 'Semana Actual');
+      XLSX.utils.book_append_sheet(wb, ws2, 'Semana Anterior');
+
+      let fileName = `HorarioPlanificado_${this.usuarioSupervisor.usuario}.xlsx`;
+
+      /** Guardar en un archivo **/
+      XLSX.writeFile(wb, fileName);
+
+    }).catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
+  ReportGetSemanaActual() {
+
+  }
+
+  ReportGetSemanaAnterior() {
+
   }
 
   ngOnInit(): void {

@@ -7,6 +7,7 @@ import { SupervisorPDV } from '../../../models/planificacion-horarios/supervisor
 import { TurnosDisponiblesPDVRequest } from '../../../models/planificacion-horarios/turnosDisponiblesPDVRequest';
 import { HorarioPlanificadoRequest } from '../../../models/planificacion-horarios/horarioPlanificadoRequest';
 import { HorarioPlanificadoPromotorRequest } from '../../../models/planificacion-horarios/horarioPlanificadoPromotorRequest';
+import { UsuarioSupervisor } from '../../../models/planificacion-horarios/usuarioSupervisor';
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +44,14 @@ export class AsignarHorariosService {
 
   getHorarioPlanificado(horarioPlanificadoPromotorRequest: HorarioPlanificadoPromotorRequest[]){
     return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/GetHorarioPlanificado`, horarioPlanificadoPromotorRequest);
+  }
+
+  //Exportar horarios
+  ReportGetSemanaActual(usuario: UsuarioSupervisor): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/ReportGetSemanaActual`, usuario);
+  }
+
+  ReportGetSemanaAnterior(usuario: UsuarioSupervisor): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/ReportGetSemanaAnterior`, usuario);
   }
 }

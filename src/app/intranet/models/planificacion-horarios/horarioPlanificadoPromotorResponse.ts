@@ -7,5 +7,9 @@ export class HorarioPlanificadoPromotorResponse {
     public horarioentrada?: string;
     public horariosalida?: string;
     public descripcion?: string;
-    public usuario_creacion?: string;
+    public fechaCreacion?: string;
+    public fechaModificacion?: string;
+    public usuarioCreacion?: string;
+    public usuarioModificacion?: string;
+    public estado?: number;
 }
