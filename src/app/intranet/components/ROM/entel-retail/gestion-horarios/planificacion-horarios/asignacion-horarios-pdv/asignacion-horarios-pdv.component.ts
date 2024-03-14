@@ -116,6 +116,60 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   filtrar() {
+    console.log('pdvFiltro',this.pdvFiltro)
+    console.log('rangoFiltro',this.rangoFiltro)
+
+    if (this.pdvFiltro === 0) {
+      console.log('Seleccione PDV');
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "warning",
+        title: "<b>Seleccione PDV</b>",
+        showCloseButton: true,
+        text: "Debe seleccionar Punto de Venta!",
+        //background: "#F7F7F9",
+        //color: "#fff",
+       
+      });
+      return; // Detener la ejecución de la función
+    }
+  
+    if (this.rangoFiltro.indexOf(',') === -1) {
+      console.log('Seleccione Rango');
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "warning",
+        title: "<b>Seleccione Rango</b>",
+        showCloseButton: true,
+        text: "Debe seleccionar Rango Semanal!",
+        //background: "#F7F7F9",
+        //color: "#fff",
+       
+      });
+      return; // Detener la ejecución de la función
+    }
+
+
     this.datosHorarioPlanificado = [];
     console.log('datosHorarioPlanificado1:', this.datosHorarioPlanificado);
 
