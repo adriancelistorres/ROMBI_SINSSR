@@ -151,7 +151,8 @@
                                         <option value="" selected>Seleccionar</option>
                                         <ng-container
                                             *ngFor="let horario of listHorario[i][j].horario.split(','); let first = first">
-                                            <option *ngIf="first && !coincidencias[i][j]"
+                                            <option
+                                                *ngIf="first && !coincidencias[i][j] && horarioNoExisteEnLista(horario)"
                                                 [value]="listHorario[i][j].horario" style="text-align: left;">
                                                 {{ horario }}
                                             </option>
@@ -162,6 +163,7 @@
                                             {{ item.descripcion }}
                                         </option>
                                     </select>
+
                                 </td>
                             </tr>
                         </tbody>

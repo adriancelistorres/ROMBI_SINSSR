@@ -60,6 +60,10 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     localStorage.setItem('puntoventa', '');
   }
 
+  horarioNoExisteEnLista(horario: string): boolean {
+    return !this.listTurnosSupervisorPDVHorarios.some(item => item.descripcion === horario);
+  }
+
   toggleOptions(i: number, j: number) {
     // Puedes implementar la lógica para mostrar/ocultar las opciones según tu requerimiento
     // Por ejemplo, puedes usar un arreglo multidimensional para almacenar el estado de cada celda
