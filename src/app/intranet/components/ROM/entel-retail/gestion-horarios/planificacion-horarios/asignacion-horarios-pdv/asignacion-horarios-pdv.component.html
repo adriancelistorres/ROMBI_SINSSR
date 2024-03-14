@@ -129,35 +129,23 @@
                                     {{ promotor.nombrepromotor }} {{ promotor.apellidopaternopromotor }} {{
                                     promotor.apellidomaternopromotor }}
                                 </th>
-                                <td *ngFor="let dia of listDiasSemana; let j = index">
-                                    <div class="custom-select-input">
-                                        <div class="dropdown">
-                                            <button class="btn btn-light dropdown-toggle" type="button" 
-                                                    id="dropdownMenuButton{{i}}{{j}}" data-toggle="dropdown" 
-                                                    aria-haspopup="true" aria-expanded="false">
-                                                {{ listHorario[i][j].horario === '' ? 'Seleccionar' : listHorario[i][j].horario.split(',')[0] }}
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#" 
-                                                   *ngFor="let item of listTurnosSupervisorPDVHorarios" 
-                                                   (click)="selectOption(item.descripcion,item.horarioentrada,item.horariosalida, i, j)">
-                                                    {{ item.descripcion }}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- <div class="custom-select-input">
-                                        <input type="text" class="form-control" style="padding: 10px; font-size: 10pt;text-align: center;"
+                                <td *ngFor="let dia of listDiasSemana; let j = index" class="p-2">
+                                    <div class="input-group" tabindex="0" (blur)="hideOptions(i, j)">
+                                        <input type="text"  class="form-control" style="padding: 7px; font-size: 10pt; text-align: center"
                                             [ngModel]="listHorario[i][j].horario === '' ? 'Seleccionar' : listHorario[i][j].horario.split(',')[0]"
                                             (ngModelChange)="listHorario[i][j].horario = $event === 'Seleccionar' ? '' : $event"
-                                            (click)="toggleOptions(i, j)">
-                                        <ul *ngIf="showOptions[i][j]">
-                                            <li *ngFor="let item of listTurnosSupervisorPDVHorarios"
-                                                (click)="selectOption(item.descripcion,item.horarioentrada,item.horariosalida, i, j)">
-                                                {{ item.descripcion }}
-                                            </li>
-                                        </ul>
-                                    </div> -->
+                                            (click)="toggleOptions(i, j)" readonly>
+                                        <div class="input-group-text p-1" (click)="toggleOptions(i, j)">
+                                            <i class="bi bi-chevron-down" style="font-size: small; font-weight: 700;"></i>
+                                        </div>
+                                    </div>
+                                    <ul *ngIf="showOptions[i][j]" class="list-unstyled floating-list">
+                                        <li *ngFor="let item of listTurnosSupervisorPDVHorarios"
+                                            (click)="selectOption(item.descripcion, item.horarioentrada, item.horariosalida, i, j)">
+                                            {{ item.descripcion }}
+                                        </li>
+                                    </ul>
+                                    
                                     <!-- <select class="form-control"
                                         style="padding: 10px; font-size: 10pt;text-align: center;"
                                         [(ngModel)]="listHorario[i][j].horario">

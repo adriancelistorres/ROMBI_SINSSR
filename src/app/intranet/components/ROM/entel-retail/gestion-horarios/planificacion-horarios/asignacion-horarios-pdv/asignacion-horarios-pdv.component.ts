@@ -48,6 +48,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   mostrarElemento: boolean = false;
 
   showOptions!: boolean[][];
+  
   constructor(
     private asignarTurnosService: AsignarTurnosService,
     private asignarHorariosService: AsignarHorariosService
@@ -63,6 +64,12 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     // Aquí se muestra un ejemplo de cómo podrías hacerlo
     this.showOptions[i][j] = !this.showOptions[i][j];
   }
+
+  hideOptions(i: number, j: number) {
+    console.log('debe entrar por el blur');
+    
+    this.showOptions[i][j] = false;
+}
 
   selectOption(descripcion: string, horarioentrada: string, horariosalida: string, i: number, j: number) {
     this.listHorario[i][j].horario = descripcion + ',' + horarioentrada + ',' + horariosalida;
