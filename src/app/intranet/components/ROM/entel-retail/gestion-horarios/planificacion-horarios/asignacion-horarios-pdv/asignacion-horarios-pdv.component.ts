@@ -70,7 +70,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     //TODO: NO BORRES NUNCA EN TU VIDA SINO NO FUNCIONA EL COMBOBOX, SI PUEDES ARREGLA ESE COMBOBOX, SUERTE 
     setTimeout(() => {
         this.showOptions[i][j] = false;
-    }, 100); // Ajusta el tiempo según sea necesario
+    }, 200); // Ajusta el tiempo según sea necesario
   }
 
   selectOption(descripcion: string, horarioentrada: string, horariosalida: string, i: number, j: number) {
