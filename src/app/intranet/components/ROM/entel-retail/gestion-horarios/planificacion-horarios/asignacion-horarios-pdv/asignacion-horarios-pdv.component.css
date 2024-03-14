@@ -16,3 +16,19 @@
 .list-item:hover {
     background-color: lightgray;
 }
+
+/* @media screen and (min-width: 100%) {
+    .prueba  {
+        max-width: 40%; 
+        font-size: 11px;
+        color: transparent;
+    }
+} */
+
+@media screen and (min-width: 70%) {
+    .prueba  {
+        max-width: 40%; 
+        font-size: 11px;
+        color: transparent;
+    }
+}
