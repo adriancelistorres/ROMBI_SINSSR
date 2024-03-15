@@ -260,6 +260,19 @@ export class AsignacionTurnosPDVComponent implements OnInit {
       return;
     }
 
+    if (hentry > hexit){
+      Swal.fire({
+        title: 'Error!',
+        text: 'El horario de entrada no puede ser mayor al horario de salida',
+        icon: 'error',
+        confirmButtonText: 'Ok',
+        customClass: {
+          confirmButton: 'swalBtnColor'
+        }
+      })
+      return;
+    }
+
     this.turnosSupervisor.usuario = this.usuarioSupervisor.usuario;
     this.turnosSupervisor.horarioentrada = this.turnForm.getRawValue().hentry;
     this.turnosSupervisor.horariosalida = this.turnForm.getRawValue().hexit;
@@ -287,6 +300,16 @@ export class AsignacionTurnosPDVComponent implements OnInit {
               this.turnosSupervisor = new TurnosSupervisor();
             }
           });
+        } else{
+          Swal.fire({
+            title: 'Error',
+            text: 'Ya existe un turno con el mismo horario para este usuario',
+            icon: 'error',
+            confirmButtonText: 'Ok',
+            customClass: {
+              confirmButton: 'swalBtnColor'
+            }
+          })
         }
       })
     }
