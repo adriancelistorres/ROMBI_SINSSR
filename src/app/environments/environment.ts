@@ -8,9 +8,10 @@ export const environment = {
   // endpoint: 'https://localhost:7117/',
   //endpoint: 'https://localhost:7169/',
   // endpoint: 'http://localhost/RomBIBack/',
-  endpoint: 'https://intranet.grupotawa.com/RomBIBack/',
+  //endpoint: 'https://intranet.grupotawa.com/RomBIBack/',
   // endpointIntranet: 'http://localhost/rombiBack/api/'
-  endpointIntranet: 'https://localhost:7169/api/'
+  // endpointIntranet: 'https://localhost:7169/api/',
+  endpointIntranet: 'https://intranet.grupotawa.com/RomBIBack/api/'
 };
 
 

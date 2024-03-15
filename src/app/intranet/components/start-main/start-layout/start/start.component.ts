@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../services/auth/auth.service';
-import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-start',
@@ -17,7 +17,7 @@ export class StartComponent {
   empresaTAWA:string = '02';
   empresaLIMTEK:string = '09';
 
-  constructor(private router: Router, private authService: AuthService ,    private toastr: ToastrService
+  constructor(private router: Router, private authService: AuthService
     ) {
     localStorage.clear();
   }
@@ -42,7 +42,23 @@ export class StartComponent {
       },
       error: (error) => {
         console.error('Error al obtener los datos del usuario:', error);
-        this.toastr.error('Se produjo un error interno', 'ERROR DE SERVIDOR')
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: "<b>Se produjo un Error Interno</b>",
+          showCloseButton: true,
+          text: "Error en el Servidor!"
+        });
 
       },
     });
@@ -63,14 +79,46 @@ export class StartComponent {
           this.router.navigate(['auth']);
         } else {
           console.log('Empresa TAWA no encontrada en la respuesta.');
-          this.toastr.error('Se produjo un error interno', 'ERROR DE SERVIDOR')
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "error",
+            title: "<b>Se produjo un Error Interno</b>",
+            showCloseButton: true,
+            text: "Error en el Servidor!"
+          });
 
           // Manejar el caso en el que el id de empresa '08' no se encuentra en la respuesta
         }
       },
       error: (error) => {
         console.error('Error al obtener los datos del usuario:', error);
-        this.toastr.error('Se produjo un error interno', 'ERROR DE SERVIDOR')
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: "<b>Se produjo un Error Interno</b>",
+          showCloseButton: true,
+          text: "Error en el Servidor!"
+        });
 
       },
     });
@@ -95,7 +143,23 @@ export class StartComponent {
         }
       },
       error: (error) => {
-        this.toastr.error('Se produjo un error interno', 'ERROR DE SERVIDOR')
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: "<b>Se produjo un Error Interno</b>",
+          showCloseButton: true,
+          text: "Error en el Servidor!"
+        });
 
         console.error('Error al obtener los datos del usuario:', error);
       },

@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth/auth.service';
 import { LoginMainRequest } from '../../../../models/Auth/loginMainRequest';
 import { SecurityService } from '../../../../services/auth/security.service';
-import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login-two',
@@ -29,8 +29,7 @@ export class LoginTwoComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private securityService: SecurityService,
-    private fb: UntypedFormBuilder,
-    private toastr: ToastrService
+    private fb: UntypedFormBuilder
   ){
     this.loginForm = this.createFormLogin();
   }
@@ -87,7 +86,22 @@ export class LoginTwoComponent implements OnInit {
               // Si el acceso es concedido, redirige a la página de autenticación tres
               this.router.navigate(['/auth/loginThree']);
           } else {
-            this.toastr.error('Se produjo un error durante la autenticación.', 'ERROR DE DATOS', {
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "bottom-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
+            });
+            Toast.fire({
+              icon: "error",
+              title: "<b>Se produjo un error durante la autenticación</b>",
+              showCloseButton: true,
+              text: "ERROR DE DATOS"
             });
               // Si el acceso es denegado, maneja el caso apropiado aquí  
               console.log('Acceso denegado');
@@ -95,7 +109,22 @@ export class LoginTwoComponent implements OnInit {
       },
       (error) => {
           // Manejar errores de la solicitud HTTP aquí
-          this.toastr.error('Se produjo un error durante la autenticación.');
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "error",
+            title: "<b>Se produjo un error durante la autenticación</b>",
+            showCloseButton: true
+          });
 
           console.error('Error al obtener los permisos:', error);
       })
