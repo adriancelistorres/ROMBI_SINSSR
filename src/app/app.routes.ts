@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { NotFoundComponent } from './intranet/shared/not-found/not-found.component';
+import { UnauthorizedComponent } from './intranet/shared/unauthorized/unauthorized.component';
 
 export const routes: Routes = [
     {
@@ -20,6 +21,10 @@ export const routes: Routes = [
         loadChildren: () => import('./intranet/components/ROM/main/main.routes').then(m => m.routes)
     },
     {
+        path: 'unauthorized', component: UnauthorizedComponent,
+    },
+    {
         path: '**', component: NotFoundComponent,
     },
+    
 ];
