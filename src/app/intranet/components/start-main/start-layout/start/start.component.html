@@ -10,9 +10,14 @@
                     <p class="card-title fs-1 fw-bold mt-3">ROMBI TAWA</p>
                     <p class="card-text fs-5 fw-bold text-uppercase">Intranet Tawa</p>
                     <button type="button" class="btn btn-primary border border-white"
-                    (click)="loginRombiTAWA()">
+                    (click)="loginRombiTAWA()" [disabled]="isLoadingTAWA">
+                    <span *ngIf="isLoadingTAWA">
+                        <i class="fa fa-spinner fa-spin"></i> Cargando...
+                    </span>
+                    <span *ngIf="!isLoadingTAWA">
                         Ingresar
                         <i class="bi bi-arrow-right-circle"></i>
+                    </span>
                     </button>
                 </div>
             </div>
@@ -26,9 +31,14 @@
                         alt="...">
                     <p class="card-title fs-1 fw-bold mt-3">ROMBI ROM</p>
                     <p class="card-text fs-5 fw-bold text-uppercase">Intranet ROM</p>
-                    <button type="button" class="btn btn-primary border border-white" (click)="loginRombiROM()">
-                        Ingresar
-                        <i class="bi bi-arrow-right-circle"></i>
+                    <button type="button" class="btn btn-primary border border-white" (click)="loginRombiROM()" [disabled]="isLoadingROM">
+                        <span *ngIf="isLoadingROM">
+                            <i class="fa fa-spinner fa-spin"></i> Cargando...
+                        </span>
+                        <span *ngIf="!isLoadingROM">
+                            Ingresar
+                            <i class="bi bi-arrow-right-circle"></i>
+                        </span>
                     </button>
                 </div>
             </div>
@@ -42,9 +52,14 @@
                         alt="...">
                     <p class="card-title fs-1 fw-bold mt-3">ROMBI LIMTEK</p>
                     <p class="card-text fs-5 fw-bold text-uppercase">Intranet ROM</p>
-                    <button type="button" class="btn btn-primary border border-white" (click)="loginRombiLIMTEK()">
-                        Ingresar
-                        <i class="bi bi-arrow-right-circle"></i>
+                    <button type="button" class="btn btn-primary border border-white" (click)="loginRombiLIMTEK()" [disabled]="isLoadingLIMTEK">
+                        <span *ngIf="isLoadingLIMTEK">
+                            <i class="fa fa-spinner fa-spin"></i> Cargando...
+                        </span>
+                        <span *ngIf="!isLoadingLIMTEK">
+                            Ingresar
+                            <i class="bi bi-arrow-right-circle"></i>
+                        </span>
                     </button>
                 </div>
             </div>

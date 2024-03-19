@@ -17,12 +17,17 @@ export class StartComponent {
   empresaTAWA:string = '02';
   empresaLIMTEK:string = '09';
 
+  isLoadingROM: boolean = false;
+  isLoadingTAWA: boolean = false;
+  isLoadingLIMTEK: boolean = false;
+
   constructor(private router: Router, private authService: AuthService
     ) {
     localStorage.clear();
   }
 
   loginRombiROM() {
+    this.isLoadingROM = true;
     this.authService.getCompany().subscribe({
       next: (response) => {
         console.log('Respuesta del servicio:', response);
@@ -61,10 +66,11 @@ export class StartComponent {
         });
 
       },
-    });
+    }).add(() => this.isLoadingROM = false); // Desactivar el spinner;
   }
 
   loginRombiTAWA() {
+    this.isLoadingTAWA = true;
     this.authService.getCompany().subscribe({
       next: (response) => {
         console.log('Respuesta del servicio:', response);
@@ -121,10 +127,11 @@ export class StartComponent {
         });
 
       },
-    });
+    }).add(() => this.isLoadingTAWA = false); // Desactivar el spinner;
   }
 
   loginRombiLIMTEK() {
+    this.isLoadingLIMTEK = true;
     this.authService.getCompany().subscribe({
       next: (response) => {
         console.log('Respuesta del servicio:', response);
@@ -163,7 +170,7 @@ export class StartComponent {
 
         console.error('Error al obtener los datos del usuario:', error);
       },
-    });
+    }).add(() => this.isLoadingLIMTEK = false); // Desactivar el spinner;
   }
 
 
