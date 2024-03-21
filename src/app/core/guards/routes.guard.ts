@@ -25,7 +25,7 @@ export const routesGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state:
   const requestedPath = state.url;
 
   // Verificar si la ruta solicitada está presente en el menú
-  console.log('requestedPath', requestedPath);
+  //console.log('requestedPath', requestedPath);
 
   let url = requestedPath;
   let partes = url.split("/");
@@ -33,12 +33,11 @@ export const routesGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state:
   // Quitamos la primera parte que es vacía y la parte "main"
   let nuevaUrl = partes.slice(2).join("/");
 
-  console.log('nuevaUrl',nuevaUrl);
+  //console.log('nuevaUrl',nuevaUrl);
   
-
   const isAuthorized = checkAuthorization(menu, nuevaUrl);
 
-  console.log('isAuthorized', isAuthorized);
+  console.log('Vista Autorizada?', isAuthorized);
 
   if (isAuthorized) {
     // El usuario tiene acceso a la ruta solicitada
@@ -51,8 +50,8 @@ export const routesGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state:
 };
 
 function checkAuthorization(menu: any, requestedPath: string): boolean {
-  console.log('DEBE ENTRAR checkAuthorization');
-  console.log('menu', menu);
+  //console.log('DEBE ENTRAR checkAuthorization');
+  //console.log('menu', menu);
 
   if (!menu || !Array.isArray(menu)) {
     return false; // No hay menú o no es un array válido
@@ -61,23 +60,23 @@ function checkAuthorization(menu: any, requestedPath: string): boolean {
   // Recorrer los módulos en el menú
   for (const modulo of menu) {
     // Verificar si la ruta del módulo coincide
-    console.log('modulo', modulo);
-    console.log('modulo.rutamodulo', modulo.rutamodulo);
+    //console.log('modulo', modulo);
+    //console.log('modulo.rutamodulo', modulo.rutamodulo);
     if (modulo.rutamodulo && modulo.rutamodulo === requestedPath) {
-      console.log('modulo.rutamodulo', modulo.rutamodulo);
+      //console.log('modulo.rutamodulo', modulo.rutamodulo);
 
       return true; // La ruta solicitada está presente en el menú
     }
 
 
-    console.log('modulo.submodules', modulo.submodules);
+    //console.log('modulo.submodules', modulo.submodules);
     // Si hay submódulos, recorrerlos
     if (modulo.submodules && Array.isArray(modulo.submodules)) {
       for (const submodulo of modulo.submodules) {
-        console.log('submodulo.rutasubmodulo', submodulo.rutasubmodulo);
+        //console.log('submodulo.rutasubmodulo', submodulo.rutasubmodulo);
         // Verificar si la ruta del submódulo coincide
         if (submodulo.rutasubmodulo && submodulo.rutasubmodulo === requestedPath) {
-          console.log('submodulo.rutasubmodulo', submodulo.rutasubmodulo);
+          //console.log('submodulo.rutasubmodulo', submodulo.rutasubmodulo);
 
           return true; // La ruta solicitada está presente en el menú
         }
@@ -87,7 +86,7 @@ function checkAuthorization(menu: any, requestedPath: string): boolean {
           for (const item of submodulo.items) {
             // Verificar si la ruta del ítem coincide
             if (item.rutaitemmodulo && item.rutaitemmodulo === requestedPath) {
-              console.log('item.rutaitemmodulo', item.rutaitemmodulo);
+              //console.log('item.rutaitemmodulo', item.rutaitemmodulo);
 
               return true; // La ruta solicitada está presente en el menú
             }
