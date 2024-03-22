@@ -83,6 +83,7 @@ export class LoginTwoComponent implements OnInit {
           console.log(response); // Aquí puedes ver la respuesta del servicio
           if (response.resultado === "ACCESO CONCEDIDO") {
               localStorage.setItem('token', response.token);
+              localStorage.setItem('perfil',response.perfil);
               // Si el acceso es concedido, redirige a la página de autenticación tres
               this.router.navigate(['/auth/loginThree']);
           } else {

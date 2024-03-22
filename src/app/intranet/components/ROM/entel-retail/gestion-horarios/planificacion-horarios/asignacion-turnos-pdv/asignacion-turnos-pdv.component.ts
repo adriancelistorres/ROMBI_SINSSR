@@ -10,6 +10,8 @@ import { SupervisorPDV } from '../../../../../../models/planificacion-horarios/s
 import { TurnosDisponiblesPDVRequest } from '../../../../../../models/planificacion-horarios/turnosDisponiblesPDVRequest';
 import { TurnosAsignadosPDVRequest } from '../../../../../../models/planificacion-horarios/turnosAsignadosPDVRequest';
 import { TurnosAsignadosPDVpostRequest } from '../../../../../../models/planificacion-horarios/turnosAsignadosPDVpostRequest';
+import { Supervisor } from '../../../../../../models/planificacion-horarios/supervisor';
+import { Jefe } from '../../../../../../models/planificacion-horarios/jefe';
 
 @Component({
   selector: 'app-asignacion-turnos-pdv',
@@ -39,6 +41,12 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
     '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
 
+  listSupervisor: Supervisor[] = [];
+  listJefe: Jefe[] = [];
+  perfil: string = "";
+  nombresSupervisor: string = "";
+  verTurnos: boolean = false;
+
   constructor(
     private fb: UntypedFormBuilder,
     private asignarTurnosService: AsignarTurnosService
@@ -47,8 +55,9 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     this.usuarioSupervisor.usuario = localStorage.getItem('user')
     localStorage.setItem('idpdv', '');
     localStorage.setItem('puntoventa', '');
-
-
+    localStorage.setItem('dnijefe', '');
+    localStorage.setItem('dnisupervisor', '');
+    this.perfil = (localStorage.getItem('perfil') || '');
   }
 
   ngOnInit(): void {
@@ -66,7 +75,24 @@ export class AsignacionTurnosPDVComponent implements OnInit {
 
     //** ASIGNAR TURNOS */
     //Obtener PDV por Supervisor
-    this.getSupervisorPDV();
+    //this.getSupervisorPDV();
+
+    switch (this.perfil) {
+      case 'ADMIN':
+        this.getJefes();
+        this.verTurnos = true;
+        break;
+      case 'JV':
+        this.getSupervisores();
+        this.verTurnos = true;
+        break;
+      case 'SG':
+        this.getSupervisorPDV();
+        break;
+      default:
+        break;
+    }
+
   }
 
   enableEditing(turno: any) {
@@ -93,13 +119,13 @@ export class AsignacionTurnosPDVComponent implements OnInit {
           customClass: {
             confirmButton: 'swalBtnColor'
           }
-          
+
         }).then((result) => {
           if (result.isConfirmed) {
             console.log('ACTUALIZADO');
             this.getTurnosSupervisor();
             this.limpiarFormulario();
-            
+
           }
         });
         this.closeModal()
@@ -137,7 +163,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     // Puedes restaurar los valores originales del turno si fuera necesario
   }
 
-  
+
   createFormTurn(): UntypedFormGroup {
     return this.fb.group({
       description: new FormControl({ value: '00:00 - 00:00', disabled: true }, Validators.compose([
@@ -170,7 +196,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
       t.editing = false;
     });
 
-  
+
   }
 
   actualizarDescripcion() {
@@ -192,27 +218,35 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   }
 
   getTurnosSupervisor() {
-    if (this.usuarioSupervisor.usuario !== null) {
-      this.asignarTurnosService.getTurnosSupervisor(this.usuarioSupervisor).subscribe(res => {
-        console.log(res);
-        if (res !== null) {
-          // Inicializar un array para almacenar los elementos filtrados
-          const filteredTurnos: any = [];
-          // Recorrer cada elemento de res
-          res.forEach((turno: any) => {
-            // Si el estado es 1, agregar el turno al array de elementos filtrados
-            if (turno.estado === 1) {
-              filteredTurnos.push(turno);
-            }
-          });
-          // Invertir el orden del array de elementos filtrados
-          this.listTurnosSupervisor = filteredTurnos.reverse();
-        } else {
-          console.log('No hay horarios creados');
-        }
-
-      })
+    this.listTurnosSupervisor = []
+    const usuarioSuper: UsuarioSupervisor = new UsuarioSupervisor();
+    if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+      const dnisupervisor = localStorage.getItem('dnisupervisor');
+      usuarioSuper.usuario = dnisupervisor || '';
+    } else {
+      usuarioSuper.usuario = this.usuarioSupervisor.usuario!;
     }
+
+    this.asignarTurnosService.getTurnosSupervisor(usuarioSuper).subscribe(res => {
+      console.log('getTurnosSupervisor', res);
+      if (res !== null) {
+        // Inicializar un array para almacenar los elementos filtrados
+        const filteredTurnos: any = [];
+        // Recorrer cada elemento de res
+        res.forEach((turno: any) => {
+          // Si el estado es 1, agregar el turno al array de elementos filtrados
+          if (turno.estado === 1) {
+            filteredTurnos.push(turno);
+          }
+        });
+        // Invertir el orden del array de elementos filtrados
+        this.listTurnosSupervisor = filteredTurnos.reverse();
+      } else {
+        console.log('No hay horarios creados');
+      }
+
+    })
+
   }
 
   getTurnForm() {
@@ -260,7 +294,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
       return;
     }
 
-    if (hentry > hexit){
+    if (hentry > hexit) {
       Swal.fire({
         title: 'Error!',
         text: 'El horario de entrada no puede ser mayor al horario de salida',
@@ -273,47 +307,57 @@ export class AsignacionTurnosPDVComponent implements OnInit {
       return;
     }
 
-    this.turnosSupervisor.usuario = this.usuarioSupervisor.usuario;
+    if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+      const dnisupervisor = localStorage.getItem('dnisupervisor');
+      this.turnosSupervisor.usuario = dnisupervisor || '';
+    } else {
+      this.turnosSupervisor.usuario = this.usuarioSupervisor.usuario!;
+    }
+
+    //this.turnosSupervisor.usuario = this.usuarioSupervisor.usuario; //cambiar
     this.turnosSupervisor.horarioentrada = this.turnForm.getRawValue().hentry;
     this.turnosSupervisor.horariosalida = this.turnForm.getRawValue().hexit;
     this.turnosSupervisor.descripcion = this.turnForm.getRawValue().description;
+    this.turnosSupervisor.usuario_creacion = this.usuarioSupervisor.usuario!;
 
-    if (this.turnosSupervisor.idturnos === 0) {
+    console.log('lo q se guarda', this.turnosSupervisor);
 
-      this.turnosSupervisor.idtipoturno = 1;
+    // if (this.turnosSupervisor.idturnos === 0) {
 
-      this.asignarTurnosService.postTurnosSupervisor(this.turnosSupervisor).subscribe(res => {
-        console.log('POST', res);
-        if (res.mensaje === 'OK') {
-          Swal.fire({
-            title: 'Listo!',
-            text: 'Registro guardado 🥳',
-            icon: 'success',
-            confirmButtonText: 'Ok',
-            customClass: {
-              confirmButton: 'swalBtnColor'
-            }
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.getTurnosSupervisor();
-              this.limpiarFormulario();
-              this.turnosSupervisor = new TurnosSupervisor();
-            }
-          });
-        } else{
-          Swal.fire({
-            title: 'Error',
-            text: 'Ya existe un turno con el mismo horario para este usuario',
-            icon: 'error',
-            confirmButtonText: 'Ok',
-            customClass: {
-              confirmButton: 'swalBtnColor'
-            }
-          })
-        }
-      })
-    }
-    
+    //   this.turnosSupervisor.idtipoturno = 1;
+
+    //   this.asignarTurnosService.postTurnosSupervisor(this.turnosSupervisor).subscribe(res => {
+    //     console.log('POST', res);
+    //     if (res.mensaje === 'OK') {
+    //       Swal.fire({
+    //         title: 'Listo!',
+    //         text: 'Registro guardado 🥳',
+    //         icon: 'success',
+    //         confirmButtonText: 'Ok',
+    //         customClass: {
+    //           confirmButton: 'swalBtnColor'
+    //         }
+    //       }).then((result) => {
+    //         if (result.isConfirmed) {
+    //           this.getTurnosSupervisor();
+    //           this.limpiarFormulario();
+    //           this.turnosSupervisor = new TurnosSupervisor();
+    //         }
+    //       });
+    //     } else {
+    //       Swal.fire({
+    //         title: 'Error',
+    //         text: 'Ya existe un turno con el mismo horario para este usuario',
+    //         icon: 'error',
+    //         confirmButtonText: 'Ok',
+    //         customClass: {
+    //           confirmButton: 'swalBtnColor'
+    //         }
+    //       })
+    //     }
+    //   })
+    // }
+
   }
 
   confirmarEliminacion() {
@@ -385,7 +429,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     });
   }
 
-  closeModal(){
+  closeModal() {
     this.getTurnosDisponiblesPDV();
     this.getTurnosAsignadosPDV();
   }
@@ -393,13 +437,19 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   ///*************ASIGNACION DE TURNOS*************/
 
   getSupervisorPDV() {
-    if (this.usuarioSupervisor.usuario !== null) {
-      this.listSupervisorPDV = [];
-      this.asignarTurnosService.getSupervisorPDV(this.usuarioSupervisor).subscribe(res => {
-        console.log(res);
-        this.listSupervisorPDV = res;
-      })
+    const usuarioSuper: UsuarioSupervisor = new UsuarioSupervisor();
+    if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+      const dnisupervisor = localStorage.getItem('dnisupervisor');
+      usuarioSuper.usuario = dnisupervisor || '';
+    } else {
+      usuarioSuper.usuario = this.usuarioSupervisor.usuario!;
     }
+    this.listSupervisorPDV = [];
+    this.asignarTurnosService.getSupervisorPDV(usuarioSuper).subscribe(res => {
+      console.log(res);
+      this.listSupervisorPDV = res;
+    })
+
   }
 
   ongetPDV(event: any) {
@@ -416,7 +466,12 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   getTurnosDisponiblesPDV() {
     const idpdv = localStorage.getItem('idpdv');
     if (idpdv !== null) {
-      this.turnosDisponiblesPDVRequest.usuario = this.usuarioSupervisor.usuario!;
+      if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+        const dnisupervisor = localStorage.getItem('dnisupervisor');
+        this.turnosDisponiblesPDVRequest.usuario = dnisupervisor || '';
+      } else {
+        this.turnosDisponiblesPDVRequest.usuario = this.usuarioSupervisor.usuario!;
+      }
       this.turnosDisponiblesPDVRequest.idpdv = Number(idpdv);
       this.asignarTurnosService.getTurnosDisponiblePDV(this.turnosDisponiblesPDVRequest).subscribe(res => {
         console.log(res)
@@ -427,10 +482,20 @@ export class AsignacionTurnosPDVComponent implements OnInit {
 
   getTurnosAsignadosPDV() {
     const idpdv = localStorage.getItem('idpdv');
-    if (idpdv !== null) {
 
-      this.turnosAsignadosPDVRequest.usuario = this.usuarioSupervisor.usuario!;
+    if (idpdv !== null) {
+      if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+        const dnisupervisor = localStorage.getItem('dnisupervisor') || '';
+        console.log(dnisupervisor);
+        this.turnosAsignadosPDVRequest.usuario = dnisupervisor;
+
+      } else {
+        this.turnosAsignadosPDVRequest.usuario = this.usuarioSupervisor.usuario!;
+      }
+
       this.turnosAsignadosPDVRequest.idpdv = Number(idpdv);
+      //console.log(this.turnosAsignadosPDVRequest);
+
       this.asignarTurnosService.getTurnosAsignadosPDV(this.turnosAsignadosPDVRequest).subscribe(res => {
         console.log(res)
         this.listTurnosAsignadosPDV = res;
@@ -453,15 +518,24 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     const idpdv = localStorage.getItem('idpdv')
     const puntoventa = localStorage.getItem('puntoventa')
 
+    const usuarioSuper: UsuarioSupervisor = new UsuarioSupervisor();
+    if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+      const dnisupervisor = localStorage.getItem('dnisupervisor');
+      usuarioSuper.usuario = dnisupervisor || '';
+    } else {
+      usuarioSuper.usuario = this.usuarioSupervisor.usuario!;
+    }
+
     rows.forEach((row: any) => {
       const rowData: any = {};
       const cells = row.querySelectorAll('td');
 
       if (cells.length > 0 && cells[4].querySelector('input').checked === true) {
-        rowData['usuario'] = this.usuarioSupervisor.usuario;
+        rowData['usuario'] = usuarioSuper.usuario;// CAMBIAR
         rowData['idpdv'] = idpdv;
         rowData['puntoventa'] = puntoventa;
         rowData['idturnos'] = cells[0].innerText;
+        rowData['usuariocreacion'] = this.usuarioSupervisor.usuario!;
         //rowData['checkbox'] = cells[4].querySelector('input').checked; //PARA VER SI MANDA SOLO TRUE
         data.push(rowData);
       }
@@ -469,13 +543,13 @@ export class AsignacionTurnosPDVComponent implements OnInit {
 
     const jsonDataForma = JSON.stringify(data);
     this.listTurnosAsignadosPDVpostRequest = JSON.parse(jsonDataForma);
-    console.log(this.listTurnosAsignadosPDVpostRequest);
+    console.log('lo q se asigna', this.listTurnosAsignadosPDVpostRequest);
 
-    this.asignarTurnosService.postTurnosPDV(this.listTurnosAsignadosPDVpostRequest).subscribe(res => {
-      console.log(res);
-      this.getTurnosDisponiblesPDV();
-      this.getTurnosAsignadosPDV();
-    })
+    // this.asignarTurnosService.postTurnosPDV(this.listTurnosAsignadosPDVpostRequest).subscribe(res => {
+    //   console.log(res);
+    //   this.getTurnosDisponiblesPDV();
+    //   this.getTurnosAsignadosPDV();
+    // })
   }
 
   deleteRowAsignados(idpdvturno: number) {
@@ -487,5 +561,59 @@ export class AsignacionTurnosPDVComponent implements OnInit {
       this.getTurnosDisponiblesPDV();
       this.getTurnosAsignadosPDV();
     })
+  }
+
+  ///*************PERMISOS*************/
+
+  getJefes() {
+    this.asignarTurnosService.getJefes().subscribe(res => {
+      console.log('jefes', res)
+      if (res != null) {
+        this.listJefe = res;
+      }
+    })
+  }
+
+  getSupervisores() {
+    let dnijefe: string="";
+
+    if (this.perfil === 'ADMIN') {
+      dnijefe = (localStorage.getItem('dnijefe') || '');
+    } else if (this.perfil === 'JV') {
+      dnijefe = this.usuarioSupervisor.usuario!;
+    } 
+
+    this.asignarTurnosService.getSupervisores(dnijefe).subscribe(res => {
+      console.log('supervisores', res)
+      if (res != null) {
+        this.listSupervisor = res;
+      }
+    })
+  }
+
+  ongetJefe(event: any) {
+    const dnijefe = (event.target as HTMLSelectElement)?.value;
+    localStorage.setItem('dnijefe', dnijefe)
+    this.listSupervisor = []
+    this.listSupervisorPDV = []
+    this.listTurnosDisponiblesPDV = []
+    this.listTurnosAsignadosPDV = []
+
+    this.verTurnos = true;
+    this.getSupervisores();
+  }
+
+  ongetSupervisor(event: any) {
+    const dnisupervisor = (event.target as HTMLSelectElement)?.value;
+    localStorage.setItem('dnisupervisor', dnisupervisor);
+
+    const supervisor: Supervisor[] = this.listSupervisor.filter(x => x.dnisupervisor == dnisupervisor);
+    this.nombresSupervisor = supervisor[0].nombresupervisor + ' ' + supervisor[0].apellidopaternosupervisor +
+      ' ' + supervisor[0].apellidomaternosupervisor;
+
+    this.verTurnos = false;
+
+    this.getSupervisorPDV();
+    this.getTurnosSupervisor();
   }
 }

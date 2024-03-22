@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { MainStartComponent } from './main-layout/main-start/main-start.component';
 import { authGuard } from '../../../../core/guards/auth.guard';
+import { routesGuard } from '../../../../core/guards/routes.guard';
 
 export const routes: Routes = [
     {
@@ -20,6 +21,7 @@ export const routes: Routes = [
             },
             {
                 path: 'EntelRetail',
+                canActivate:[routesGuard],
                 loadChildren: () =>
                     import('./../entel-retail/entel-retail.routes').then((m) => m.routes),
             },

@@ -3,5 +3,6 @@ export class LoginMainRequest {
     codpais?: string;
     user?: string;
     password?: string;
+    perfil?: string;
   }
   

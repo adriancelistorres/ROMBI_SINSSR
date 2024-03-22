@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UsuarioSupervisor } from '../../../models/planificacion-horarios/usuarioSupervisor';
 import { TurnosSupervisor } from '../../../models/planificacion-horarios/turnosSupervisor';
@@ -14,6 +14,7 @@ import { TurnosAsignadosPDVpostRequest } from '../../../models/planificacion-hor
 export class AsignarTurnosService {
 
   private readonly apiUrl = environment.endpointIntranet;
+  httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
 
   constructor(
     private http: HttpClient
@@ -55,5 +56,13 @@ export class AsignarTurnosService {
 
   deleteTurnosPDV(pdvTurno: any): Observable<any>{
     return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/DeleteTurnosPDV`, pdvTurno);
+  }
+
+  getSupervisores(dnijefe: string): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}PlanificacionHorarios/GetSupervisores`, `"${dnijefe}"`, this.httpOptions);
+  }
+
+  getJefes(): Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}PlanificacionHorarios/GetJefes`);
   }
 }
