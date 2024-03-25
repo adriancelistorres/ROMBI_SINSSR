@@ -620,5 +620,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
 
     this.getSupervisorPDV();
     this.getTurnosSupervisor();
+    this.listTurnosDisponiblesPDV = [];
+    this.listTurnosAsignadosPDV = [];
   }
 }
