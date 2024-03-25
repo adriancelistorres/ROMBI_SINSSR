@@ -108,6 +108,9 @@ export class AsignacionTurnosPDVComponent implements OnInit {
   saveChanges(turno: any) {
     turno.editing = false;
     // Aquí puedes implementar la lógica para guardar los cambios en tu base de datos o donde sea necesario
+    turno.usuario_modificacion = this.usuarioSupervisor.usuario!;
+    console.log('TURNO EDIT',turno);// CAMBIAR
+    
     this.asignarTurnosService.putTurnosSupervisor(turno).subscribe(res => {
       console.log(res);
       if (res.mensaje === 'OK') {
@@ -322,41 +325,41 @@ export class AsignacionTurnosPDVComponent implements OnInit {
 
     console.log('lo q se guarda', this.turnosSupervisor);
 
-    // if (this.turnosSupervisor.idturnos === 0) {
+    if (this.turnosSupervisor.idturnos === 0) {
 
-    //   this.turnosSupervisor.idtipoturno = 1;
+      this.turnosSupervisor.idtipoturno = 1;
 
-    //   this.asignarTurnosService.postTurnosSupervisor(this.turnosSupervisor).subscribe(res => {
-    //     console.log('POST', res);
-    //     if (res.mensaje === 'OK') {
-    //       Swal.fire({
-    //         title: 'Listo!',
-    //         text: 'Registro guardado 🥳',
-    //         icon: 'success',
-    //         confirmButtonText: 'Ok',
-    //         customClass: {
-    //           confirmButton: 'swalBtnColor'
-    //         }
-    //       }).then((result) => {
-    //         if (result.isConfirmed) {
-    //           this.getTurnosSupervisor();
-    //           this.limpiarFormulario();
-    //           this.turnosSupervisor = new TurnosSupervisor();
-    //         }
-    //       });
-    //     } else {
-    //       Swal.fire({
-    //         title: 'Error',
-    //         text: 'Ya existe un turno con el mismo horario para este usuario',
-    //         icon: 'error',
-    //         confirmButtonText: 'Ok',
-    //         customClass: {
-    //           confirmButton: 'swalBtnColor'
-    //         }
-    //       })
-    //     }
-    //   })
-    // }
+      this.asignarTurnosService.postTurnosSupervisor(this.turnosSupervisor).subscribe(res => {
+        console.log('POST', res);
+        if (res.mensaje === 'OK') {
+          Swal.fire({
+            title: 'Listo!',
+            text: 'Registro guardado 🥳',
+            icon: 'success',
+            confirmButtonText: 'Ok',
+            customClass: {
+              confirmButton: 'swalBtnColor'
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.getTurnosSupervisor();
+              this.limpiarFormulario();
+              this.turnosSupervisor = new TurnosSupervisor();
+            }
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'Ya existe un turno con el mismo horario para este usuario',
+            icon: 'error',
+            confirmButtonText: 'Ok',
+            customClass: {
+              confirmButton: 'swalBtnColor'
+            }
+          })
+        }
+      })
+    }
 
   }
 
@@ -415,6 +418,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
         // Aquí puedes llamar a la función para eliminar el registro
         this.turnosSupervisorDelRequest.idturnos = idturno;
         this.turnosSupervisorDelRequest.usuario = usuario;
+        this.turnosSupervisorDelRequest.usuario_modificacion = this.usuarioSupervisor.usuario!;
         this.asignarTurnosService.deleteTurnosSupervisor(this.turnosSupervisorDelRequest).subscribe(res => {
           console.log('DELETE', res);
           if (res.mensaje === 'OK') {
@@ -535,7 +539,7 @@ export class AsignacionTurnosPDVComponent implements OnInit {
         rowData['idpdv'] = idpdv;
         rowData['puntoventa'] = puntoventa;
         rowData['idturnos'] = cells[0].innerText;
-        rowData['usuariocreacion'] = this.usuarioSupervisor.usuario!;
+        rowData['usuario_creacion'] = this.usuarioSupervisor.usuario!;
         //rowData['checkbox'] = cells[4].querySelector('input').checked; //PARA VER SI MANDA SOLO TRUE
         data.push(rowData);
       }
@@ -545,16 +549,17 @@ export class AsignacionTurnosPDVComponent implements OnInit {
     this.listTurnosAsignadosPDVpostRequest = JSON.parse(jsonDataForma);
     console.log('lo q se asigna', this.listTurnosAsignadosPDVpostRequest);
 
-    // this.asignarTurnosService.postTurnosPDV(this.listTurnosAsignadosPDVpostRequest).subscribe(res => {
-    //   console.log(res);
-    //   this.getTurnosDisponiblesPDV();
-    //   this.getTurnosAsignadosPDV();
-    // })
+    this.asignarTurnosService.postTurnosPDV(this.listTurnosAsignadosPDVpostRequest).subscribe(res => {
+      console.log(res);
+      this.getTurnosDisponiblesPDV();
+      this.getTurnosAsignadosPDV();
+    })
   }
 
   deleteRowAsignados(idpdvturno: number) {
     const pdvTurno = {
-      idpdvturno: idpdvturno
+      idpdvturno: idpdvturno,
+      usuario_modificacion: this.usuarioSupervisor.usuario!
     }
     this.asignarTurnosService.deleteTurnosPDV(pdvTurno).subscribe(res => {
       console.log(res);

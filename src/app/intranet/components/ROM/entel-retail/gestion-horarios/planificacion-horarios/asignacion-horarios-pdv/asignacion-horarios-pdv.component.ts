@@ -16,6 +16,8 @@ import { HorarioPlanificadoPromotorRequest } from '../../../../../../models/plan
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { lastValueFrom } from 'rxjs';
+import { Supervisor } from '../../../../../../models/planificacion-horarios/supervisor';
+import { Jefe } from '../../../../../../models/planificacion-horarios/jefe';
 
 @Component({
   selector: 'app-asignacion-horarios-pdv',
@@ -51,6 +53,10 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
   coincidencias: boolean[][] = [];
 
+  listSupervisor: Supervisor[] = [];
+  listJefe: Jefe[] = [];
+  perfil: string = "";
+
   constructor(
     private asignarTurnosService: AsignarTurnosService,
     private asignarHorariosService: AsignarHorariosService
@@ -58,6 +64,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.usuarioSupervisor.usuario = localStorage.getItem('user');
     localStorage.setItem('idpdv', '');
     localStorage.setItem('puntoventa', '');
+    this.perfil = (localStorage.getItem('perfil') || '');
   }
 
   toggleVisibilidad() {
@@ -106,7 +113,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   ReportGetSemanaAnterior() {}
 
   ngOnInit(): void {
-    this.getSupervisorPDV();
+    //this.getSupervisorPDV();
     this.getRangoSemana();
 
     //Obtener fecha Hoy para inicializar la lista de dias
@@ -122,6 +129,22 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.diasSemana.domingo = this.rangoFiltro;
     this.getDiasSemana();
     console.log('vacoppop', this.listRangoSemana);
+
+    //PERMISOS
+
+    switch (this.perfil) {
+      case 'ADMIN':
+        this.getJefes();
+        break;
+      case 'JV':
+        this.getSupervisores();
+        break;
+      case 'SG':
+        this.getSupervisorPDV();
+        break;
+      default:
+        break;
+    }
   }
 
   filtrar() {
@@ -531,5 +554,33 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     return !this.listTurnosSupervisorPDVHorarios.some(
       (item) => item.descripcion === horario
     );
+  }
+
+  ///*************PERMISOS*************/
+
+  getJefes() {
+    this.asignarTurnosService.getJefes().subscribe(res => {
+      console.log('jefes', res)
+      if (res != null) {
+        this.listJefe = res;
+      }
+    })
+  }
+
+  getSupervisores() {
+    let dnijefe: string="";
+
+    if (this.perfil === 'ADMIN') {
+      dnijefe = (localStorage.getItem('dnijefe') || '');
+    } else if (this.perfil === 'JV') {
+      dnijefe = this.usuarioSupervisor.usuario!;
+    } 
+
+    this.asignarTurnosService.getSupervisores(dnijefe).subscribe(res => {
+      console.log('supervisores', res)
+      if (res != null) {
+        this.listSupervisor = res;
+      }
+    })
   }
 }
