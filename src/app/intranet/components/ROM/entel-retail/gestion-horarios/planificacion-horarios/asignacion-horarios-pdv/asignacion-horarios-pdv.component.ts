@@ -56,6 +56,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   listSupervisor: Supervisor[] = [];
   listJefe: Jefe[] = [];
   perfil: string = "";
+  verTurnos: boolean = false;
 
   constructor(
     private asignarTurnosService: AsignarTurnosService,
@@ -108,9 +109,9 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       });
   }
 
-  ReportGetSemanaActual() {}
+  ReportGetSemanaActual() { }
 
-  ReportGetSemanaAnterior() {}
+  ReportGetSemanaAnterior() { }
 
   ngOnInit(): void {
     //this.getSupervisorPDV();
@@ -135,9 +136,11 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     switch (this.perfil) {
       case 'ADMIN':
         this.getJefes();
+        this.verTurnos = true;
         break;
       case 'JV':
         this.getSupervisores();
+        this.verTurnos = true;
         break;
       case 'SG':
         this.getSupervisorPDV();
@@ -222,15 +225,23 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   getSupervisorPDV() {
-    if (this.usuarioSupervisor.usuario !== null) {
-      this.listSupervisorPDV = [];
-      this.asignarTurnosService
-        .getSupervisorPDV(this.usuarioSupervisor)
-        .subscribe((res) => {
-          console.log(res);
-          this.listSupervisorPDV = res;
-        });
+    //if (this.usuarioSupervisor.usuario !== null) {}
+    const usuarioSuper: UsuarioSupervisor = new UsuarioSupervisor();
+    if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+      const dnisupervisor = localStorage.getItem('dnisupervisor');
+      usuarioSuper.usuario = dnisupervisor || '';
+    } else {
+      usuarioSuper.usuario = this.usuarioSupervisor.usuario!;
     }
+
+    this.listSupervisorPDV = [];
+    this.asignarTurnosService
+      .getSupervisorPDV(usuarioSuper)
+      .subscribe((res) => {
+        console.log(res);
+        this.listSupervisorPDV = res;
+      });
+
   }
 
   getRangoSemana() {
@@ -249,8 +260,14 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   getPromotorSupervisorPDV() {
-    this.supervisorPDV.usuario = this.usuarioSupervisor.usuario!;
+    if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+      const dnisupervisor = localStorage.getItem('dnisupervisor');
+      this.supervisorPDV.usuario = dnisupervisor || '';
+    } else {
+      this.supervisorPDV.usuario = this.usuarioSupervisor.usuario!;
+    }
     this.supervisorPDV.idpuntoventarol = Number(localStorage.getItem('idpdv')!);
+    console.log('this.supervisorPDV',this.supervisorPDV)
     this.asignarHorariosService
       .getPromotorSupervisorPDV(this.supervisorPDV)
       .subscribe((res) => {
@@ -287,7 +304,12 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   getTurnosSupervisorPDVHorarios() {
     const idpdv = localStorage.getItem('idpdv');
     if (idpdv !== null) {
-      this.turnosAsignadosPDVRequest.usuario = this.usuarioSupervisor.usuario!;
+      if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+        const dnisupervisor = localStorage.getItem('dnisupervisor');
+        this.turnosAsignadosPDVRequest.usuario = dnisupervisor || '';
+      } else {
+        this.turnosAsignadosPDVRequest.usuario = this.usuarioSupervisor.usuario!;
+      }
       this.turnosAsignadosPDVRequest.idpdv = Number(idpdv);
       console.log(this.turnosAsignadosPDVRequest);
 
@@ -301,6 +323,14 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   guardarHorarios() {
+    const usuarioSuper: UsuarioSupervisor = new UsuarioSupervisor();
+    if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+      const dnisupervisor = localStorage.getItem('dnisupervisor');
+      usuarioSuper.usuario = dnisupervisor || '';
+    } else {
+      usuarioSuper.usuario = this.usuarioSupervisor.usuario!;
+    }
+
     Swal.fire({
       title: 'Esta seguro que desea guardar?',
       text: "Se guardará los cambios realizados en el horario planificado y no podrá deshacerlos!",
@@ -329,6 +359,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
             // Crear un objeto para el horario actual
             const objetoHorario = {
               dnipromotor: promotor.dnipromotor || '',
+              dnisupervisor: usuarioSuper.usuario,
               nombrepromotor: promotor.nombrepromotor || '',
               apellidopaternopromotor: promotor.apellidopaternopromotor || '',
               apellidomaternopromotor: promotor.apellidomaternopromotor || '',
@@ -491,9 +522,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
                   // console.log('fechaIndex:', fechaIndex);
                   // console.log('promotorIndex:', promotorIndex);
                   if (fechaIndex !== -1 && promotorIndex !== -1) {
-                    const horario = `${horarioPlanificado.descripcion || ''},${
-                      horarioPlanificado.horarioentrada || ''
-                    },${horarioPlanificado.horariosalida || ''}`;
+                    const horario = `${horarioPlanificado.descripcion || ''},${horarioPlanificado.horarioentrada || ''
+                      },${horarioPlanificado.horariosalida || ''}`;
                     const rhorario = horario === ',,' ? '' : horario;
                     this.listHorario[promotorIndex][fechaIndex].horario =
                       rhorario;
@@ -568,13 +598,13 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   getSupervisores() {
-    let dnijefe: string="";
+    let dnijefe: string = "";
 
     if (this.perfil === 'ADMIN') {
       dnijefe = (localStorage.getItem('dnijefe') || '');
     } else if (this.perfil === 'JV') {
       dnijefe = this.usuarioSupervisor.usuario!;
-    } 
+    }
 
     this.asignarTurnosService.getSupervisores(dnijefe).subscribe(res => {
       console.log('supervisores', res)
@@ -583,4 +613,27 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       }
     })
   }
+
+  ongetJefe(event: any) {
+    const dnijefe = (event.target as HTMLSelectElement)?.value;
+    localStorage.setItem('dnijefe', dnijefe)
+    this.listSupervisor = [];
+    this.listSupervisorPDV = [];
+    this.datosHorarioPlanificado = [];
+    this.promotorList = [];
+    this.verTurnos = true;
+    this.getSupervisores();
+  }
+
+  ongetSupervisor(event: any) {
+    const dnisupervisor = (event.target as HTMLSelectElement)?.value;
+    localStorage.setItem('dnisupervisor', dnisupervisor);
+    this.datosHorarioPlanificado = [];
+    this.promotorList = [];
+    this.verTurnos = false;
+    this.pdvFiltro=0;
+    this.getSupervisorPDV();
+
+  }
+
 }

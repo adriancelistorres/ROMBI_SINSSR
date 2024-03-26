@@ -1,5 +1,6 @@
 export class HorarioPlanificadoRequest {
     idhorarioplanificado?: number;
+    dnisupervisor?: string;
     dnipromotor?: string;
     idpdv?: number;
     puntoventa?: string;
