@@ -73,13 +73,19 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   }
 
   exportexcel() {
+    const usuarioSuper: UsuarioSupervisor = new UsuarioSupervisor();
+    if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
+      const dnisupervisor = localStorage.getItem('dnisupervisor');
+      usuarioSuper.usuario = dnisupervisor || '';
+    } else {
+      usuarioSuper.usuario = this.usuarioSupervisor.usuario!;
+    }
+
     let promiseSemanaActual = lastValueFrom(
-      this.asignarHorariosService.ReportGetSemanaActual(this.usuarioSupervisor)
+      this.asignarHorariosService.ReportGetSemanaActual(usuarioSuper)
     );
     let promiseSemanaAnterior = lastValueFrom(
-      this.asignarHorariosService.ReportGetSemanaAnterior(
-        this.usuarioSupervisor
-      )
+      this.asignarHorariosService.ReportGetSemanaAnterior(usuarioSuper)
     );
 
     Promise.all([promiseSemanaActual, promiseSemanaAnterior])
@@ -99,7 +105,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
         XLSX.utils.book_append_sheet(wb, ws1, 'Semana Actual');
         XLSX.utils.book_append_sheet(wb, ws2, 'Semana Anterior');
 
-        let fileName = `HorarioPlanificado_${this.usuarioSupervisor.usuario}.xlsx`;
+        let fileName = `HorarioPlanificado_${usuarioSuper.usuario}.xlsx`;
 
         /** Guardar en un archivo **/
         XLSX.writeFile(wb, fileName);
@@ -262,12 +268,21 @@ export class AsignacionHorariosPDVComponent implements OnInit {
   getPromotorSupervisorPDV() {
     if (this.perfil === 'ADMIN' || this.perfil === 'JV') {
       const dnisupervisor = localStorage.getItem('dnisupervisor');
-      this.supervisorPDV.usuario = dnisupervisor || '';
+      this.supervisorPDV.dnisupervisor = dnisupervisor || '';
     } else {
-      this.supervisorPDV.usuario = this.usuarioSupervisor.usuario!;
+      this.supervisorPDV.dnisupervisor = this.usuarioSupervisor.usuario!;
     }
     this.supervisorPDV.idpuntoventarol = Number(localStorage.getItem('idpdv')!);
-    console.log('this.supervisorPDV',this.supervisorPDV)
+
+    const fechasSeparadas = this.rangoFiltro.split(',');
+    const fechaInicio = fechasSeparadas[0];
+    const fechaFin = fechasSeparadas[1];
+
+    this.supervisorPDV.fechainicio = fechaInicio;
+    this.supervisorPDV.fechafin = fechaFin;
+
+    console.log('this.supervisorPDV',this.supervisorPDV);
+
     this.asignarHorariosService
       .getPromotorSupervisorPDV(this.supervisorPDV)
       .subscribe((res) => {
@@ -528,7 +543,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
                     this.listHorario[promotorIndex][fechaIndex].horario =
                       rhorario;
                   }
-
+                  //cuando el horario ya esta guardado pero no figura en la lista de turnos. Manda booleans
                   for (let i = 0; i < this.listHorario.length; i++) {
                     this.coincidencias[i] = [];
                     for (let j = 0; j < this.listHorario[i].length; j++) {

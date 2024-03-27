@@ -63,11 +63,11 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4 d-flex align-items-center mt-4">
-                                    <button class="btn btn-primary me-3 prueba" type="button" (click)="filtrar()">
+                                    <button class="btn btn-primary me-3 prueba" type="button" (click)="filtrar()" [disabled]="verTurnos">
                                         <i class="bi bi-search"></i>
                                         <span class="d-none d-sm-inline ms-2">Buscar</span>
                                     </button>
-                                    <button class="btn btn-success prueba" style="background-color: #00680a;" type="button" (click)="exportexcel()">
+                                    <button class="btn btn-success prueba" style="background-color: #00680a;" type="button" (click)="exportexcel()" [disabled]="verTurnos">
                                         <i class="bi bi-file-earmark-spreadsheet-fill"></i>
                                         <span class="d-none d-sm-inline ms-2">Exportar Todos</span>
                                     </button>
