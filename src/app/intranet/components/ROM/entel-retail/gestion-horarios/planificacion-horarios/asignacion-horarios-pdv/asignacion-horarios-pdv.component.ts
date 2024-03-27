@@ -298,6 +298,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
               horario: '', // Valor inicial del select
               fila: i, // Coordenada de fila
               columna: j, // Coordenada de columna
+              activarcbo: 0 // si el campo debe estar deshabilitado
             });
           }
           this.listHorario.push(innerArray);
@@ -542,6 +543,14 @@ export class AsignacionHorariosPDVComponent implements OnInit {
                     const rhorario = horario === ',,' ? '' : horario;
                     this.listHorario[promotorIndex][fechaIndex].horario =
                       rhorario;
+
+                    const activarcbo = horarioPlanificado.activarcbo
+                    console.log('activadocbo',activarcbo);
+
+                    const ractivarcbo = activarcbo === undefined ? 0 : activarcbo;
+
+                    this.listHorario[promotorIndex][fechaIndex].activarcbo =
+                    ractivarcbo
                   }
                   //cuando el horario ya esta guardado pero no figura en la lista de turnos. Manda booleans
                   for (let i = 0; i < this.listHorario.length; i++) {
