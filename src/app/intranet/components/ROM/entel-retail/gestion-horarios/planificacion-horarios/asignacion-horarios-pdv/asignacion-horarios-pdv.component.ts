@@ -281,7 +281,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.supervisorPDV.fechainicio = fechaInicio;
     this.supervisorPDV.fechafin = fechaFin;
 
-    console.log('this.supervisorPDV',this.supervisorPDV);
+    console.log('this.supervisorPDV', this.supervisorPDV);
 
     this.asignarHorariosService
       .getPromotorSupervisorPDV(this.supervisorPDV)
@@ -551,6 +551,22 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
                     this.listHorario[promotorIndex][fechaIndex].activarcbo =
                     ractivarcbo
+
+                    // const horario = `${horarioPlanificado.descripcion || ''},${horarioPlanificado.horarioentrada || ''},${horarioPlanificado.horariosalida || ''}`;
+                    // const rhorario = horario === ',,' ? '' : horario;
+                    // this.listHorario[promotorIndex][fechaIndex].horario = rhorario;
+
+                    // // Mantén la obtención del valor original de activarcbo.
+                    // const activarcbo = horarioPlanificado.activarcbo;
+                    // console.log('activadocbo', activarcbo);
+
+                    // // Aquí ajustas ractivarcbo basándote en si rhorario es vacío.
+                    // // Si rhorario es '', entonces ractivarcbo debe ser 1, independientemente del valor de activarcbo.
+                    // // Si no, usas la lógica original para determinar el valor de ractivarcbo.
+                    // const ractivarcbo = rhorario === '' ? 1 : (activarcbo === undefined ? 0 : activarcbo);
+
+                    // this.listHorario[promotorIndex][fechaIndex].activarcbo = ractivarcbo;
+
                   }
                   //cuando el horario ya esta guardado pero no figura en la lista de turnos. Manda booleans
                   for (let i = 0; i < this.listHorario.length; i++) {
@@ -572,10 +588,12 @@ export class AsignacionHorariosPDVComponent implements OnInit {
                 );
                 console.log('coincidencias', this.coincidencias);
               } else {
+
                 for (let i = 0; i < this.listHorario.length; i++) {
                   this.coincidencias[i] = [];
                   for (let j = 0; j < this.listHorario[i].length; j++) {
                     const horarioActual = this.listHorario[i][j].horario;
+                    this.listHorario[i][j].activarcbo = 1;
                     const partesHorario = horarioActual.split(',');
                     const coincidencia = partesHorario.some(
                       (part: any) => part === ''
@@ -655,7 +673,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
     this.datosHorarioPlanificado = [];
     this.promotorList = [];
     this.verTurnos = false;
-    this.pdvFiltro=0;
+    this.pdvFiltro = 0;
     this.getSupervisorPDV();
 
   }
