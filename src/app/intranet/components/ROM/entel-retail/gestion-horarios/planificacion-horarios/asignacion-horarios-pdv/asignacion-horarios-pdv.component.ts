@@ -298,7 +298,9 @@ export class AsignacionHorariosPDVComponent implements OnInit {
               horario: '', // Valor inicial del select
               fila: i, // Coordenada de fila
               columna: j, // Coordenada de columna
-              activarcbo: 0 // si el campo debe estar deshabilitado
+              activarcbo: 0, // si el campo debe estar deshabilitado
+              estado: 0,
+              variable: false
             });
           }
           this.listHorario.push(innerArray);
@@ -387,6 +389,8 @@ export class AsignacionHorariosPDVComponent implements OnInit {
               horarioentrada: horario.horario.split(',')[1] || '',
               horariosalida: horario.horario.split(',')[2] || '',
               usuario_creacion: this.usuarioSupervisor.usuario || '',
+              activarcbo: 1,
+              estado: 1
             };
 
             // Agregar el objeto al arreglo de promotorPorDia
@@ -545,12 +549,18 @@ export class AsignacionHorariosPDVComponent implements OnInit {
                       rhorario;
 
                     const activarcbo = horarioPlanificado.activarcbo
-                    console.log('activadocbo',activarcbo);
+                    console.log('activadocbo', activarcbo);
 
                     const ractivarcbo = activarcbo === undefined ? 0 : activarcbo;
-
                     this.listHorario[promotorIndex][fechaIndex].activarcbo =
-                    ractivarcbo
+                      ractivarcbo
+
+                    const restado = horarioPlanificado.estado
+                    this.listHorario[promotorIndex][fechaIndex].estado =
+                      restado
+
+                    // this.listHorario[promotorIndex][fechaIndex].variable =
+                    //   true
 
                     // const horario = `${horarioPlanificado.descripcion || ''},${horarioPlanificado.horarioentrada || ''},${horarioPlanificado.horariosalida || ''}`;
                     // const rhorario = horario === ',,' ? '' : horario;
@@ -567,7 +577,29 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
                     // this.listHorario[promotorIndex][fechaIndex].activarcbo = ractivarcbo;
 
+                    if(this.listHorario[promotorIndex][fechaIndex].estado==2 && this.listHorario[promotorIndex][fechaIndex].activarcbo==2){
+                      this.listHorario[promotorIndex][fechaIndex].variable=1;
+                    }
+
                   }
+
+                  // // Suponiendo que this.listHorario es tu matriz bidimensional
+                  // this.listHorario.forEach(fila => {
+                  //   fila.forEach(elemento => {
+                  //     if (elemento.horario === "" && elemento.variable) {
+                  //       elemento.activarcbo = 1;
+                  //     }
+                  //   });
+                  // });
+
+                  this.listHorario.forEach(fila => {
+                    fila.forEach(elemento => {
+                      if (elemento.estado === 0 && elemento.actirvarcbo === 0) {
+                        elemento.variable = 1;
+                      }
+                    });
+                  });
+
                   //cuando el horario ya esta guardado pero no figura en la lista de turnos. Manda booleans
                   for (let i = 0; i < this.listHorario.length; i++) {
                     this.coincidencias[i] = [];
@@ -593,7 +625,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
                   this.coincidencias[i] = [];
                   for (let j = 0; j < this.listHorario[i].length; j++) {
                     const horarioActual = this.listHorario[i][j].horario;
-                    this.listHorario[i][j].activarcbo = 1;
+                    this.listHorario[i][j].variable = false;
                     const partesHorario = horarioActual.split(',');
                     const coincidencia = partesHorario.some(
                       (part: any) => part === ''

@@ -12,4 +12,6 @@ export class HorarioPlanificadoRequest {
     fecha_modificacion?: Date;
     usuario_creacion?: string;
     usuario_modificacion?: string;
+    activarcbo?: number;
+    estado?: number;
 }

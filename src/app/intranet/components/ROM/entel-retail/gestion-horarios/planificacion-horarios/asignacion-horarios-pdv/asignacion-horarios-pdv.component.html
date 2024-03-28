@@ -126,7 +126,7 @@
                                 <td *ngFor="let dia of listDiasSemana; let j = index" class="p-2">
                                     <select class="form-control"
                                         style="padding: 10px; font-size: 10pt;text-align: center;"
-                                        [(ngModel)]="listHorario[i][j].horario" [disabled]="!listHorario[i][j].activarcbo">
+                                        [(ngModel)]="listHorario[i][j].horario" [disabled]="listHorario[i][j].variable">
                                         <option value="" selected>Seleccionar</option>
                                         <ng-container
                                             *ngFor="let horario of listHorario[i][j].horario.split(','); let first = first">
