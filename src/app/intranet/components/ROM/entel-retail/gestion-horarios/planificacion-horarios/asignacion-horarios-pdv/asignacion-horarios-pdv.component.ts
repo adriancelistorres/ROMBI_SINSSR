@@ -287,7 +287,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       .getPromotorSupervisorPDV(this.supervisorPDV)
       .subscribe((res) => {
         this.promotorList = res;
-        console.log(this.promotorList);
+        console.log('this.promotorList',this.promotorList);
         this.datosHorarioPlanificado = [];
         this.listHorario = [];
 
@@ -527,21 +527,31 @@ export class AsignacionHorariosPDVComponent implements OnInit {
 
               this.datosHorarioPlanificado = res;
 
+              console.log('this.datosHorarioPlanificado subs', this.datosHorarioPlanificado);
+
               if (
                 this.datosHorarioPlanificado &&
                 this.datosHorarioPlanificado.length > 0
               ) {
-                this.datosHorarioPlanificado.forEach((horarioPlanificado) => {
+                this.datosHorarioPlanificado.forEach((horarioPlanificado, index) => {
+
+                  console.log('horarioPlanificado', index, horarioPlanificado);
+
                   const fechaIndex = this.listDiasSemana.findIndex(
                     (dia) => dia.fecha === horarioPlanificado.fecha
                   );
-                  const promotorIndex = this.promotorList.findIndex(
-                    (promotor) =>
-                      promotor.dnipromotor === horarioPlanificado.dnipromotor
-                  );
-                  // console.log('fechaIndex:', fechaIndex);
-                  // console.log('promotorIndex:', promotorIndex);
-                  if (fechaIndex !== -1 && promotorIndex !== -1) {
+                  const promotorIndex =
+                    this.promotorList.findIndex(
+                      (promotor) =>
+                        promotor.dnipromotor === horarioPlanificado.dnipromotor
+                    );
+
+                  console.log('fechaIndex:', index, fechaIndex);
+                  console.log('promotorIndex:', index, promotorIndex);
+                  console.log('activarcbo', index, horarioPlanificado.activarcbo);
+                  console.log('estado', index, horarioPlanificado.estado);
+
+                  if ((fechaIndex !== -1 && promotorIndex !== -1)) {
                     const horario = `${horarioPlanificado.descripcion || ''},${horarioPlanificado.horarioentrada || ''
                       },${horarioPlanificado.horariosalida || ''}`;
                     const rhorario = horario === ',,' ? '' : horario;
@@ -549,18 +559,27 @@ export class AsignacionHorariosPDVComponent implements OnInit {
                       rhorario;
 
                     const activarcbo = horarioPlanificado.activarcbo
-                    console.log('activadocbo', activarcbo);
+                    console.log('activarcbo', activarcbo);
 
-                    const ractivarcbo = activarcbo === undefined ? 0 : activarcbo;
+                    // const ractivarcbo = activarcbo === undefined ? 0 : activarcbo;
                     this.listHorario[promotorIndex][fechaIndex].activarcbo =
-                      ractivarcbo
+                      activarcbo
 
                     const restado = horarioPlanificado.estado
+                    console.log('restado', restado);
+
                     this.listHorario[promotorIndex][fechaIndex].estado =
                       restado
 
+                    if (horarioPlanificado.activarcbo == 2 && horarioPlanificado.estado == 2) {
+                      this.listHorario[promotorIndex][fechaIndex].variable =
+                        true
+                    }
+
                     // this.listHorario[promotorIndex][fechaIndex].variable =
-                    //   true
+                    //   vari
+                    // console.log('vari',this.listHorario[promotorIndex][fechaIndex].variable);
+
 
                     // const horario = `${horarioPlanificado.descripcion || ''},${horarioPlanificado.horarioentrada || ''},${horarioPlanificado.horariosalida || ''}`;
                     // const rhorario = horario === ',,' ? '' : horario;
@@ -576,10 +595,16 @@ export class AsignacionHorariosPDVComponent implements OnInit {
                     // const ractivarcbo = rhorario === '' ? 1 : (activarcbo === undefined ? 0 : activarcbo);
 
                     // this.listHorario[promotorIndex][fechaIndex].activarcbo = ractivarcbo;
+                    console.log('this.listHorario[][].estado', this.listHorario[promotorIndex][fechaIndex].estado);
+                    console.log('this.listHorario[][].activarcbo', this.listHorario[promotorIndex][fechaIndex].activarcbo);
 
-                    if(this.listHorario[promotorIndex][fechaIndex].estado==2 && this.listHorario[promotorIndex][fechaIndex].activarcbo==2){
-                      this.listHorario[promotorIndex][fechaIndex].variable=1;
-                    }
+                    // if (this.listHorario[promotorIndex][fechaIndex].estado == 2 && this.listHorario[promotorIndex][fechaIndex].activarcbo == 2) {
+                    //   // console.log('this.listHorario[][].estado, DENTRO',this.listHorario[promotorIndex][fechaIndex].estado);
+                    //   // console.log('this.listHorario[][].activarcbo, DENTRO',this.listHorario[promotorIndex][fechaIndex].activarcbo);
+                    //   console.log('ENTRA?');
+
+                    //   this.listHorario[promotorIndex][fechaIndex].variable = 1;
+                    // }
 
                   }
 
