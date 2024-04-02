@@ -115,10 +115,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
       });
   }
 
-  ReportGetSemanaActual() { }
-
-  ReportGetSemanaAnterior() { }
-
   ngOnInit(): void {
     //this.getSupervisorPDV();
     this.getRangoSemana();
@@ -522,8 +518,6 @@ export class AsignacionHorariosPDVComponent implements OnInit {
         .subscribe(
           (res) => {
             if (res !== null) {
-              // Verifica si la respuesta no es nula
-              // this.datosHorarioPlanificado = [];
 
               this.datosHorarioPlanificado = res;
 
@@ -576,46 +570,7 @@ export class AsignacionHorariosPDVComponent implements OnInit {
                         true
                     }
 
-                    // this.listHorario[promotorIndex][fechaIndex].variable =
-                    //   vari
-                    // console.log('vari',this.listHorario[promotorIndex][fechaIndex].variable);
-
-
-                    // const horario = `${horarioPlanificado.descripcion || ''},${horarioPlanificado.horarioentrada || ''},${horarioPlanificado.horariosalida || ''}`;
-                    // const rhorario = horario === ',,' ? '' : horario;
-                    // this.listHorario[promotorIndex][fechaIndex].horario = rhorario;
-
-                    // // Mantén la obtención del valor original de activarcbo.
-                    // const activarcbo = horarioPlanificado.activarcbo;
-                    // console.log('activadocbo', activarcbo);
-
-                    // // Aquí ajustas ractivarcbo basándote en si rhorario es vacío.
-                    // // Si rhorario es '', entonces ractivarcbo debe ser 1, independientemente del valor de activarcbo.
-                    // // Si no, usas la lógica original para determinar el valor de ractivarcbo.
-                    // const ractivarcbo = rhorario === '' ? 1 : (activarcbo === undefined ? 0 : activarcbo);
-
-                    // this.listHorario[promotorIndex][fechaIndex].activarcbo = ractivarcbo;
-                    console.log('this.listHorario[][].estado', this.listHorario[promotorIndex][fechaIndex].estado);
-                    console.log('this.listHorario[][].activarcbo', this.listHorario[promotorIndex][fechaIndex].activarcbo);
-
-                    // if (this.listHorario[promotorIndex][fechaIndex].estado == 2 && this.listHorario[promotorIndex][fechaIndex].activarcbo == 2) {
-                    //   // console.log('this.listHorario[][].estado, DENTRO',this.listHorario[promotorIndex][fechaIndex].estado);
-                    //   // console.log('this.listHorario[][].activarcbo, DENTRO',this.listHorario[promotorIndex][fechaIndex].activarcbo);
-                    //   console.log('ENTRA?');
-
-                    //   this.listHorario[promotorIndex][fechaIndex].variable = 1;
-                    // }
-
                   }
-
-                  // // Suponiendo que this.listHorario es tu matriz bidimensional
-                  // this.listHorario.forEach(fila => {
-                  //   fila.forEach(elemento => {
-                  //     if (elemento.horario === "" && elemento.variable) {
-                  //       elemento.activarcbo = 1;
-                  //     }
-                  //   });
-                  // });
 
                   this.listHorario.forEach(fila => {
                     fila.forEach(elemento => {
