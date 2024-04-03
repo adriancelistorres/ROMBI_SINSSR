@@ -11,8 +11,8 @@ export const environment = {
   //endpoint: 'https://intranet.grupotawa.com/RomBIBack/',
   // endpointIntranet: 'http://localhost/rombiBack/api/'
   // endpointIntranet: 'https://localhost:7169/api/',
-  // endpointIntranet: 'https://intranet.grupotawa.com/RomBIBack/api/'
-  endpointIntranet: 'https://localhost:7169/api/'
+   endpointIntranet: 'https://intranet.grupotawa.com/RomBIBack/api/'
+  //endpointIntranet: 'https://localhost:7169/api/'
   //  endpointIntranet: 'http://localhost/RomBIBack/api/',
 
 };
