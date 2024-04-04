@@ -1,0 +1,97 @@
+<div class="col-12 px-3">
+    <div class="container-fluid mt-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item fw-bold"><a class="text-decoration-none">Accesos</a></li>
+                <li class="breadcrumb-item fw-bold active" aria-current="page">Asignación</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="card border-dark">
+        <div class="card-header">
+            <h4 class="card-title text-uppercase fw-bold text-black mt-3">Accesos</h4>
+        </div>
+        <div class="card-body">
+            <div class="col-sm-12 mt-1">
+                <div class="row px-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <form [formGroup]="accessForm" (ngSubmit)="getAccessForm()">
+                                <div class="row my-3">
+                                    <div class="col-sm-3">
+                                        <label for="input1" class="form-label">Usuario</label>
+                                        <input type="text" id="input1" class="form-control" formControlName="usuario"
+                                            [maxlength]="13" (blur)="getNombres()">
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label for="input3" class="form-label">Nombres y Apellidos</label>
+                                        <input type="text" id="input3" class="form-control" formControlName="nombres"
+                                            readonly>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="input2" class="form-label">H. Entrada</label>
+                                        <select class="form-select" id="input2" formControlName="perfil">
+                                            <option value="">Seleccionar Perfil</option>
+                                            <option *ngFor="let perfil of perfilesList" [value]="perfil.idperfiles">{{ perfil.nombre }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-end my-3">
+                                    <div class="col-sm-3">
+                                        <button type="submit" class="btn btn-success" style="width: 100%;"
+                                            [disabled]="!accessForm.valid">
+                                            Asignar
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="table-responsive-lg mt-4">
+                        <table
+                            class="table table-dark caption-top table-hover table-bordered text-center table-sm rounded-2">
+                            <caption class="text-black fw-bold">
+                                <div class="row justify-content-md-end my-2">
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Buscar"
+                                                [(ngModel)]="searchTerm" (keyup)="search()" aria-label="Username"
+                                                aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                </div>
+                            </caption>
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">IdAcceso</th>
+                                    <th scope="col">Usuario</th>
+                                    <th scope="col">Nombres y Apellidos</th>
+                                    <th scope="col">Perfil</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of filteredAccesosList">
+                                    <td>{{item.idacceso}}</td>
+                                    <td>{{item.dni}}</td>
+                                    <td>{{item.nombrecompleto}}</td>
+                                    <td>{{item.perfil}}</td>
+                                    <td>
+                                        <a>
+                                            <i class="bi bi-pencil-square me-3" (click)="editRow(item)"
+                                                style="color: #4f8bd9;font-size: 1.4rem;"></i>
+                                        </a>
+                                        <a>
+                                            <i class="bi bi-trash" (click)="deleteRow()"
+                                                style="color: #d9534f;font-size: 1.4rem;"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
