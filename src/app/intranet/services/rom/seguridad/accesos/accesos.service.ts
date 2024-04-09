@@ -24,6 +24,10 @@ export class AccesosService {
     return this.http.post<any>(`${this.apiUrl}Accesos/PostAccesos`,accessRequest);
   }
 
+  deleteAccesos(accessRequest: AccesosRequest): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}Accesos/DeleteAccesos`,accessRequest);
+  }
+
   getSegUsuario(dni: string): Observable<any>{
     return this.http.post<any>(`${this.apiUrl}Accesos/GetSegUsuario`, `"${dni}"`, this.httpOptions);
   }

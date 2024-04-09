@@ -43,9 +43,23 @@
                                             Asignar
                                         </button>
                                     </div>
+
+                                  
                                 </div>
                             </form>
                         </div>
+                        <div class="">
+                            <div class="row">
+                                <div class="custom-file">
+                                    <button class="btn btn-primary" (click)="downloadExcel()">Download</button>
+                                  </div>
+                              <div class="custom-file">
+                                <input  type="file" class="custom-file-input" id="customFile" accept=".xlsx, .xls">
+                                <label class="custom-file-label" for="customFile"></label>
+                              </div>
+                            </div>
+                        </div>
+                          
                     </div>
                     <div class="table-responsive-lg mt-4">
                         <table
@@ -75,15 +89,32 @@
                                     <td>{{item.idacceso}}</td>
                                     <td>{{item.dni}}</td>
                                     <td>{{item.nombrecompleto}}</td>
-                                    <td>{{item.perfil}}</td>
                                     <td>
-                                        <a>
-                                            <i class="bi bi-pencil-square me-3" (click)="editRow(item)"
-                                                style="color: #4f8bd9;font-size: 1.4rem;"></i>
+                                        <ng-container *ngIf="!item.editing">{{item.perfil }}</ng-container>
+                                        <select class="form-select" *ngIf="item.editing"
+                                            [(ngModel)]="item.idperfiles">
+                                            <!-- <option [value]="item.idperfil" selected>{{item.perfil}}</option> -->
+                                            <option *ngFor="let perfil of perfilesList" [value]="perfil.idperfiles">{{ perfil.nombre }}</option>
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <a *ngIf="!item.editing" (click)="enableEditing(item)">
+                                            <i class="bi bi-pencil-square me-3"
+                                                style="color: #4f8bd9; font-size: 1.4rem;"></i>
                                         </a>
-                                        <a>
-                                            <i class="bi bi-trash" (click)="deleteRow()"
-                                                style="color: #d9534f;font-size: 1.4rem;"></i>
+                                        
+                                        <a *ngIf="item.editing" (click)="saveChanges(item)">
+                                            <i class="bi bi-check2-circle me-3"
+                                                style="color: #4fd976; font-size: 1.4rem;"></i>
+                                        </a>
+                                        <a *ngIf="item.editing" (click)="cancelEditing(item)">
+                                            <i class="bi bi-x-square me-3"
+                                                style="color: #d9534f; font-size: 1.4rem;"></i>
+                                        </a>
+                                        <a *ngIf="!item.editing" (click)="deleteAcceso(item)">
+                                            <i class="bi bi-trash"
+                                                style="color: #d9534f; font-size: 1.4rem;"></i>
                                         </a>
                                     </td>
                                 </tr>
