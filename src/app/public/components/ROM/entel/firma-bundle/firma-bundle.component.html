@@ -1,10 +1,15 @@
-<div class="col-12 px-3">
-    <div class="card border-dark">
-        <div class="card-header"> 
-            <h4 class="card-title text-uppercase fw-bold text-black mt-3">Validación de Entrega de Bundle</h4>
-        </div>
-        <div class="card-body">
-            
-        </div>
-    </div>
-</div>
+<div>
+    <canvas
+      #canvas
+      (mousedown)="onMouseDown($event)"
+      (mousemove)="onMouseMove($event)"
+      (mouseup)="onMouseUp()"
+      (touchstart)="onTouchStart($event)"
+      (touchmove)="onTouchMove($event)"
+      (touchend)="onTouchEnd()"
+    >
+    </canvas>
+    <button (click)="clearCanvas()">Limpiar</button>
+    <button (click)="downloadPdf()">Descargar PDF</button>
+  </div>
+  
