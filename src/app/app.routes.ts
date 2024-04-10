@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { NotFoundComponent } from './intranet/shared/not-found/not-found.component';
 import { UnauthorizedComponent } from './intranet/shared/unauthorized/unauthorized.component';
+import { NotFoundPublicComponent } from './intranet/shared/not-found-public/not-found-public.component';
 
 export const routes: Routes = [
     {
@@ -23,6 +24,9 @@ export const routes: Routes = [
     {
         path: 'public/Rom',//PRINCIPAL DE INTRANET
         loadChildren: () => import('./public/components/ROM/rom.routes').then(m => m.routes)
+    },
+    {
+        path: 'public', component: NotFoundPublicComponent,
     },
     {
         path: 'unauthorized', component: UnauthorizedComponent,

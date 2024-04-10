@@ -9,7 +9,7 @@ export const routes: Routes = [
             {
                 path: '',
                 pathMatch: 'full',
-                redirectTo: '/'
+                redirectTo: '/public/Rom/main/Entel/FirmaBundle'
             },
             {
                 path:'Entel',
