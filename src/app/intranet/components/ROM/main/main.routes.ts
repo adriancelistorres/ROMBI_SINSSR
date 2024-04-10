@@ -27,6 +27,7 @@ export const routes: Routes = [
             },
             {
                 path: 'Seguridad',
+                canActivate:[routesGuard],
                 loadChildren: () =>
                     import('./../seguridad/seguridad.routes').then((m) => m.routes),
             },

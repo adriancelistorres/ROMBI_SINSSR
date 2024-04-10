@@ -15,6 +15,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./gestion-horarios/gestion-horarios.routes').then(m => m.routes)
             },
             {
+                path: 'GestionVentas',
+                loadChildren: () => import('./gestion-ventas/gestion-ventas.routes').then(m => m.routes)
+            },
+            {
                 path: '**', component: NotFoundComponent,
             },
 

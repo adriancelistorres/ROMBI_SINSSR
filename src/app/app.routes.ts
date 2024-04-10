@@ -21,10 +21,14 @@ export const routes: Routes = [
         loadChildren: () => import('./intranet/components/ROM/main/main.routes').then(m => m.routes)
     },
     {
+        path: 'public/Rom',//PRINCIPAL DE INTRANET
+        loadChildren: () => import('./public/components/ROM/rom.routes').then(m => m.routes)
+    },
+    {
         path: 'unauthorized', component: UnauthorizedComponent,
     },
     {
         path: '**', component: NotFoundComponent,
     },
-    
+
 ];
