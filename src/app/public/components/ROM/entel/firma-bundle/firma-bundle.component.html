@@ -1,15 +1,43 @@
-<div>
-    <canvas
-      #canvas
-      (mousedown)="onMouseDown($event)"
-      (mousemove)="onMouseMove($event)"
-      (mouseup)="onMouseUp()"
-      (touchstart)="onTouchStart($event)"
-      (touchmove)="onTouchMove($event)"
-      (touchend)="onTouchEnd()"
-    >
-    </canvas>
-    <button (click)="clearCanvas()">Limpiar</button>
-    <button (click)="downloadPdf()">Descargar PDF</button>
-  </div>
-  
+<!-- 
+<form style="background-color: beige;width: 100%;">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+        <div style="background-color: aqua;">
+                <div style="background-color: white;">
+                  
+                        <signature-pad style="background-color: transparent;" #signature fxFlex="1 1 50" (window:resize)="resizeSignaturePad()"
+                        class="signature" 
+                        id="sign_canvas" fxFlexAlign.xs="center"></signature-pad>
+                </div> 
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form> -->
+
+
+<!-- <div>
+        <div >
+          
+                <signature-pad  #signature fxFlex="1 1 50" (window:resize)="resizeSignaturePad()"
+                class="signature" 
+                id="sign_canvas" fxFlexAlign.xs="center"></signature-pad>
+        </div> 
+</div> -->
+
+ 
+
+
+        <signature-pad  style="width: 100%;" #signature fxFlex="1 1 50" (window:resize)="resizeSignaturePad()"
+            class="signature" id="sign_canvas" fxFlexAlign.xs="center"></signature-pad>
+
+    
