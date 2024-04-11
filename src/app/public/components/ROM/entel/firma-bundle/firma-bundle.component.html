@@ -1,43 +1,77 @@
-<!-- 
-<form style="background-color: beige;width: 100%;">
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
-          <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <div style="background-color: aqua;">
-                <div style="background-color: white;">
-                  
-                        <signature-pad style="background-color: transparent;" #signature fxFlex="1 1 50" (window:resize)="resizeSignaturePad()"
-                        class="signature" 
-                        id="sign_canvas" fxFlexAlign.xs="center"></signature-pad>
-                </div> 
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form> -->
+<div class="" style="max-width: 650px;">
+	<div class="container-fluid mt-4">
+		<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item fw-bold">
+					<a class="text-decoration-none">
+						Validación de Entrega de Bundles
+					</a>
+				</li>
+				<li class="breadcrumb-item fw-bold active" aria-current="page">Validar</li>
+			</ol>
+		</nav>
+	</div>
+	<div class="card border-dark">
+		<div class="card-header">
+			<h5 class="card-title text-uppercase fw-bold text-black mt-3">Validación de Entrega de Bundles</h5>
+		</div>
+		<form [formGroup]="bundleForm" (ngSubmit)="getBundleForm()">
+			<div class="card-body">
 
+				<div class="row my-3 px-2">
+					<div class="col-sm-12">
+						<label for="input1" class="form-label">Código de Venta</label>
+						<input type="text" id="input1" class="form-control" formControlName="intidventasprincipal"
+							[maxlength]="13">
+					</div>
+				</div>
+				<div class="row my-3 px-2">
+					<div class="col-sm-12">
+						<label for="input2" class="form-label">Nombre Vendedor</label>
+						<input type="text" id="input2" class="form-control" formControlName="nombrepromotor">
+					</div>
+				</div>
+				<div class="row my-3 px-2">
+					<div class="col-sm-12">
+						<label for="input3" class="form-label">DNI Cliente</label>
+						<input type="text" id="input3" class="form-control" formControlName="dnicliente">
+					</div>
+				</div>
+				<div class="row my-3 px-2">
+					<div class="col-sm-12">
+						<label for="input4" class="form-label">Producto</label>
+						<input type="text" id="input4" class="form-control" formControlName="producto">
+					</div>
+				</div>
+				<div class="row my-3 px-2">
+					<div class="col-sm-12">
+						<label for="input5" class="form-label">Nombre Premio</label>
+						<input type="text" id="input5" class="form-control" formControlName="nombrebundle">
+					</div>
+				</div>
+				<div class="row my-3">
+					<div class="col-sm-12" style="padding: 0px;">
+						<label for="sign_canvas" class="form-label" style="padding-left: 21px;">Firma</label>
+						<signature-pad style="width: 100%; height: 200px;" #signature fxFlex="1 1 50%"
+							(window:resize)="resizeSignaturePad()" class="signature" id="sign_canvas"
+							fxFlexAlign.xs="center"></signature-pad>
+						<div style="padding-left: 21px;">
+							<button type="button" class="btn btn-info" (click)="limpiarFirma()">
+								<i class="bi bi-trash-fill" style="font-size: 1.4rem;"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer text-body-secondary text-end">
+				<button type="submit" class="btn btn-primary m-3">
+					Enviar Validación
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
 
-<!-- <div>
-        <div >
-          
-                <signature-pad  #signature fxFlex="1 1 50" (window:resize)="resizeSignaturePad()"
-                class="signature" 
-                id="sign_canvas" fxFlexAlign.xs="center"></signature-pad>
-        </div> 
-</div> -->
-
- 
-
-
-        <signature-pad  style="width: 100%;" #signature fxFlex="1 1 50" (window:resize)="resizeSignaturePad()"
-            class="signature" id="sign_canvas" fxFlexAlign.xs="center"></signature-pad>
-
-    
+<!-- <signature-pad style="width: 100%;" #signature fxFlex="1 1 50" (window:resize)="resizeSignaturePad()" class="signature"
+	id="sign_canvas" fxFlexAlign.xs="center">
+</signature-pad> -->
