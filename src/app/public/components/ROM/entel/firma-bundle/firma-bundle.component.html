@@ -23,30 +23,39 @@
 						<label for="input1" class="form-label">Código de Venta</label>
 						<input type="text" id="input1" class="form-control" formControlName="intidventasprincipal"
 							[maxlength]="13">
+						<button type="button" class="btn btn-success mt-2" (click)="getBundlesVentas()">
+							<i class="bi bi-search" style="font-size: 1.4rem;"></i>
+						</button>
 					</div>
 				</div>
 				<div class="row my-3 px-2">
 					<div class="col-sm-12">
 						<label for="input2" class="form-label">Nombre Vendedor</label>
-						<input type="text" id="input2" class="form-control" formControlName="nombrepromotor">
+						<input type="text" id="input2" class="form-control" formControlName="nombrepromotor" readonly>
 					</div>
 				</div>
 				<div class="row my-3 px-2">
 					<div class="col-sm-12">
 						<label for="input3" class="form-label">DNI Cliente</label>
-						<input type="text" id="input3" class="form-control" formControlName="dnicliente">
+						<input type="text" id="input3" class="form-control" formControlName="dnicliente" readonly>
 					</div>
 				</div>
 				<div class="row my-3 px-2">
 					<div class="col-sm-12">
 						<label for="input4" class="form-label">Producto</label>
-						<input type="text" id="input4" class="form-control" formControlName="producto">
+						<input type="text" id="input4" class="form-control" formControlName="producto" readonly>
 					</div>
 				</div>
 				<div class="row my-3 px-2">
 					<div class="col-sm-12">
 						<label for="input5" class="form-label">Nombre Premio</label>
-						<input type="text" id="input5" class="form-control" formControlName="nombrebundle">
+						<input type="text" id="input5" class="form-control" formControlName="nombrebundle" readonly>
+					</div>
+				</div>
+				<div class="row my-3 px-2">
+					<div class="col-sm-12">
+						<label for="input6" class="form-label">Numero Celular Cliente (*)</label>
+						<input type="text" id="input6" class="form-control" formControlName="celularcliente">
 					</div>
 				</div>
 				<div class="row my-3">

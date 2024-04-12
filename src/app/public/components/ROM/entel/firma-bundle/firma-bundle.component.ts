@@ -2,6 +2,8 @@ import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AngularSignaturePadModule, NgSignaturePadOptions, SignaturePadComponent } from '@almothafar/angular-signature-pad';
 import { CommonModule } from '@angular/common';
+import { ValidacionBundlesService } from '../../../../services/ROM/entel/validacion-bundles/validacion-bundles.service';
+import { ValidacionBundle } from '../../../../models/ROM/entel/validacion-bundles/validacionbundle';
 
 @Component({
   selector: 'app-firma-bundle',
@@ -27,9 +29,12 @@ export class FirmaBundleComponent implements AfterViewInit {
   };
 
   bundleForm: UntypedFormGroup;
+  validacionBundle: ValidacionBundle = new ValidacionBundle();
+  intidventasprincipal: number=0;
 
   constructor(
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private validacionBundles: ValidacionBundlesService
   ) {
     this.bundleForm = this.createFormBundle();
   }
@@ -76,6 +81,9 @@ export class FirmaBundleComponent implements AfterViewInit {
       nombrebundle: new FormControl('', Validators.compose([
         Validators.required,
       ])),
+      celularcliente: new FormControl('', Validators.compose([
+        Validators.required,
+      ])),
       firma: new FormControl('', Validators.compose([
         Validators.required,
       ])),
@@ -85,4 +93,29 @@ export class FirmaBundleComponent implements AfterViewInit {
   getBundleForm(){
 
   }
+
+  getBundlesVentas() {
+    const control = this.bundleForm.get('intidventasprincipal');
+
+  if (control) {
+    const id = control.value;
+    this.validacionBundles.getBundlesVentas(id).subscribe(res => {
+      if (res !== null) {
+        this.validacionBundle = res;
+        console.log('this.validacionBundle', this.validacionBundle);
+        
+        this.bundleForm.patchValue({
+          nombrepromotor: res.nombrepromotor,
+          dnicliente: res.strdnicliente,
+          producto: res.strproductodesc,
+          nombrebundle: res.descripcion,
+        });
+      }
+    });
+  } else {
+    console.error('Debe ingresar el código de la venta!');
+  }
+  }
+  
+
 }
