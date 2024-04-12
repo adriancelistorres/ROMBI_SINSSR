@@ -4,6 +4,7 @@ import { AngularSignaturePadModule, NgSignaturePadOptions, SignaturePadComponent
 import { CommonModule } from '@angular/common';
 import { ValidacionBundlesService } from '../../../../services/ROM/entel/validacion-bundles/validacion-bundles.service';
 import { ValidacionBundle } from '../../../../models/ROM/entel/validacion-bundles/validacionbundle';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-firma-bundle',
@@ -30,7 +31,7 @@ export class FirmaBundleComponent implements AfterViewInit {
 
   bundleForm: UntypedFormGroup;
   validacionBundle: ValidacionBundle = new ValidacionBundle();
-  intidventasprincipal: number=0;
+  intidventasprincipal: number = 0;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -60,11 +61,11 @@ export class FirmaBundleComponent implements AfterViewInit {
     this.signaturePad?.clear();
   }
 
-  limpiarFirma(){
+  limpiarFirma() {
     this.signaturePad?.clear();
   }
 
-  createFormBundle(): UntypedFormGroup{
+  createFormBundle(): UntypedFormGroup {
     return this.fb.group({
       intidventasprincipal: new FormControl('', Validators.compose([
         Validators.required,
@@ -90,32 +91,52 @@ export class FirmaBundleComponent implements AfterViewInit {
     });
   }
 
-  getBundleForm(){
+  getBundleForm() {
 
   }
 
   getBundlesVentas() {
     const control = this.bundleForm.get('intidventasprincipal');
 
-  if (control) {
-    const id = control.value;
-    this.validacionBundles.getBundlesVentas(id).subscribe(res => {
-      if (res !== null) {
-        this.validacionBundle = res;
-        console.log('this.validacionBundle', this.validacionBundle);
-        
-        this.bundleForm.patchValue({
-          nombrepromotor: res.nombrepromotor,
-          dnicliente: res.strdnicliente,
-          producto: res.strproductodesc,
-          nombrebundle: res.descripcion,
-        });
+    if (control) {
+      const id = control.value;
+      this.validacionBundles.getBundlesVentas(id).subscribe(res => {
+        if (res !== null) {
+          this.validacionBundle = res;
+          console.log('this.validacionBundle', this.validacionBundle);
+
+          this.bundleForm.patchValue({
+            nombrepromotor: res.nombrepromotor,
+            dnicliente: res.strdnicliente,
+            producto: res.strproductodesc,
+            nombrebundle: res.descripcion,
+          });
+        }
+      });
+    } else {
+      console.error('Debe ingresar el código de la venta!');
+    }
+  }
+
+  firmar() {
+    Swal.fire({
+      title: "Do you want to save the changes?",
+      html: `
+      <signature-pad style="width: 100%; height: 200px;" #signature fxFlex="1 1 50%"
+      (window:resize)="resizeSignaturePad()" class="signature" id="sign_canvas"
+      fxFlexAlign.xs="center"></signature-pad>
+      `,
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      denyButtonText: `Don't save`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire("Saved!", "", "success");
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
       }
     });
-  } else {
-    console.error('Debe ingresar el código de la venta!');
   }
-  }
-  
-
 }
