@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AngularSignaturePadModule, NgSignaturePadOptions, SignaturePadComponent } from '@almothafar/angular-signature-pad';
 import { CommonModule } from '@angular/common';
@@ -33,6 +33,8 @@ export class FirmaBundleComponent implements AfterViewInit {
   validacionBundle: ValidacionBundle = new ValidacionBundle();
   intidventasprincipal: number = 0;
 
+  @ViewChild('staticBackdrop') modal!: ElementRef;
+
   constructor(
     private fb: UntypedFormBuilder,
     private validacionBundles: ValidacionBundlesService
@@ -47,18 +49,45 @@ export class FirmaBundleComponent implements AfterViewInit {
     this.signaturePad?.set('minWidth', 1); // set szimek/signature_pad options at runtime
     this.signaturePad?.clear(); // invoke functions from szimek/signature_pad API
     this.resizeSignaturePad()
+
   }
 
+  // resizeSignaturePad() {
+  //   const containerWidth: any = document.getElementById("sign_canvas")?.offsetWidth;
+  //   // const newCanvasWidth = containerWidth * 1.1; // Aumenta el ancho en un 10%
+  //   const newCanvasWidth = containerWidth; // Aumenta el ancho en un 10%
+
+  //   this.signaturePad?.set('canvasWidth', newCanvasWidth);
+  //   // this.signaturePad?.set('canvasHeight', newCanvasWidth * 0.5); // 1:2 ratio
+
+  //   console.log('Resized canvas', newCanvasWidth);
+  //   this.signaturePad?.clear();
+  // }
+
   resizeSignaturePad() {
-    const containerWidth: any = document.getElementById("sign_canvas")?.offsetWidth;
-    // const newCanvasWidth = containerWidth * 1.1; // Aumenta el ancho en un 10%
-    const newCanvasWidth = containerWidth; // Aumenta el ancho en un 10%
+    const containerWidth = document.getElementById("sign_canvas")?.offsetWidth;
+    const containerHeight = document.getElementById("sign_canvas")?.offsetHeight;
 
-    this.signaturePad?.set('canvasWidth', newCanvasWidth);
-    // this.signaturePad?.set('canvasHeight', newCanvasWidth * 0.5); // 1:2 ratio
+    if (containerWidth && containerHeight && this.signaturePad) {
+      this.signaturePad.options = this.signaturePadOptions;
+      console.log('Resized canvas', containerWidth, containerHeight);
+      this.signaturePad?.set('canvasWidth', containerWidth);
+      //this.signaturePad.clear();
+    }
+  }
 
-    console.log('Resized canvas', newCanvasWidth);
-    this.signaturePad?.clear();
+  verdimensiones() {
+    const containerWidth = document.getElementById("sign_canvas")?.offsetWidth;
+    const containerHeight = document.getElementById("sign_canvas")?.offsetHeight;
+
+    if (containerWidth && containerHeight && this.signaturePad) {
+      this.signaturePad.options = this.signaturePadOptions;
+      console.log('Resized canvas', containerWidth, containerHeight);
+      this.signaturePad?.set('canvasWidth', containerWidth);
+      // this.signaturePadOptions.canvasWidth = containerWidth;
+      // this.signaturePadOptions.canvasHeight = containerHeight;
+      // this.signaturePad.clear();
+    }
   }
 
   limpiarFirma() {

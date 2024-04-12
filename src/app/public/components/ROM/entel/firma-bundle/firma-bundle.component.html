@@ -70,7 +70,7 @@
 							</button> -->
 							<!-- <button type="button" class="btn btn-danger" (click)="firmar()">Firmar</button> -->
 							<button class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-								type="button">
+								type="button" >
 								Firmar
 							</button>
 						
@@ -92,8 +92,8 @@
 
 
 <div class="modal fade" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-	tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
+	tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" (shown.bs.modal)="verdimensiones()">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Firme Aquí</h1>
