@@ -33,6 +33,8 @@ export class FirmaBundleComponent implements AfterViewInit {
   validacionBundle: ValidacionBundle = new ValidacionBundle();
   intidventasprincipal: number = 0;
 
+  firmaBase64: string = ''; // Variable para almacenar la firma en Base64
+
   @ViewChild('staticBackdrop') modal!: ElementRef;
 
   constructor(
@@ -90,8 +92,18 @@ export class FirmaBundleComponent implements AfterViewInit {
     }
   }
 
+  guardarFirma() {
+    if (this.signaturePad) {
+      const signatureBase64 = this.signaturePad.toDataURL(); // Obtener la firma en formato Base64
+      console.log('Firma en Base64:', signatureBase64);
+      this.firmaBase64 = '';
+      this.firmaBase64 = signatureBase64; // Asignar la firma Base64 a la variable para mostrarla en la plantilla
+    }
+  }
+
   limpiarFirma() {
     this.signaturePad?.clear();
+    this.firmaBase64 = ''; // Limpiar la variable de la firma Base64
   }
 
   createFormBundle(): UntypedFormGroup {
