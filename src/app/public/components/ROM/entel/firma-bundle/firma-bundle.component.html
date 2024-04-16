@@ -60,15 +60,6 @@
 				</div>
 				<div class="row my-3 px-2">
 					<div class="col-sm-12">
-						<!-- <label for="sign_canvas" class="form-label">Firma</label> -->
-						<!-- <signature-pad style="width: 100%; height: 200px;" #signature fxFlex="1 1 50%"
-							(window:resize)="resizeSignaturePad()" class="signature" id="sign_canvas"
-							fxFlexAlign.xs="center"></signature-pad> -->
-						<!-- <div style="padding-left: 21px;"></div> -->
-						<!-- <button type="button" class="btn btn-info" (click)="limpiarFirma()">
-								<i class="bi bi-trash-fill" style="font-size: 1.4rem;"></i>
-							</button> -->
-						<!-- <button type="button" class="btn btn-danger" (click)="firmar()">Firmar</button> -->
 						<button *ngIf="!firmaBase64" class="btn btn-info mt-4" data-bs-toggle="modal"
 							data-bs-target="#staticBackdrop" type="button">
 							Firmar <i class="bi bi-pencil-square" style="font-size: 1.4rem;"></i>
@@ -92,37 +83,6 @@
 		</form>
 	</div>
 </div>
-
-<!-- <signature-pad style="width: 100%;" #signature fxFlex="1 1 50" (window:resize)="resizeSignaturePad()" class="signature"
-	id="sign_canvas" fxFlexAlign.xs="center">
-</signature-pad> -->
-
-
-<!-- <div class="modal fade" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-	tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" (shown.bs.modal)="verdimensiones()">
-	<div class="modal-dialog modal-xl modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Firme Aquí</h1>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<signature-pad style="width: 100%; height: 200px;" #signature fxFlex="1 1 50%"
-					(window:resize)="resizeSignaturePad()" class="signature" id="sign_canvas" fxFlexAlign.xs="center">
-				</signature-pad>
-				
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" (click)="guardarFirma()" data-bs-dismiss="modal">
-					<i class="bi bi-floppy2-fill" style="font-size: 1.4rem;"></i>
-				</button>
-				<button type="button" class="btn btn-info" (click)="limpiarFirma()">
-					<i class="bi bi-trash-fill" style="font-size: 1.4rem;"></i>
-				</button>
-			</div>
-		</div>
-	</div>
-</div> -->
 
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
 	aria-labelledby="staticBackdropLabel" aria-hidden="true" (shown.bs.modal)="verdimensiones()">
