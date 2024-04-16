@@ -73,8 +73,15 @@ export class FirmaBundleComponent implements AfterViewInit {
     if (containerWidth && containerHeight && this.signaturePad) {
       this.signaturePad.options = this.signaturePadOptions;
       console.log('Resized canvas', containerWidth, containerHeight);
+
+
       this.signaturePad?.set('canvasWidth', containerWidth);
-      //this.signaturePad.clear();
+        //this.signaturePad.clear();
+      // if (Number(containerWidth) > 400) {
+
+      // } else {
+        
+      // }
     }
   }
 

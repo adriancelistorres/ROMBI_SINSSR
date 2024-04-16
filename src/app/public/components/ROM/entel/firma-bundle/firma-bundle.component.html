@@ -69,13 +69,17 @@
 								<i class="bi bi-trash-fill" style="font-size: 1.4rem;"></i>
 							</button> -->
 						<!-- <button type="button" class="btn btn-danger" (click)="firmar()">Firmar</button> -->
-						<button class="btn btn-info mt-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-							type="button">
+						<button *ngIf="!firmaBase64" class="btn btn-info mt-4" data-bs-toggle="modal"
+							data-bs-target="#staticBackdrop" type="button">
 							Firmar <i class="bi bi-pencil-square" style="font-size: 1.4rem;"></i>
 						</button>
 						<div *ngIf="firmaBase64" class="mt-3">
 							<h6 class="mb-1">Firma (Vista Preliminar):</h6>
 							<img [src]="firmaBase64" alt="Firma" class="img-fluid" style="border: solid 2px;">
+							<button type="button" class="btn btn-info mt-1" (click)="limpiarFirma()"
+								data-bs-dismiss="modal">
+								Borrar <i class="bi bi-trash-fill" style="font-size: 1.4rem;"></i>
+							</button>
 						</div>
 					</div>
 				</div>
@@ -94,7 +98,7 @@
 </signature-pad> -->
 
 
-<div class="modal fade" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+<!-- <div class="modal fade" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
 	tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" (shown.bs.modal)="verdimensiones()">
 	<div class="modal-dialog modal-xl modal-dialog-centered">
 		<div class="modal-content">
@@ -106,18 +110,41 @@
 				<signature-pad style="width: 100%; height: 200px;" #signature fxFlex="1 1 50%"
 					(window:resize)="resizeSignaturePad()" class="signature" id="sign_canvas" fxFlexAlign.xs="center">
 				</signature-pad>
-				<button type="button" class="btn btn-success" (click)="guardarFirma()">
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" (click)="guardarFirma()" data-bs-dismiss="modal">
 					<i class="bi bi-floppy2-fill" style="font-size: 1.4rem;"></i>
 				</button>
 				<button type="button" class="btn btn-info" (click)="limpiarFirma()">
 					<i class="bi bi-trash-fill" style="font-size: 1.4rem;"></i>
 				</button>
 			</div>
+		</div>
+	</div>
+</div> -->
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+	aria-labelledby="staticBackdropLabel" aria-hidden="true" (shown.bs.modal)="verdimensiones()">
+	<div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Firme Aquí</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+				<signature-pad style="width: 100%; height: 150px;" #signature fxFlex="1 1 50%"
+					(window:resize)="resizeSignaturePad()" class="signature" id="sign_canvas" fxFlexAlign.xs="center">
+				</signature-pad>
+			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-					Cerrar
+				<button type="button" class="btn btn-success" (click)="guardarFirma()" data-bs-dismiss="modal"
+					(touchend)="guardarFirma()">
+					Guardar <i class="bi bi-floppy2-fill" style="font-size: 1.4rem;"></i>
 				</button>
-				<!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+				<button type="button" class="btn btn-info mt-1" (click)="limpiarFirma()">
+					Borrar <i class="bi bi-trash-fill" style="font-size: 1.4rem;"></i>
+				</button>
 			</div>
 		</div>
 	</div>
