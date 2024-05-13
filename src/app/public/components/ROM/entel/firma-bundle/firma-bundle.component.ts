@@ -54,18 +54,6 @@ export class FirmaBundleComponent implements AfterViewInit {
 
   }
 
-  // resizeSignaturePad() {
-  //   const containerWidth: any = document.getElementById("sign_canvas")?.offsetWidth;
-  //   // const newCanvasWidth = containerWidth * 1.1; // Aumenta el ancho en un 10%
-  //   const newCanvasWidth = containerWidth; // Aumenta el ancho en un 10%
-
-  //   this.signaturePad?.set('canvasWidth', newCanvasWidth);
-  //   // this.signaturePad?.set('canvasHeight', newCanvasWidth * 0.5); // 1:2 ratio
-
-  //   console.log('Resized canvas', newCanvasWidth);
-  //   this.signaturePad?.clear();
-  // }
-
   resizeSignaturePad() {
     const containerWidth = document.getElementById("sign_canvas")?.offsetWidth;
     const containerHeight = document.getElementById("sign_canvas")?.offsetHeight;
@@ -73,7 +61,6 @@ export class FirmaBundleComponent implements AfterViewInit {
     if (containerWidth && containerHeight && this.signaturePad) {
       this.signaturePad.options = this.signaturePadOptions;
       console.log('Resized canvas', containerWidth, containerHeight);
-
 
       this.signaturePad?.set('canvasWidth', containerWidth);
         //this.signaturePad.clear();
