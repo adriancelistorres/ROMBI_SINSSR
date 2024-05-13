@@ -12,4 +12,5 @@ export class HorarioPlanificadoPromotorResponse {
     public usuarioCreacion?: string;
     public usuarioModificacion?: string;
     public estado?: number;
+    
 }
